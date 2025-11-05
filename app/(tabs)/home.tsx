@@ -14,6 +14,8 @@ export default function HomeScreen() {
   const { progress, isQuizUnlocked } = useProgress();
   const { profile } = useUser();
 
+
+
   const handleQuizPress = (quizId: string, requiredPoints: number) => {
     if (!isQuizUnlocked(requiredPoints)) {
       return;
@@ -43,7 +45,7 @@ export default function HomeScreen() {
         </View>
 
         <View style={styles.pointsBadge}>
-          <Trophy size={18} color="#FFD700" />
+          <Trophy size={18} color="#29392E" />
           <Text style={styles.pointsText}>{progress.totalPoints} pts</Text>
         </View>
       </View>
@@ -58,7 +60,7 @@ export default function HomeScreen() {
           <View style={styles.statsGrid}>
             <View style={styles.statItem}>
               <View style={styles.statIconContainer}>
-                <Trophy size={24} color="#FFD700" />
+                <Trophy size={24} color="#8B9F99" />
               </View>
               <Text style={styles.statValue}>{progress.totalPoints}</Text>
               <Text style={styles.statLabel}>Points</Text>
@@ -66,7 +68,7 @@ export default function HomeScreen() {
 
             <View style={styles.statItem}>
               <View style={styles.statIconContainer}>
-                <Zap size={24} color="#3B82F6" />
+                <Zap size={24} color="#8B9F99" />
               </View>
               <Text style={styles.statValue}>{completedQuizzes}</Text>
               <Text style={styles.statLabel}>Quiz complétés</Text>
@@ -74,7 +76,7 @@ export default function HomeScreen() {
 
             <View style={styles.statItem}>
               <View style={styles.statIconContainer}>
-                <Clock size={24} color="#10B981" />
+                <Clock size={24} color="#8B9F99" />
               </View>
               <Text style={styles.statValue}>{totalQuizzes - completedQuizzes}</Text>
               <Text style={styles.statLabel}>À découvrir</Text>

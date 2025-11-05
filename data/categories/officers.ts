@@ -10,7 +10,7 @@ export const officiersQuiz: Quiz = {
     {
       id: 'of1',
       question: "Quel est l’insigne du Sous-lieutenant (SLT) ?",
-      image: require('@/assets/images/grades/slt.png'),
+      image: require('@/assets/grades/Armee/Caporal.png'),
       options: ['SLT', 'LTN', 'CNE', 'CDT'],
       correctAnswer: 0,
       points: 10,
@@ -32,7 +32,7 @@ export const officiersQuiz: Quiz = {
     {
       id: 'of4',
       question: "Cet insigne correspond à quel grade ?",
-      image: require('@/assets/images/grades/cne.png'),
+      image: require('@/assets/grades/Armee/Caporal.png'),
       options: ['Lieutenant', 'Capitaine', 'Commandant', 'CNE major'],
       correctAnswer: 1,
       points: 10,
@@ -40,7 +40,7 @@ export const officiersQuiz: Quiz = {
     {
       id: 'of5',
       question: "Quel est l’insigne d’un Commandant (CDT) ?",
-      image: require('@/assets/images/grades/cdt.png'),
+      image: require('@/assets/grades/Armee/Caporal.png'),
       options: ['CDT', 'CNE', 'COL', 'LCL'],
       correctAnswer: 0,
       points: 10,
@@ -69,7 +69,7 @@ export const officiersQuiz: Quiz = {
     {
       id: 'of9',
       question: "Quel est l’insigne du Lieutenant-colonel ?",
-      image: require('@/assets/images/grades/lcl.png'),
+      image: require('@/assets/grades/Armee/Caporal.png'),
       options: ['LCL', 'COL', 'CNE', 'CDT'],
       correctAnswer: 0,
       points: 10,

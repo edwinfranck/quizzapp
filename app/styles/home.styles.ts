@@ -3,7 +3,7 @@ import { StyleSheet } from 'react-native';
 export default StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#0F172A',
+    backgroundColor: '#8B9F99',
   },
   header: {
     flexDirection: 'row' as const,
@@ -11,7 +11,7 @@ export default StyleSheet.create({
     alignItems: 'center' as const,
     paddingHorizontal: 24,
     paddingVertical: 16,
-    backgroundColor: '#1E293B',
+    backgroundColor: '#7A9182',
   },
   greeting: {
     flexDirection: 'row' as const,
@@ -30,25 +30,26 @@ export default StyleSheet.create({
   },
   greetingText: {
     fontSize: 14,
-    color: '#94A3B8',
+    color: '#29392E',
     fontWeight: '500' as const,
   },
   userName: {
     fontSize: 20,
-    color: '#FFFFFF',
-    fontWeight: '700' as const,
+    color: '#29392E',
+    //fontWeight: '700' as const,
+    fontFamily: 'Inter_900Black',
   },
   pointsBadge: {
     flexDirection: 'row' as const,
     alignItems: 'center' as const,
     gap: 6,
-    backgroundColor: '#334155',
+    backgroundColor: '#8B9F99',
     paddingHorizontal: 12,
     paddingVertical: 8,
     borderRadius: 4,
   },
   pointsText: {
-    color: '#FFFFFF',
+    color: '#29392E',
     fontSize: 14,
     fontWeight: '700' as const,
   },
@@ -60,16 +61,17 @@ export default StyleSheet.create({
     gap: 24,
   },
   statsCard: {
-    backgroundColor: '#1E293B',
+    backgroundColor: '#7A9182',
     borderRadius: 4,
     padding: 20,
-    borderWidth: 1,
+    borderWidth: 0,
     borderColor: '#334155',
   },
   statsTitle: {
     fontSize: 18,
-    fontWeight: '700' as const,
-    color: '#FFFFFF',
+    //fontWeight: '700' as const,
+    fontFamily: 'Inter_900Black',
+    color: '#29392E',
     marginBottom: 16,
   },
   statsGrid: {
@@ -84,18 +86,18 @@ export default StyleSheet.create({
     width: 48,
     height: 48,
     borderRadius: 4,
-    backgroundColor: '#334155',
+    backgroundColor: '#29392E',
     alignItems: 'center' as const,
     justifyContent: 'center' as const,
   },
   statValue: {
     fontSize: 24,
     fontWeight: '800' as const,
-    color: '#FFFFFF',
+    color: '#29392E',
   },
   statLabel: {
     fontSize: 12,
-    color: '#94A3B8',
+    color: '#29392E',
     fontWeight: '600' as const,
   },
   section: {
@@ -103,17 +105,18 @@ export default StyleSheet.create({
   },
   sectionTitle: {
     fontSize: 22,
-    fontWeight: '700' as const,
-    color: '#FFFFFF',
+    //fontWeight: '700' as const,
+    fontFamily: 'Inter_900Black',
+    color: '#29392E',
   },
   quizCard: {
     flexDirection: 'row' as const,
     alignItems: 'center' as const,
-    backgroundColor: '#1E293B',
+    backgroundColor: '#7A9182',
     borderRadius: 4,
     padding: 16,
     gap: 16,
-    borderWidth: 1,
+    borderWidth: 0,
     borderColor: '#334155',
   },
   quizCardLocked: {
@@ -139,11 +142,11 @@ export default StyleSheet.create({
   quizTitle: {
     fontSize: 18,
     fontWeight: '700' as const,
-    color: '#FFFFFF',
+    color: '#29392E',
   },
   quizQuestions: {
     fontSize: 14,
-    color: '#94A3B8',
+    color: '#29392E',
     fontWeight: '500' as const,
   },
   quizStats: {
@@ -153,7 +156,7 @@ export default StyleSheet.create({
   },
   quizStatsText: {
     fontSize: 14,
-    color: '#94A3B8',
+    color: '#29392E',
     fontWeight: '600' as const,
   },
   badge: {

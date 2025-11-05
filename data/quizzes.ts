@@ -5,14 +5,17 @@ import { historyQuiz } from './categories/history';
 import { nonGradesQuiz } from './categories/none_grade';
 import { scienceQuiz } from './categories/science';
 import { sportsQuiz } from './categories/sports';
+import { gradesQuiz } from './categories/grades';
+import { sousOffQuiz } from './categories/sous-officers';
+import { officiersQuiz } from './categories/officers';
+import { generauxQuiz } from './categories/generaux';
 
 export const quizzes: Quiz[] = [
   nonGradesQuiz,
-  armyQuiz,
-  scienceQuiz,
-  historyQuiz,
-  sportsQuiz,
-  cultureQuiz,
+  //gradesQuiz,
+  //sousOffQuiz,
+  //officiersQuiz,
+  //generauxQuiz
   
 ];
 

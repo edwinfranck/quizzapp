@@ -5,12 +5,12 @@ export const gradesQuiz: Quiz = {
   title: 'Gradés',
   icon: '🪖',
   color: '#2563EB',
-  requiredPoints: 50,
+  requiredPoints: 70,
   questions: [
     {
       id: 'gr1',
       question: "Quel est l’insigne du Caporal ?",
-      image: require('@/assets/images/grades/caporal.png'),
+      image: require('@/assets/grades/Armee/Caporal.png'),
       options: ['Caporal', 'Caporal-chef', 'Caporal-major', 'SD1'],
       correctAnswer: 0,
       points: 10,
@@ -32,7 +32,7 @@ export const gradesQuiz: Quiz = {
     {
       id: 'gr4',
       question: "À quel corps appartient l’insigne suivant ?",
-      image: require('@/assets/images/grades/gf_1ere_classe.png'),
+      image: require('@/assets/grades/Armee/Caporal.png'),
       options: ['Police', 'Forêt', 'Armée', 'Garde civile'],
       correctAnswer: 1,
       points: 10,
@@ -47,7 +47,7 @@ export const gradesQuiz: Quiz = {
     {
       id: 'gr6',
       question: "Quel insigne représente le Caporal-major ?",
-      image: require('@/assets/images/grades/cam.png'),
+      image: require('@/assets/grades/Armee/Caporal.png'),
       options: ['Caporal', 'Caporal-chef', 'Caporal-major', 'Capitaine'],
       correctAnswer: 2,
       points: 10,
@@ -76,7 +76,7 @@ export const gradesQuiz: Quiz = {
     {
       id: 'gr10',
       question: "Quel insigne correspond à AP1 ?",
-      image: require('@/assets/images/grades/ap1.png'),
+      image: require('@/assets/grades/Armee/Caporal.png'),
       options: ['AP1', 'AP2', 'SBP', 'Agent'],
       correctAnswer: 0,
       points: 10,

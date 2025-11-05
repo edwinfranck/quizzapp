@@ -10,7 +10,7 @@ export const sousOffQuiz: Quiz = {
     {
       id: 'so1',
       question: "Quel est l’insigne correspondant au Sergent (SGT) ?",
-      image: require('@/assets/images/grades/sgt.png'),
+      image: require('@/assets/grades/Armee/Caporal.png'),
       options: ['Sergent', 'Sergent-chef', 'Caporal', 'Adjudant'],
       correctAnswer: 0,
       points: 10,
@@ -32,7 +32,7 @@ export const sousOffQuiz: Quiz = {
     {
       id: 'so4',
       question: "Cet insigne correspond à quel grade ?",
-      image: require('@/assets/images/grades/sgm.png'),
+      image: require('@/assets/grades/Armee/Caporal.png'),
       options: ['Sergent', 'Sergent-chef', 'Sergent-major', 'Adjudant'],
       correctAnswer: 2,
       points: 10,
@@ -54,7 +54,7 @@ export const sousOffQuiz: Quiz = {
     {
       id: 'so7',
       question: "Cet insigne appartient à quel grade ?",
-      image: require('@/assets/images/grades/adj.png'),
+      image: require('@/assets/grades/Armee/Caporal.png'),
       options: ['Adjudant', 'Adjudant-chef', 'Adjudant-major', 'Sergent-major'],
       correctAnswer: 0,
       points: 10,
@@ -76,7 +76,7 @@ export const sousOffQuiz: Quiz = {
     {
       id: 'so10',
       question: "Quel insigne représente l'Adjudant-chef (ADC) ?",
-      image: require('@/assets/images/grades/adc.png'),
+      image: require('@/assets/grades/Armee/Caporal.png'),
       options: ['ADC', 'ADJ', 'ADM', 'SCH'],
       correctAnswer: 0,
       points: 10,

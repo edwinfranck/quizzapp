@@ -5,12 +5,12 @@ export const generauxQuiz: Quiz = {
   title: 'Généraux',
   icon: '⭐',
   color: '#F59E0B',
-  requiredPoints: 300,
+  requiredPoints: 400,
   questions: [
     {
       id: 'gn1',
       question: "Quel est l’insigne du Général de brigade ?",
-      image: require('@/assets/images/grades/grb.png'),
+      image: require('@/assets/grades/Armee/Caporal.png'),
       options: ['GRB', 'GRD', 'GCA', 'GRA'],
       correctAnswer: 0,
       points: 10,
@@ -25,7 +25,7 @@ export const generauxQuiz: Quiz = {
     {
       id: 'gn3',
       question: "Quel insigne appartient à un Général de division ?",
-      image: require('@/assets/images/grades/grd.png'),
+      image: require('@/assets/grades/Armee/Caporal.png'),
       options: ['GRD', 'GRB', 'GRA', 'IGP1'],
       correctAnswer: 0,
       points: 10,
@@ -40,7 +40,7 @@ export const generauxQuiz: Quiz = {
     {
       id: 'gn5',
       question: "Cet insigne correspond à quel grade ?",
-      image: require('@/assets/images/grades/gca.png'),
+      image: require('@/assets/grades/Armee/Caporal.png'),
       options: ['GCA', 'GRD', 'GRA', 'GRB'],
       correctAnswer: 0,
       points: 10,
@@ -62,7 +62,7 @@ export const generauxQuiz: Quiz = {
     {
       id: 'gn8',
       question: "Quel insigne correspond à l’Inspecteur général de Police 1ère classe ?",
-      image: require('@/assets/images/grades/igp1.png'),
+      image: require('@/assets/grades/Armee/Caporal.png'),
       options: ['IGP1', 'IGP2', 'IGCE', 'CMP'],
       correctAnswer: 0,
       points: 10,
@@ -77,7 +77,7 @@ export const generauxQuiz: Quiz = {
     {
       id: 'gn10',
       question: "Quel insigne représente l'Inspecteur Général Classe Exceptionnelle (IGCE) ?",
-      image: require('@/assets/images/grades/igce.png'),
+      image: require('@/assets/grades/Armee/Caporal.png'),
       options: ['IGP1', 'IGP2', 'IGCE', 'GRA'],
       correctAnswer: 2,
       points: 10,

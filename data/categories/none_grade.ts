@@ -4,13 +4,13 @@ export const nonGradesQuiz: Quiz = {
   id: 'non-grades',
   title: 'Non gradés',
   icon: '🪖',
-  color: '#3B82F6',
+  color: '#192e03',
   requiredPoints: 0,
   questions: [
     {
       id: 'ng1',
       question: "Cet insigne correspond à quel grade ?",
-      image: require('@/assets/grades/SD2.png'),
+      image: require('@/assets/grades/Armee/SD2.png'),
       options: ['SD1', 'Élève agent', 'Garde 2e classe', 'SD2'],
       correctAnswer: 3,
       points: 10,
@@ -32,7 +32,7 @@ export const nonGradesQuiz: Quiz = {
     {
       id: 'ng4',
       question: "Cet insigne appartient à quel corps ?",
-      image: require('@/assets/grades/Adjudant-Chef.png'),
+      image: require('@/assets/grades/Police/AP1_Agent.png'),
       options: ['Armée', 'Forêt', 'Police', 'Douane'],
       correctAnswer: 0,
       points: 10,
@@ -47,7 +47,7 @@ export const nonGradesQuiz: Quiz = {
     {
       id: 'ng6',
       question: "Cet insigne correspond à quel grade ?",
-      image: require('@/assets/grades/Ancien.png'),
+      image: require('@/assets/grades/Armee/SD2.png'),
       options: ['SD1', 'SD2', 'Caporal', 'Élève agent'],
       correctAnswer: 0,
       points: 10,
@@ -69,7 +69,7 @@ export const nonGradesQuiz: Quiz = {
     {
       id: 'ng9',
       question: "Cet insigne correspond à quel grade ?",
-      image: require('@/assets/grades/Agent.png'),
+      image: require('@/assets/grades/Police/AP1_Agent.png'),
       options: ['AP1', 'AP2', 'SBP', 'Agent'],
       correctAnswer: 1,
       points: 10,
