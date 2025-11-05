@@ -1,10 +1,20 @@
-import { useProgress } from '@/contexts/ProgressContext';
-import { useUser } from '@/contexts/UserContext';
-import { quizzes } from '@/data/quizzes';
-import { AVAILABLE_AVATARS, Avatar } from '@/types/user';
-import * as Haptics from 'expo-haptics';
-import { CheckCheck, ChevronRight, Edit2, RotateCcw, TargetIcon, Trophy } from 'lucide-react-native';
-import { useState } from 'react';
+import { useProgress } from "@/contexts/ProgressContext";
+import { useUser } from "@/contexts/UserContext";
+import { quizzes } from "@/data/quizzes";
+import { AVAILABLE_AVATARS, Avatar } from "@/types/user";
+import * as Haptics from "expo-haptics";
+import {
+  CheckCheck,
+  ChevronRight,
+  Edit2,
+  RotateCcw,
+  Sparkles,
+  Star,
+  TargetIcon,
+  Trophy,
+  Zap,
+} from "lucide-react-native";
+import { useState } from "react";
 import {
   Alert,
   Modal,
@@ -15,8 +25,8 @@ import {
   Text,
   TextInput,
   View,
-} from 'react-native';
-import { useSafeAreaInsets } from 'react-native-safe-area-context';
+} from "react-native";
+import { useSafeAreaInsets } from "react-native-safe-area-context";
 
 export default function ProfileScreen() {
   const insets = useSafeAreaInsets();
@@ -34,7 +44,7 @@ export default function ProfileScreen() {
     if (tempName.trim().length >= 2) {
       updateName(tempName.trim());
       setIsEditingName(false);
-      if (Platform.OS !== 'web') {
+      if (Platform.OS !== "web") {
         Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success);
       }
     }
@@ -43,31 +53,33 @@ export default function ProfileScreen() {
   const handleAvatarSelect = (avatar: Avatar) => {
     updateAvatar(avatar);
     setIsAvatarModalVisible(false);
-    if (Platform.OS !== 'web') {
+    if (Platform.OS !== "web") {
       Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success);
     }
   };
 
   const handleResetProgress = () => {
-    if (Platform.OS === 'web') {
+    if (Platform.OS === "web") {
       const confirm = window.confirm(
-        'Êtes-vous sûr de vouloir réinitialiser votre progression ? Cette action est irréversible.'
+        "Êtes-vous sûr de vouloir réinitialiser votre progression ? Cette action est irréversible."
       );
       if (confirm) {
         resetProgress();
       }
     } else {
       Alert.alert(
-        'Réinitialiser la progression',
-        'Êtes-vous sûr de vouloir réinitialiser votre progression ? Cette action est irréversible.',
+        "Réinitialiser la progression",
+        "Êtes-vous sûr de vouloir réinitialiser votre progression ? Cette action est irréversible.",
         [
-          { text: 'Annuler', style: 'cancel' },
+          { text: "Annuler", style: "cancel" },
           {
-            text: 'Réinitialiser',
-            style: 'destructive',
+            text: "Réinitialiser",
+            style: "destructive",
             onPress: () => {
               resetProgress();
-              Haptics.notificationAsync(Haptics.NotificationFeedbackType.Warning);
+              Haptics.notificationAsync(
+                Haptics.NotificationFeedbackType.Warning
+              );
             },
           },
         ]
@@ -88,9 +100,12 @@ export default function ProfileScreen() {
       >
         <View style={styles.profileCard}>
           <Pressable
-            style={[styles.avatarLarge, { backgroundColor: profile.avatar.backgroundColor }]}
+            style={[
+              styles.avatarLarge,
+              { backgroundColor: profile.avatar.backgroundColor },
+            ]}
             onPress={() => {
-              if (Platform.OS !== 'web') {
+              if (Platform.OS !== "web") {
                 Haptics.selectionAsync();
               }
               setIsAvatarModalVisible(true);
@@ -135,7 +150,7 @@ export default function ProfileScreen() {
             <Pressable
               style={styles.nameContainer}
               onPress={() => {
-                if (Platform.OS !== 'web') {
+                if (Platform.OS !== "web") {
                   Haptics.selectionAsync();
                 }
                 setIsEditingName(true);
@@ -160,7 +175,7 @@ export default function ProfileScreen() {
             </View>
 
             <View style={styles.statCard}>
-               <View style={styles.statIcon}>
+              <View style={styles.statIcon}>
                 <CheckCheck size={28} color="#8B9F99" />
               </View>
               <Text style={styles.statValue}>{completedQuizzes}</Text>
@@ -168,7 +183,7 @@ export default function ProfileScreen() {
             </View>
 
             <View style={styles.statCard}>
-               <View style={styles.statIcon}>
+              <View style={styles.statIcon}>
                 <TargetIcon size={28} color="#8B9F99" />
               </View>
               <Text style={styles.statValue}>{totalQuizzes}</Text>
@@ -182,12 +197,21 @@ export default function ProfileScreen() {
 
           <Pressable style={styles.settingItem} onPress={handleResetProgress}>
             <View style={styles.settingLeft}>
-              <View style={[styles.settingIconContainer, styles.dangerIconContainer]}>
+              <View
+                style={[
+                  styles.settingIconContainer,
+                  styles.dangerIconContainer,
+                ]}
+              >
                 <RotateCcw size={20} color="#EF4444" />
               </View>
               <View>
-                <Text style={styles.settingTitle}>Réinitialiser la progression</Text>
-                <Text style={styles.settingDescription}>Effacer tous les résultats</Text>
+                <Text style={styles.settingTitle}>
+                  Réinitialiser la progression
+                </Text>
+                <Text style={styles.settingDescription}>
+                  Effacer tous les résultats
+                </Text>
               </View>
             </View>
             <ChevronRight size={20} color="#64748B" />
@@ -199,19 +223,30 @@ export default function ProfileScreen() {
           <View style={styles.badgesGrid}>
             {Object.values(progress.quizResults).map((result) => (
               <View key={result.quizId} style={styles.badgeItem}>
-                <Text style={styles.badgeEmoji}>
-                  {result.badge === 'platinum' && '💎'}
-                  {result.badge === 'gold' && '🥇'}
-                  {result.badge === 'silver' && '🥈'}
-                  {result.badge === 'bronze' && '🥉'}
-                </Text>
+                <View style={styles.badgeIcon}>
+                  {result.badge === "platinum" && (
+                    <Sparkles size={28} color="#8B9F99" />
+                  )}
+                  {result.badge === "gold" && (
+                    <Trophy size={28} color="#8B9F99" />
+                  )}
+                  {result.badge === "silver" && (
+                    <Star size={28} color="#8B9F99" />
+                  )}
+                  {result.badge === "bronze" && (
+                    <Zap size={28} color="#8B9F99" fill="#8B9F99" />
+                  )}
+                </View>
+
                 <Text style={styles.badgeLabel}>
                   {quizzes.find((q) => q.id === result.quizId)?.title}
                 </Text>
               </View>
             ))}
             {Object.keys(progress.quizResults).length === 0 && (
-              <Text style={styles.noBadgesText}>Aucun badge pour le moment</Text>
+              <Text style={styles.noBadgesText}>
+                Aucun badge pour le moment
+              </Text>
             )}
           </View>
         </View>
@@ -223,7 +258,10 @@ export default function ProfileScreen() {
         animationType="slide"
         onRequestClose={() => setIsAvatarModalVisible(false)}
       >
-        <Pressable style={styles.modalOverlay} onPress={() => setIsAvatarModalVisible(false)}>
+        <Pressable
+          style={styles.modalOverlay}
+          onPress={() => setIsAvatarModalVisible(false)}
+        >
           <View style={styles.modalContent}>
             <Text style={styles.modalTitle}>Choisir un avatar</Text>
             <View style={styles.avatarsGrid}>
@@ -256,18 +294,18 @@ export default function ProfileScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#8B9F99',
+    backgroundColor: "#8B9F99",
   },
   header: {
     paddingHorizontal: 24,
     paddingVertical: 20,
-    backgroundColor: '#7A9182',
+    backgroundColor: "#7A9182",
   },
   headerTitle: {
     fontSize: 26,
     //fontWeight: '800' as const,
-    fontFamily: 'Inter_900Black',
-    color: '#29392E',
+    fontFamily: "Inter_900Black",
+    color: "#29392E",
   },
   scrollView: {
     flex: 1,
@@ -277,147 +315,147 @@ const styles = StyleSheet.create({
     gap: 24,
   },
   profileCard: {
-    backgroundColor: '#7A9182',
+    backgroundColor: "#7A9182",
     borderRadius: 4,
     padding: 32,
-    alignItems: 'center' as const,
+    alignItems: "center" as const,
     gap: 20,
     borderWidth: 0,
-    borderColor: '#334155',
+    borderColor: "#334155",
   },
   avatarLarge: {
     width: 100,
     height: 100,
     borderRadius: 50,
-    alignItems: 'center' as const,
-    justifyContent: 'center' as const,
-    position: 'relative' as const,
+    alignItems: "center" as const,
+    justifyContent: "center" as const,
+    position: "relative" as const,
   },
   avatarEmojiLarge: {
     fontSize: 52,
   },
   editBadge: {
-    position: 'absolute' as const,
+    position: "absolute" as const,
     bottom: 0,
     right: 0,
-    backgroundColor: '#8B9F99',
+    backgroundColor: "#8B9F99",
     width: 32,
     height: 32,
     borderRadius: 16,
-    alignItems: 'center' as const,
-    justifyContent: 'center' as const,
+    alignItems: "center" as const,
+    justifyContent: "center" as const,
     borderWidth: 0,
-    borderColor: '#1E293B',
+    borderColor: "#1E293B",
   },
   nameContainer: {
-    flexDirection: 'row' as const,
-    alignItems: 'center' as const,
+    flexDirection: "row" as const,
+    alignItems: "center" as const,
     gap: 8,
   },
   userName: {
     fontSize: 28,
-    fontWeight: '700' as const,
-    color: '#29392E',
+    fontWeight: "700" as const,
+    color: "#29392E",
   },
   nameEditContainer: {
-    width: '100%' as const,
+    width: "100%" as const,
     gap: 12,
   },
   nameInput: {
-    backgroundColor: '#8B9F99',
+    backgroundColor: "#8B9F99",
     borderRadius: 4,
     paddingHorizontal: 16,
     paddingVertical: 12,
     fontSize: 18,
-    color: '#29392E',
-    textAlign: 'center' as const,
+    color: "#29392E",
+    textAlign: "center" as const,
   },
   nameEditButtons: {
-    flexDirection: 'row' as const,
+    flexDirection: "row" as const,
     gap: 12,
   },
   nameEditButton: {
     flex: 1,
     paddingVertical: 10,
     borderRadius: 4,
-    alignItems: 'center' as const,
+    alignItems: "center" as const,
   },
   cancelButton: {
-    backgroundColor: '#8B9F99',
+    backgroundColor: "#8B9F99",
   },
   saveButton: {
-    backgroundColor: '#29392E',
+    backgroundColor: "#29392E",
   },
   cancelButtonText: {
-    color: '#29392E',
+    color: "#29392E",
     fontSize: 16,
-    fontWeight: '600' as const,
+    fontWeight: "600" as const,
   },
   saveButtonText: {
-    color: '#8B9F99',
+    color: "#8B9F99",
     fontSize: 16,
-    fontWeight: '600' as const,
+    fontWeight: "600" as const,
   },
   statsSection: {
     gap: 16,
   },
   sectionTitle: {
     fontSize: 20,
-    fontWeight: '700' as const,
-    color: '#29392E',
+    fontWeight: "700" as const,
+    color: "#29392E",
   },
   statsGrid: {
-    flexDirection: 'row' as const,
+    flexDirection: "row" as const,
     gap: 12,
   },
   statCard: {
     flex: 1,
-    backgroundColor: '#7A9182',
+    backgroundColor: "#7A9182",
     borderRadius: 4,
     padding: 16,
-    alignItems: 'center' as const,
+    alignItems: "center" as const,
     gap: 8,
     borderWidth: 0,
-    borderColor: '#334155',
+    borderColor: "#334155",
   },
   statIcon: {
     width: 48,
     height: 48,
     borderRadius: 4,
-    backgroundColor: '#29392E',
-    alignItems: 'center' as const,
-    justifyContent: 'center' as const,
+    backgroundColor: "#29392E",
+    alignItems: "center" as const,
+    justifyContent: "center" as const,
   },
   statEmoji: {
     fontSize: 32,
   },
   statValue: {
     fontSize: 24,
-    fontWeight: '800' as const,
-    color: '#29392E',
+    fontWeight: "800" as const,
+    color: "#29392E",
   },
   statLabel: {
     fontSize: 12,
-    color: '#29392E',
-    fontWeight: '600' as const,
-    textAlign: 'center' as const,
+    color: "#29392E",
+    fontWeight: "600" as const,
+    textAlign: "center" as const,
   },
   settingsSection: {
     gap: 16,
   },
   settingItem: {
-    flexDirection: 'row' as const,
-    justifyContent: 'space-between' as const,
-    alignItems: 'center' as const,
-    backgroundColor: '#7A9182',
+    flexDirection: "row" as const,
+    justifyContent: "space-between" as const,
+    alignItems: "center" as const,
+    backgroundColor: "#7A9182",
     borderRadius: 4,
     padding: 16,
     borderWidth: 0,
-    borderColor: '#334155',
+    borderColor: "#334155",
   },
   settingLeft: {
-    flexDirection: 'row' as const,
-    alignItems: 'center' as const,
+    flexDirection: "row" as const,
+    alignItems: "center" as const,
     gap: 12,
     flex: 1,
   },
@@ -425,62 +463,62 @@ const styles = StyleSheet.create({
     width: 40,
     height: 40,
     borderRadius: 4,
-    backgroundColor: '#334155',
-    alignItems: 'center' as const,
-    justifyContent: 'center' as const,
+    backgroundColor: "#334155",
+    alignItems: "center" as const,
+    justifyContent: "center" as const,
   },
   dangerIconContainer: {
-    backgroundColor: 'rgba(239, 68, 68, 0.2)',
+    backgroundColor: "rgba(239, 68, 68, 0.2)",
   },
   settingTitle: {
     fontSize: 16,
-    fontWeight: '600' as const,
-    color: '#29392E',
+    fontWeight: "600" as const,
+    color: "#29392E",
   },
   settingDescription: {
     fontSize: 13,
-    color: '#29392E',
+    color: "#29392E",
   },
   badgesSection: {
     gap: 16,
     marginBottom: 20,
   },
   badgesGrid: {
-    flexDirection: 'row' as const,
-    flexWrap: 'wrap' as const,
+    flexDirection: "row" as const,
+    flexWrap: "wrap" as const,
     gap: 12,
   },
   badgeItem: {
-    backgroundColor: '#7A9182',
+    backgroundColor: "#7A9182",
     borderRadius: 4,
     padding: 16,
-    alignItems: 'center' as const,
+    alignItems: "center" as const,
     gap: 8,
     minWidth: 100,
     borderWidth: 0,
-    borderColor: '#334155',
+    borderColor: "#334155",
   },
   badgeEmoji: {
     fontSize: 36,
   },
   badgeLabel: {
     fontSize: 12,
-    color: '#29392E',
-    fontWeight: '600' as const,
-    textAlign: 'center' as const,
+    color: "#29392E",
+    fontWeight: "600" as const,
+    textAlign: "center" as const,
   },
   noBadgesText: {
     fontSize: 14,
-    color: '#64748B',
-    fontStyle: 'italic' as const,
+    color: "#64748B",
+    fontStyle: "italic" as const,
   },
   modalOverlay: {
     flex: 1,
-    backgroundColor: 'rgba(0, 0, 0, 0.7)',
-    justifyContent: 'flex-end' as const,
+    backgroundColor: "rgba(0, 0, 0, 0.7)",
+    justifyContent: "flex-end" as const,
   },
   modalContent: {
-    backgroundColor: '#8B9F99',
+    backgroundColor: "#8B9F99",
     borderTopLeftRadius: 24,
     borderTopRightRadius: 24,
     padding: 24,
@@ -488,48 +526,57 @@ const styles = StyleSheet.create({
   },
   modalTitle: {
     fontSize: 22,
-    fontWeight: '700' as const,
-    color: '#29392E',
+    fontWeight: "700" as const,
+    color: "#29392E",
     marginBottom: 20,
-    textAlign: 'center' as const,
+    textAlign: "center" as const,
   },
   avatarsGrid: {
-    flexDirection: 'row' as const,
-    flexWrap: 'wrap' as const,
+    flexDirection: "row" as const,
+    flexWrap: "wrap" as const,
     gap: 12,
-    justifyContent: 'center' as const,
+    justifyContent: "center" as const,
   },
   avatarOption: {
     width: 70,
     height: 70,
     borderRadius: 4,
-    alignItems: 'center' as const,
-    justifyContent: 'center' as const,
-    position: 'relative' as const,
+    alignItems: "center" as const,
+    justifyContent: "center" as const,
+    position: "relative" as const,
   },
   avatarSelected: {
     borderWidth: 4,
-    borderColor: '#29392E',
+    borderColor: "#29392E",
   },
   avatarOptionEmoji: {
     fontSize: 36,
   },
   checkmark: {
-    position: 'absolute' as const,
+    position: "absolute" as const,
     top: -6,
     right: -6,
-    backgroundColor: '#10B981',
+    backgroundColor: "#10B981",
     width: 24,
     height: 24,
     borderRadius: 4,
-    alignItems: 'center' as const,
-    justifyContent: 'center' as const,
+    alignItems: "center" as const,
+    justifyContent: "center" as const,
     borderWidth: 2,
-    borderColor: '#29392E',
+    borderColor: "#29392E",
   },
   checkmarkText: {
-    color: '#29392E',
+    color: "#29392E",
     fontSize: 14,
-    fontWeight: '700' as const,
+    fontWeight: "700" as const,
+  },
+  badgeIcon: {
+    width: 40,
+    height: 40,
+    borderRadius: 4,
+    backgroundColor: '#29392E',
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginBottom: 8,
   },
 });

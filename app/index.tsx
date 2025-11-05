@@ -17,7 +17,7 @@ export default function RootIndex() {
     return <Redirect href="/onboarding" />;
   }
 
-  return <Redirect href="/home" />;
+  return <Redirect href="/onboarding" />;
 }
 
 const styles = StyleSheet.create({

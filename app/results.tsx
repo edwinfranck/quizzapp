@@ -2,7 +2,7 @@ import { useProgress } from '@/contexts/ProgressContext';
 import { getBadgeColor, getBadgeEmoji, quizzes } from '@/data/quizzes';
 import * as Haptics from 'expo-haptics';
 import { useLocalSearchParams, useRouter } from 'expo-router';
-import { AlarmClock, Home, RotateCcw, Trophy } from 'lucide-react-native';
+import { AlarmClock, Home, RotateCcw, Sparkles, Star, Trophy, Zap } from 'lucide-react-native';
 import { useEffect, useRef } from 'react';
 import {
   Animated,
@@ -107,6 +107,28 @@ export default function ResultsScreen() {
     return `${mins}:${secs.toString().padStart(2, '0')}`;
   };
 
+  const badgeConfig = {
+  platinum: {
+    icon: <Sparkles size={28} color="#8B9F99" />,
+    text: "PARFAIT !"
+  },
+  gold: {
+    icon: <Trophy size={28} color="#8B9F99" />,
+    text: "Excellent !"
+  },
+  silver: {
+    icon: <Star size={28} color="#8B9F99" />,
+    text: "Bien joué !"
+  },
+  bronze: {
+    icon: <Zap size={28} color="#8B9F99" fill="#8B9F99" />,
+    text: "Bon effort !"
+  }
+};
+
+
+
+
   return (
     <View style={[styles.container, { paddingTop: insets.top, paddingBottom: insets.bottom }]}>
       {result.badge === 'platinum' && (
@@ -156,6 +178,16 @@ export default function ResultsScreen() {
             {result.badge === 'silver' && 'Bien joué !'}
             {result.badge === 'bronze' && 'Bon effort !'}
           </Text>
+
+          <View style={styles.badgeIcon}>
+  {badgeConfig[result.badge].icon}
+</View>
+
+<Text style={styles.badgeText}>
+  {badgeConfig[result.badge].text}
+</Text>
+
+          
         </View>
 
         <View style={styles.statsContainer}>
@@ -215,7 +247,7 @@ export default function ResultsScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#0F172A',
+    backgroundColor: '#335148',
   },
   confettiContainer: {
     position: 'absolute' as const,
@@ -279,7 +311,7 @@ const styles = StyleSheet.create({
   },
   statCard: {
     flex: 1,
-    backgroundColor: '#1E293B',
+    backgroundColor: '#29392E',
     padding: 20,
     borderRadius: 4,
     alignItems: 'center' as const,
@@ -326,10 +358,10 @@ const styles = StyleSheet.create({
     opacity: 0.9,
   },
   retryButton: {
-    backgroundColor: '#3B82F6',
+    backgroundColor: '#7A9182',
   },
   homeButton: {
-    backgroundColor: '#FFFFFF',
+    backgroundColor: '#29392E',
   },
   buttonText: {
     fontSize: 18,
@@ -345,4 +377,26 @@ const styles = StyleSheet.create({
     fontSize: 18,
     textAlign: 'center' as const,
   },
+  badgeIcon: {
+  marginBottom: 6,
+},
+
+badgeIconBox: {
+  width: 50,
+  height: 50,
+  borderRadius: 8,
+  backgroundColor: 'rgba(255,255,255,0.15)',
+  justifyContent: 'center',
+  alignItems: 'center',
+
+  // petit effet premium
+  shadowColor: '#000',
+  shadowOpacity: 0.15,
+  shadowRadius: 4,
+  shadowOffset: { width: 0, height: 2 },
+  elevation: 4,
+  marginBottom: 8,
+},
+
+
 });

@@ -2,7 +2,7 @@ import { useProgress } from '@/contexts/ProgressContext';
 import { quizzes } from '@/data/quizzes';
 import * as Haptics from 'expo-haptics';
 import { useRouter } from 'expo-router';
-import { Lock, Trophy } from 'lucide-react-native';
+import { Lock, Trophy, Star, Play, Sparkles, Zap } from 'lucide-react-native';
 import {
   Platform,
   Pressable,
@@ -18,90 +18,99 @@ export default function QuizzesScreen() {
   const insets = useSafeAreaInsets();
   const { progress, isQuizUnlocked } = useProgress();
 
-  const handleQuizPress = (quizId: string, requiredPoints: number) => {
+  const handlePress = (quizId: string, requiredPoints: number) => {
     if (!isQuizUnlocked(requiredPoints)) return;
 
     if (Platform.OS !== 'web') {
       Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
     }
 
-    router.push(`/quiz/${quizId}` as never);
+    router.push(`/quiz/${quizId}`);
   };
 
   return (
     <View style={[styles.container, { paddingTop: insets.top }]}>
+      
       {/* HEADER */}
       <View style={styles.header}>
         <Text style={styles.headerTitle}>Quiz</Text>
-        <View style={styles.pointsContainer}>
-          <Trophy size={20} color="#29392E" />
+
+        <View style={styles.pointsBadge}>
+          <Trophy size={18} color="#29392E" />
           <Text style={styles.pointsText}>{progress.totalPoints} pts</Text>
         </View>
       </View>
 
-      {/* CONTENT */}
-      <ScrollView
-        style={styles.scrollView}
-        contentContainerStyle={styles.scrollContent}
-        showsVerticalScrollIndicator={false}
-      >
-        {quizzes.map((quiz) => {
-          const unlocked = isQuizUnlocked(quiz.requiredPoints);
-          const result = progress.quizResults[quiz.id];
+      {/* GRID LIST */}
+      <ScrollView contentContainerStyle={styles.gridContainer}>
+        <View style={styles.grid}>
+          {quizzes.map((quiz) => {
+            const unlocked = isQuizUnlocked(quiz.requiredPoints);
+            const result = progress.quizResults[quiz.id];
 
-          return (
-            <Pressable
-              key={quiz.id}
-              onPress={() => handleQuizPress(quiz.id, quiz.requiredPoints)}
-              disabled={!unlocked}
-              style={({ pressed }) => [
-                styles.card,
-                { backgroundColor: quiz.color },
-                !unlocked && styles.cardLocked,
-                pressed && unlocked && styles.cardPressed,
-              ]}
-            >
-              <View style={styles.cardHeader}>
-                <Text style={styles.cardIcon}>{quiz.icon}</Text>
+            return (
+              <Pressable
+                key={quiz.id}
+                onPress={() => handlePress(quiz.id, quiz.requiredPoints)}
+                disabled={!unlocked}
+                style={({ pressed }) => [
+                  styles.card,
+                  { backgroundColor: quiz.color },
+                  !unlocked && styles.cardLocked,
+                  pressed && unlocked && styles.cardPressed,
+                ]}
+              >
+                {/* TOP ROW : icon left + state icon right */}
+                <View style={styles.topRow}>
+                  <Text style={styles.icon}>{quiz.icon}</Text>
 
-                {!unlocked && (
-                  <View style={styles.lockBadge}>
-                    <Lock size={16} color="#FFF" />
-                  </View>
-                )}
-              </View>
-
-              <Text style={styles.cardTitle}>{quiz.title}</Text>
-
-              {/* Quiz unlocked */}
-              {unlocked ? (
-                result ? (
-                  <View style={styles.statsContainer}>
-                    <Text style={styles.statsText}>
-                      ✓ {result.score}/{result.totalQuestions}
-                    </Text>
-                    <Text style={styles.badgeText}>
-                      {result.badge === 'platinum' && '💎'}
-                      {result.badge === 'gold' && '🥇'}
-                      {result.badge === 'silver' && '🥈'}
-                      {result.badge === 'bronze' && '🥉'}
-                    </Text>
-                  </View>
-                ) : (
-                  <Text style={styles.questionCount}>
-                    {quiz.questions.length} questions
-                  </Text>
-                )
-              ) : (
-                <View style={styles.lockedInfo}>
-                  <Text style={styles.requiredText}>
-                    Débloquer avec {quiz.requiredPoints} pts
-                  </Text>
+                  {unlocked ? (
+                    result ? (
+                      <>
+                        {result.badge === 'platinum' && (
+                          <Sparkles size={22} color="#FFF" />
+                        )}
+                        {result.badge === 'gold' && (
+                          <Trophy size={22} color="#FFF" />
+                        )}
+                        {result.badge === 'silver' && (
+                          <Star size={22} color="#FFF" />
+                        )}
+                        {result.badge === 'bronze' && (
+                          <Zap size={22} color="#FFF" fill="#FFF" />
+                        )}
+                      </>
+                    ) : (
+                      <Play size={22} color="#FFF" />
+                    )
+                  ) : (
+                    <Lock size={22} color="#FFF" />
+                  )}
                 </View>
-              )}
-            </Pressable>
-          );
-        })}
+
+                {/* TITLE */}
+                <Text style={styles.title}>{quiz.title}</Text>
+
+                {/* SUBTEXT */}
+                {unlocked ? (
+                  result ? (
+                    <Text style={styles.subText}>
+                      Score : {result.score}/{result.totalQuestions}
+                    </Text>
+                  ) : (
+                    <Text style={styles.subText}>
+                      {quiz.questions.length} questions
+                    </Text>
+                  )
+                ) : (
+                  <Text style={styles.lockedText}>
+                    {quiz.requiredPoints} pts requis
+                  </Text>
+                )}
+              </Pressable>
+            );
+          })}
+        </View>
       </ScrollView>
     </View>
   );
@@ -113,119 +122,98 @@ const styles = StyleSheet.create({
     backgroundColor: '#8B9F99',
   },
 
-  /* HEADER */
   header: {
+    paddingHorizontal: 22,
+    paddingVertical: 20,
+    backgroundColor: '#7A9182',
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
-    paddingHorizontal: 22,
-    paddingVertical: 18,
-    backgroundColor: '#7A9182',
-    borderBottomWidth: 1,
-    borderBottomColor: 'rgba(255,255,255,0.05)',
   },
+
   headerTitle: {
-    fontSize: 26,
-    fontFamily: 'Inter_900Black',
+    fontSize: 28,
+    //fontWeight: '900',
     color: '#29392E',
+    fontFamily: 'Inter_900Black',
   },
-  pointsContainer: {
+
+  pointsBadge: {
     flexDirection: 'row',
     alignItems: 'center',
     gap: 8,
     backgroundColor: '#8B9F99',
     paddingHorizontal: 14,
     paddingVertical: 8,
-    borderRadius: 4,
+    borderRadius: 6,
   },
+
   pointsText: {
     color: '#29392E',
-    fontSize: 14,
-    fontWeight: '700' as const,
+    fontWeight: '700',
   },
 
-  /* LIST */
-  scrollView: {
-    flex: 1,
-  },
-  scrollContent: {
-    padding: 20,
-    gap: 18,
+  gridContainer: {
+    padding: 16,
   },
 
-  /* CARD */
+  grid: {
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    justifyContent: 'space-between',
+    rowGap: 16,
+  },
+
   card: {
+    width: '48%',
     borderRadius: 4,
-    padding: 22,
+    padding: 14,
+    minHeight: 150,
+    justifyContent: 'space-between',
+
     shadowColor: '#000',
-    shadowOffset: { width: 0, height: 6 },
-    shadowOpacity: 0.25,
-    shadowRadius: 10,
-    elevation: 6,
+    shadowOpacity: 0.12,
+    shadowOffset: { width: 0, height: 4 },
+    shadowRadius: 6,
+    elevation: 0,
   },
+
   cardLocked: {
     opacity: 0.55,
-    backdropFilter: 'blur(2px)', // web only, mobile ignore gracefully
   },
+
   cardPressed: {
     transform: [{ scale: 0.97 }],
   },
 
-  cardHeader: {
+  topRow: {
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
   },
-  cardIcon: {
-    fontSize: 44,
+
+  icon: {
+    fontSize: 34,
   },
-  lockBadge: {
-    backgroundColor: 'rgba(0, 0, 0, 0.35)',
-    padding: 8,
-    borderRadius: 8,
-  },
-  cardTitle: {
+
+  title: {
     marginTop: 10,
-    fontSize: 24,
+    fontSize: 17,
     fontWeight: '800',
     color: '#FFF',
   },
 
-  /* TEXT */
-  questionCount: {
+  subText: {
+    fontSize: 14,
     marginTop: 4,
-    fontSize: 16,
     color: 'rgba(255,255,255,0.85)',
     fontWeight: '600',
   },
 
-  statsContainer: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    marginTop: 8,
-  },
-  statsText: {
-    fontSize: 16,
-    color: 'rgba(255,255,255,0.95)',
-    fontWeight: '700',
-  },
-  badgeText: {
-    fontSize: 24,
-    marginLeft: 10,
-  },
-
-  lockedInfo: {
-    marginTop: 6,
-    backgroundColor: 'rgba(0,0,0,0.28)',
-    paddingVertical: 6,
-    paddingHorizontal: 12,
-    borderRadius: 8,
-    alignSelf: 'flex-start',
-  },
-  requiredText: {
-    color: '#FFF',
+  lockedText: {
+    marginTop: 4,
     fontSize: 14,
-    fontWeight: '600',
+    color: '#FFF',
+    fontWeight: '700',
   },
 });

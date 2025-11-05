@@ -1,10 +1,5 @@
 import { Quiz } from '@/types/quiz';
-import { armyQuiz } from './categories/army';
-import { cultureQuiz } from './categories/culture';
-import { historyQuiz } from './categories/history';
 import { nonGradesQuiz } from './categories/none_grade';
-import { scienceQuiz } from './categories/science';
-import { sportsQuiz } from './categories/sports';
 import { gradesQuiz } from './categories/grades';
 import { sousOffQuiz } from './categories/sous-officers';
 import { officiersQuiz } from './categories/officers';
@@ -13,9 +8,9 @@ import { generauxQuiz } from './categories/generaux';
 export const quizzes: Quiz[] = [
   nonGradesQuiz,
   gradesQuiz,
-  //sousOffQuiz,
-  //officiersQuiz,
-  //generauxQuiz
+  sousOffQuiz,
+  officiersQuiz,
+  generauxQuiz
   
 ];
 

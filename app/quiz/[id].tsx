@@ -6,6 +6,7 @@ import { Image } from 'expo-image';
 import { useLocalSearchParams, useRouter } from 'expo-router';
 import { CheckCircle2, Clock, XCircle } from 'lucide-react-native';
 import { useEffect, useRef, useState } from 'react';
+import { useIsFocused } from '@react-navigation/native';
 import {
   Animated,
   Platform,
@@ -21,10 +22,12 @@ export default function QuizScreen() {
   const { id } = useLocalSearchParams<{ id: string }>();
   const router = useRouter();
   const insets = useSafeAreaInsets();
-  const { saveQuizResult } = useProgress();
+  const { saveQuizResult, progress } = useProgress();
 
   // in-progress helpers (save/restore partial quiz state)
   const { saveInProgress, loadInProgress, clearInProgress } = useProgress();
+
+  const isFocused = useIsFocused();
 
   const quiz = quizzes.find((q) => q.id === id);
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
@@ -73,14 +76,37 @@ export default function QuizScreen() {
   useEffect(() => {
     let mounted = true;
     (async () => {
-      if (!quiz || !loadInProgress) return;
+      if (!quiz || !loadInProgress || !progress) return;
+
       try {
+        // First check if we already have a completed result for this quiz
+        const existingResult = progress.quizResults[quiz.id];
+        if (existingResult) {
+          // Quiz was already completed - start fresh
+          if (mounted) {
+            setCurrentQuestionIndex(0);
+            setTimeElapsed(0);
+            setCorrectAnswers(0);
+            setSelectedAnswer(null);
+            setShowResult(false);
+          }
+          return;
+        }
+
+        // No completed result yet - try to restore in-progress state
         const ip = await loadInProgress(quiz.id);
         if (mounted && ip) {
           setCurrentQuestionIndex(ip.currentQuestionIndex ?? 0);
           setTimeElapsed(ip.timeElapsed ?? 0);
           setCorrectAnswers(ip.correctAnswers ?? 0);
           setSelectedAnswer(ip.selectedAnswer ?? null);
+        } else if (mounted && isFocused) {
+          // No in-progress snapshot: ensure local state is reset when focused
+          setCurrentQuestionIndex(0);
+          setTimeElapsed(0);
+          setCorrectAnswers(0);
+          setSelectedAnswer(null);
+          setShowResult(false);
         }
       } catch (err) {
         // ignore - already logged in context
@@ -90,7 +116,7 @@ export default function QuizScreen() {
     return () => {
       mounted = false;
     };
-  }, [quiz?.id, loadInProgress]);
+  }, [quiz?.id, loadInProgress, isFocused, progress]);
 
   // persist an in-progress snapshot whenever key pieces change
   useEffect(() => {
@@ -138,7 +164,7 @@ export default function QuizScreen() {
   }
 
   const currentQuestion: Question = quiz.questions[currentQuestionIndex];
-  const progress = ((currentQuestionIndex + 1) / quiz.questions.length) * 100;
+  const progressPercent = ((currentQuestionIndex + 1) / quiz.questions.length) * 100;
 
   const handleAnswerPress = (answerIndex: number) => {
     if (selectedAnswer !== null) {
@@ -196,13 +222,15 @@ export default function QuizScreen() {
           badge,
           date: new Date().toISOString(),
         };
-        saveQuizResult(quizResult);
-        // clear any saved in-progress state for this quiz now that it's finished
         try {
+          // First save the quiz result
+          saveQuizResult(quizResult);
+          // Then clear in-progress state since this quiz is completed
           clearInProgress?.(quiz.id);
         } catch (err) {
-          // ignore errors clearing
+          console.error('Error saving quiz result:', err);
         }
+        // Navigate to results screen
         router.replace(`/results?quizId=${quiz.id}` as never);
       }
     }, 1500);
@@ -223,7 +251,7 @@ export default function QuizScreen() {
     <View style={styles.header}>
       <View style={styles.progressContainer}>
         <View style={styles.progressBar}>
-          <View style={[styles.progressFill, { width: `${progress}%` }]} />
+          <View style={[styles.progressFill, { width: `${progressPercent}%` }]} />
         </View>
         <Text style={styles.progressText}>
           {currentQuestionIndex + 1}/{quiz.questions.length}

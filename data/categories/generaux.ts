@@ -4,8 +4,8 @@ export const generauxQuiz: Quiz = {
   id: 'generaux',
   title: 'Généraux',
   icon: '⭐',
-  color: '#F59E0B',
-  requiredPoints: 400,
+  color: '#192e03',
+  requiredPoints: 370,
   questions: [
     {
       id: 'gn1',

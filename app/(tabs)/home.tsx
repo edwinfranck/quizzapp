@@ -3,7 +3,7 @@ import { useUser } from '@/contexts/UserContext';
 import { quizzes } from '@/data/quizzes';
 import * as Haptics from 'expo-haptics';
 import { useRouter } from 'expo-router';
-import { Clock, Trophy, Zap, Sparkles, Star, Lock } from 'lucide-react-native';
+import { Clock, Trophy, Zap, Sparkles, Star, Lock, Play } from 'lucide-react-native';
 import { Platform, Pressable, ScrollView, Text, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import styles from '../styles/home.styles';
@@ -14,12 +14,8 @@ export default function HomeScreen() {
   const { progress, isQuizUnlocked } = useProgress();
   const { profile } = useUser();
 
-
-
   const handleQuizPress = (quizId: string, requiredPoints: number) => {
-    if (!isQuizUnlocked(requiredPoints)) {
-      return;
-    }
+    if (!isQuizUnlocked(requiredPoints)) return;
 
     if (Platform.OS !== 'web') {
       Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
@@ -102,54 +98,49 @@ export default function HomeScreen() {
                 onPress={() => handleQuizPress(quiz.id, quiz.requiredPoints)}
                 disabled={!unlocked}
               >
+                {/* Icone gauche */}
                 <View style={[styles.quizIconContainer, { backgroundColor: quiz.color }]}>
                   <Text style={styles.quizIcon}>{quiz.icon}</Text>
                 </View>
 
+                {/* Infos */}
                 <View style={styles.quizInfo}>
                   <Text style={styles.quizTitle}>{quiz.title}</Text>
-                  {unlocked ? (
-                    result ? (
-                      <View style={styles.quizStatsRow}>
+
+                  <View style={styles.quizStatsRow}>
+                    {unlocked ? (
+                      result ? (
                         <Text style={styles.quizStatsText}>
                           Score: {result.score}/{result.totalQuestions}
                         </Text>
-                      </View>
+                      ) : (
+                        <Text style={styles.quizQuestions}>{quiz.questions.length} questions</Text>
+                      )
                     ) : (
-                      <Text style={styles.quizQuestions}>{quiz.questions.length} questions</Text>
-                    )
-                  ) : (
-                    <View style={styles.quizStatsRow}>
                       <Text style={styles.quizLocked}>{quiz.requiredPoints} pts requis</Text>
-                      <View style={styles.playButton}>
-                        <Lock size={16} color="#8B9F99" />
-                      </View>
-                    </View>
-                  )}
+                    )}
+                  </View>
                 </View>
 
-                {unlocked && (
-                  result ? (
-                    <View style={styles.playButton}>
-                      {result.badge === 'platinum' && (
-                        <Sparkles size={18} color="#8B9F99" />
-                      )}
-                      {result.badge === 'gold' && (
-                        <Trophy size={18} color="#8B9F99" />
-                      )}
-                      {result.badge === 'silver' && (
-                        <Star size={18} color="#8B9F99" />
-                      )}
-                      {result.badge === 'bronze' && (
-                        <Zap size={18} color="#8B9F99" fill="#8B9F99" />
-                      )}
-                    </View>
+                {/* Icone droite */}
+                <View style={styles.playButton}>
+                  {unlocked ? (
+                    result ? (
+                      <>
+                        {result.badge === 'platinum' && <Sparkles size={18} color="#8B9F99" />}
+                        {result.badge === 'gold' && <Trophy size={18} color="#8B9F99" />}
+                        {result.badge === 'silver' && <Star size={18} color="#8B9F99" />}
+                        {result.badge === 'bronze' && (
+                          <Zap size={18} color="#8B9F99" fill="#8B9F99" />
+                        )}
+                      </>
+                    ) : (
+                      <Play size={18} color="#8B9F99" />
+                    )
                   ) : (
-                    <View style={styles.playButton}>
-                      
-                    </View>
-                  )
-                )}
+                    <Lock size={18} color="#8B9F99" />
+                  )}
+                </View>
               </Pressable>
             );
           })}
@@ -158,5 +149,3 @@ export default function HomeScreen() {
     </View>
   );
 }
-
-

@@ -112,7 +112,13 @@ export const [ProgressProvider, useProgress] = createContextHook(() => {
   );
 
   const resetProgress = useCallback(async () => {
-    await saveProgress(defaultProgress);
+    try {
+      await saveProgress(defaultProgress);
+      // clear any in-progress quiz snapshots so quizzes restart fresh
+      await AsyncStorage.removeItem(INPROGRESS_KEY);
+    } catch (error) {
+      console.error('Error resetting progress:', error);
+    }
   }, []);
 
   const getQuizResult = useCallback(
