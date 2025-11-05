@@ -32,9 +32,9 @@ export default function QuizzesScreen() {
     <View style={[styles.container, { paddingTop: insets.top }]}>
       {/* HEADER */}
       <View style={styles.header}>
-        <Text style={styles.headerTitle}>Tous les Quiz</Text>
+        <Text style={styles.headerTitle}>Quiz</Text>
         <View style={styles.pointsContainer}>
-          <Trophy size={20} color="#FFD700" />
+          <Trophy size={20} color="#29392E" />
           <Text style={styles.pointsText}>{progress.totalPoints} pts</Text>
         </View>
       </View>
@@ -110,7 +110,7 @@ export default function QuizzesScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#0F172A',
+    backgroundColor: '#8B9F99',
   },
 
   /* HEADER */
@@ -120,28 +120,28 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     paddingHorizontal: 22,
     paddingVertical: 18,
-    backgroundColor: '#1E293B',
+    backgroundColor: '#7A9182',
     borderBottomWidth: 1,
     borderBottomColor: 'rgba(255,255,255,0.05)',
   },
   headerTitle: {
     fontSize: 26,
-    fontWeight: '800',
-    color: '#FFF',
+    fontFamily: 'Inter_900Black',
+    color: '#29392E',
   },
   pointsContainer: {
     flexDirection: 'row',
     alignItems: 'center',
     gap: 8,
-    backgroundColor: '#334155',
+    backgroundColor: '#8B9F99',
     paddingHorizontal: 14,
     paddingVertical: 8,
     borderRadius: 4,
   },
   pointsText: {
-    color: '#FFF',
-    fontSize: 16,
-    fontWeight: '700',
+    color: '#29392E',
+    fontSize: 14,
+    fontWeight: '700' as const,
   },
 
   /* LIST */

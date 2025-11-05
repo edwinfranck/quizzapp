@@ -98,7 +98,7 @@ export default function ProfileScreen() {
           >
             <Text style={styles.avatarEmojiLarge}>{profile.avatar.emoji}</Text>
             <View style={styles.editBadge}>
-              <Edit2 size={14} color="#FFFFFF" />
+              <Edit2 size={14} color="#29392E" />
             </View>
           </Pressable>
 
@@ -142,7 +142,7 @@ export default function ProfileScreen() {
               }}
             >
               <Text style={styles.userName}>{profile.name}</Text>
-              <Edit2 size={18} color="#94A3B8" />
+              <Edit2 size={18} color="#29392E" />
             </Pressable>
           )}
         </View>
@@ -153,7 +153,7 @@ export default function ProfileScreen() {
           <View style={styles.statsGrid}>
             <View style={styles.statCard}>
               <View style={styles.statIcon}>
-                <Trophy size={28} color="#FFD700" />
+                <Trophy size={28} color="#8B9F99" />
               </View>
               <Text style={styles.statValue}>{progress.totalPoints}</Text>
               <Text style={styles.statLabel}>Points totaux</Text>
@@ -161,7 +161,7 @@ export default function ProfileScreen() {
 
             <View style={styles.statCard}>
                <View style={styles.statIcon}>
-                <CheckCheck size={28} color="#FFD700" />
+                <CheckCheck size={28} color="#8B9F99" />
               </View>
               <Text style={styles.statValue}>{completedQuizzes}</Text>
               <Text style={styles.statLabel}>Quiz finis</Text>
@@ -169,7 +169,7 @@ export default function ProfileScreen() {
 
             <View style={styles.statCard}>
                <View style={styles.statIcon}>
-                <TargetIcon size={28} color="#FFD700" />
+                <TargetIcon size={28} color="#8B9F99" />
               </View>
               <Text style={styles.statValue}>{totalQuizzes}</Text>
               <Text style={styles.statLabel}>Quiz totaux</Text>
@@ -256,17 +256,18 @@ export default function ProfileScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#0F172A',
+    backgroundColor: '#8B9F99',
   },
   header: {
     paddingHorizontal: 24,
     paddingVertical: 20,
-    backgroundColor: '#1E293B',
+    backgroundColor: '#7A9182',
   },
   headerTitle: {
-    fontSize: 28,
-    fontWeight: '800' as const,
-    color: '#FFFFFF',
+    fontSize: 26,
+    //fontWeight: '800' as const,
+    fontFamily: 'Inter_900Black',
+    color: '#29392E',
   },
   scrollView: {
     flex: 1,
@@ -276,12 +277,12 @@ const styles = StyleSheet.create({
     gap: 24,
   },
   profileCard: {
-    backgroundColor: '#1E293B',
+    backgroundColor: '#7A9182',
     borderRadius: 4,
     padding: 32,
     alignItems: 'center' as const,
     gap: 20,
-    borderWidth: 1,
+    borderWidth: 0,
     borderColor: '#334155',
   },
   avatarLarge: {
@@ -299,13 +300,13 @@ const styles = StyleSheet.create({
     position: 'absolute' as const,
     bottom: 0,
     right: 0,
-    backgroundColor: '#3B82F6',
+    backgroundColor: '#8B9F99',
     width: 32,
     height: 32,
     borderRadius: 16,
     alignItems: 'center' as const,
     justifyContent: 'center' as const,
-    borderWidth: 3,
+    borderWidth: 0,
     borderColor: '#1E293B',
   },
   nameContainer: {
@@ -316,19 +317,19 @@ const styles = StyleSheet.create({
   userName: {
     fontSize: 28,
     fontWeight: '700' as const,
-    color: '#FFFFFF',
+    color: '#29392E',
   },
   nameEditContainer: {
     width: '100%' as const,
     gap: 12,
   },
   nameInput: {
-    backgroundColor: '#334155',
+    backgroundColor: '#8B9F99',
     borderRadius: 4,
     paddingHorizontal: 16,
     paddingVertical: 12,
     fontSize: 18,
-    color: '#FFFFFF',
+    color: '#29392E',
     textAlign: 'center' as const,
   },
   nameEditButtons: {
@@ -342,18 +343,18 @@ const styles = StyleSheet.create({
     alignItems: 'center' as const,
   },
   cancelButton: {
-    backgroundColor: '#334155',
+    backgroundColor: '#8B9F99',
   },
   saveButton: {
-    backgroundColor: '#3B82F6',
+    backgroundColor: '#29392E',
   },
   cancelButtonText: {
-    color: '#FFFFFF',
+    color: '#29392E',
     fontSize: 16,
     fontWeight: '600' as const,
   },
   saveButtonText: {
-    color: '#FFFFFF',
+    color: '#8B9F99',
     fontSize: 16,
     fontWeight: '600' as const,
   },
@@ -363,7 +364,7 @@ const styles = StyleSheet.create({
   sectionTitle: {
     fontSize: 20,
     fontWeight: '700' as const,
-    color: '#FFFFFF',
+    color: '#29392E',
   },
   statsGrid: {
     flexDirection: 'row' as const,
@@ -371,19 +372,19 @@ const styles = StyleSheet.create({
   },
   statCard: {
     flex: 1,
-    backgroundColor: '#1E293B',
+    backgroundColor: '#7A9182',
     borderRadius: 4,
     padding: 16,
     alignItems: 'center' as const,
     gap: 8,
-    borderWidth: 1,
+    borderWidth: 0,
     borderColor: '#334155',
   },
   statIcon: {
     width: 48,
     height: 48,
     borderRadius: 4,
-    backgroundColor: '#334155',
+    backgroundColor: '#29392E',
     alignItems: 'center' as const,
     justifyContent: 'center' as const,
   },
@@ -393,11 +394,11 @@ const styles = StyleSheet.create({
   statValue: {
     fontSize: 24,
     fontWeight: '800' as const,
-    color: '#FFFFFF',
+    color: '#29392E',
   },
   statLabel: {
     fontSize: 12,
-    color: '#94A3B8',
+    color: '#29392E',
     fontWeight: '600' as const,
     textAlign: 'center' as const,
   },
@@ -408,10 +409,10 @@ const styles = StyleSheet.create({
     flexDirection: 'row' as const,
     justifyContent: 'space-between' as const,
     alignItems: 'center' as const,
-    backgroundColor: '#1E293B',
+    backgroundColor: '#7A9182',
     borderRadius: 4,
     padding: 16,
-    borderWidth: 1,
+    borderWidth: 0,
     borderColor: '#334155',
   },
   settingLeft: {
@@ -434,11 +435,11 @@ const styles = StyleSheet.create({
   settingTitle: {
     fontSize: 16,
     fontWeight: '600' as const,
-    color: '#FFFFFF',
+    color: '#29392E',
   },
   settingDescription: {
     fontSize: 13,
-    color: '#94A3B8',
+    color: '#29392E',
   },
   badgesSection: {
     gap: 16,
@@ -450,13 +451,13 @@ const styles = StyleSheet.create({
     gap: 12,
   },
   badgeItem: {
-    backgroundColor: '#1E293B',
+    backgroundColor: '#7A9182',
     borderRadius: 4,
     padding: 16,
     alignItems: 'center' as const,
     gap: 8,
     minWidth: 100,
-    borderWidth: 1,
+    borderWidth: 0,
     borderColor: '#334155',
   },
   badgeEmoji: {
@@ -464,7 +465,7 @@ const styles = StyleSheet.create({
   },
   badgeLabel: {
     fontSize: 12,
-    color: '#94A3B8',
+    color: '#29392E',
     fontWeight: '600' as const,
     textAlign: 'center' as const,
   },
@@ -479,7 +480,7 @@ const styles = StyleSheet.create({
     justifyContent: 'flex-end' as const,
   },
   modalContent: {
-    backgroundColor: '#1E293B',
+    backgroundColor: '#8B9F99',
     borderTopLeftRadius: 24,
     borderTopRightRadius: 24,
     padding: 24,
@@ -488,7 +489,7 @@ const styles = StyleSheet.create({
   modalTitle: {
     fontSize: 22,
     fontWeight: '700' as const,
-    color: '#FFFFFF',
+    color: '#29392E',
     marginBottom: 20,
     textAlign: 'center' as const,
   },
@@ -508,7 +509,7 @@ const styles = StyleSheet.create({
   },
   avatarSelected: {
     borderWidth: 4,
-    borderColor: '#FFFFFF',
+    borderColor: '#29392E',
   },
   avatarOptionEmoji: {
     fontSize: 36,
@@ -524,10 +525,10 @@ const styles = StyleSheet.create({
     alignItems: 'center' as const,
     justifyContent: 'center' as const,
     borderWidth: 2,
-    borderColor: '#FFFFFF',
+    borderColor: '#29392E',
   },
   checkmarkText: {
-    color: '#FFFFFF',
+    color: '#29392E',
     fontSize: 14,
     fontWeight: '700' as const,
   },

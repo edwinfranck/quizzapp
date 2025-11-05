@@ -21,7 +21,7 @@ export default StyleSheet.create({
   avatarSmall: {
     width: 48,
     height: 48,
-    borderRadius: 24,
+    borderRadius: 4,
     alignItems: 'center' as const,
     justifyContent: 'center' as const,
   },
@@ -154,6 +154,12 @@ export default StyleSheet.create({
     alignItems: 'center' as const,
     gap: 8,
   },
+  quizStatsRow: {
+    flexDirection: 'row' as const,
+    alignItems: 'center' as const,
+    justifyContent: 'space-between' as const,
+    gap: 8,
+  },
   quizStatsText: {
     fontSize: 14,
     color: '#29392E',
@@ -171,7 +177,15 @@ export default StyleSheet.create({
     width: 40,
     height: 40,
     borderRadius: 4,
-    backgroundColor: '#3B82F6',
+    backgroundColor: '#29392E',
+    alignItems: 'center' as const,
+    justifyContent: 'center' as const,
+  },
+  infoBadge: {
+    width: 28,
+    height: 28,
+    borderRadius: 4,
+    backgroundColor: '#29392E',
     alignItems: 'center' as const,
     justifyContent: 'center' as const,
   },

@@ -23,12 +23,21 @@ export default function QuizScreen() {
   const insets = useSafeAreaInsets();
   const { saveQuizResult } = useProgress();
 
+  // in-progress helpers (save/restore partial quiz state)
+  const { saveInProgress, loadInProgress, clearInProgress } = useProgress();
+
   const quiz = quizzes.find((q) => q.id === id);
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
   const [selectedAnswer, setSelectedAnswer] = useState<number | null>(null);
   const [correctAnswers, setCorrectAnswers] = useState(0);
   const [timeElapsed, setTimeElapsed] = useState(0);
   const [showResult, setShowResult] = useState(false);
+
+  // refs to always capture latest values for saving on unmount
+  const currentQuestionIndexRef = useRef(currentQuestionIndex);
+  const selectedAnswerRef = useRef(selectedAnswer);
+  const correctAnswersRef = useRef(correctAnswers);
+  const timeElapsedRef = useRef(timeElapsed);
 
   const fadeAnim = useRef(new Animated.Value(1)).current;
   const scaleAnims = useRef(
@@ -42,6 +51,75 @@ export default function QuizScreen() {
 
     return () => clearInterval(timer);
   }, []);
+
+  // keep refs in sync with state
+  useEffect(() => {
+    currentQuestionIndexRef.current = currentQuestionIndex;
+  }, [currentQuestionIndex]);
+
+  useEffect(() => {
+    selectedAnswerRef.current = selectedAnswer;
+  }, [selectedAnswer]);
+
+  useEffect(() => {
+    correctAnswersRef.current = correctAnswers;
+  }, [correctAnswers]);
+
+  useEffect(() => {
+    timeElapsedRef.current = timeElapsed;
+  }, [timeElapsed]);
+
+  // restore any in-progress quiz state when opening this screen
+  useEffect(() => {
+    let mounted = true;
+    (async () => {
+      if (!quiz || !loadInProgress) return;
+      try {
+        const ip = await loadInProgress(quiz.id);
+        if (mounted && ip) {
+          setCurrentQuestionIndex(ip.currentQuestionIndex ?? 0);
+          setTimeElapsed(ip.timeElapsed ?? 0);
+          setCorrectAnswers(ip.correctAnswers ?? 0);
+          setSelectedAnswer(ip.selectedAnswer ?? null);
+        }
+      } catch (err) {
+        // ignore - already logged in context
+      }
+    })();
+
+    return () => {
+      mounted = false;
+    };
+  }, [quiz?.id, loadInProgress]);
+
+  // persist an in-progress snapshot whenever key pieces change
+  useEffect(() => {
+    if (!quiz || !saveInProgress) return;
+    // use timeElapsedRef to avoid writing every second
+    saveInProgress(quiz.id, {
+      currentQuestionIndex,
+      timeElapsed: timeElapsedRef.current,
+      correctAnswers,
+      selectedAnswer,
+    });
+  }, [quiz?.id, currentQuestionIndex, selectedAnswer, correctAnswers, saveInProgress]);
+
+  // save on unmount as a last-resort snapshot
+  useEffect(() => {
+    return () => {
+      try {
+        if (!quiz || !saveInProgress) return;
+        saveInProgress(quiz.id, {
+          currentQuestionIndex: currentQuestionIndexRef.current,
+          timeElapsed: timeElapsedRef.current,
+          correctAnswers: correctAnswersRef.current,
+          selectedAnswer: selectedAnswerRef.current,
+        });
+      } catch (err) {
+        // noop
+      }
+    };
+  }, [quiz?.id, saveInProgress]);
 
   useEffect(() => {
     Animated.timing(fadeAnim, {
@@ -119,6 +197,12 @@ export default function QuizScreen() {
           date: new Date().toISOString(),
         };
         saveQuizResult(quizResult);
+        // clear any saved in-progress state for this quiz now that it's finished
+        try {
+          clearInProgress?.(quiz.id);
+        } catch (err) {
+          // ignore errors clearing
+        }
         router.replace(`/results?quizId=${quiz.id}` as never);
       }
     }, 1500);

@@ -12,7 +12,7 @@ import { generauxQuiz } from './categories/generaux';
 
 export const quizzes: Quiz[] = [
   nonGradesQuiz,
-  //gradesQuiz,
+  gradesQuiz,
   //sousOffQuiz,
   //officiersQuiz,
   //generauxQuiz

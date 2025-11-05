@@ -4,6 +4,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useCallback, useEffect, useMemo, useState } from 'react';
 
 const STORAGE_KEY = '@quiz_progress';
+const INPROGRESS_KEY = '@quiz_inprogress';
 
 const defaultProgress: UserProgress = {
   totalPoints: 0,
@@ -39,6 +40,48 @@ export const [ProgressProvider, useProgress] = createContextHook(() => {
       console.error('Error saving progress:', error);
     }
   };
+
+  type InProgressState = {
+    currentQuestionIndex: number;
+    timeElapsed: number;
+    correctAnswers: number;
+    selectedAnswer: number | null;
+  };
+
+  const saveInProgress = useCallback(async (quizId: string, state: InProgressState) => {
+    try {
+      const stored = await AsyncStorage.getItem(INPROGRESS_KEY);
+      const map = stored ? JSON.parse(stored) : {};
+      map[quizId] = state;
+      await AsyncStorage.setItem(INPROGRESS_KEY, JSON.stringify(map));
+    } catch (error) {
+      console.error('Error saving in-progress quiz state:', error);
+    }
+  }, []);
+
+  const loadInProgress = useCallback(async (quizId: string): Promise<InProgressState | undefined> => {
+    try {
+      const stored = await AsyncStorage.getItem(INPROGRESS_KEY);
+      if (!stored) return undefined;
+      const map = JSON.parse(stored);
+      return map[quizId];
+    } catch (error) {
+      console.error('Error loading in-progress quiz state:', error);
+      return undefined;
+    }
+  }, []);
+
+  const clearInProgress = useCallback(async (quizId: string) => {
+    try {
+      const stored = await AsyncStorage.getItem(INPROGRESS_KEY);
+      if (!stored) return;
+      const map = JSON.parse(stored);
+      delete map[quizId];
+      await AsyncStorage.setItem(INPROGRESS_KEY, JSON.stringify(map));
+    } catch (error) {
+      console.error('Error clearing in-progress quiz state:', error);
+    }
+  }, []);
 
   const saveQuizResult = useCallback(
     (result: QuizResult) => {
@@ -94,7 +137,11 @@ export const [ProgressProvider, useProgress] = createContextHook(() => {
       resetProgress,
       getQuizResult,
       isQuizUnlocked,
+      // in-progress helpers
+      saveInProgress,
+      loadInProgress,
+      clearInProgress,
     }),
-    [progress, isLoading, saveQuizResult, resetProgress, getQuizResult, isQuizUnlocked]
+    [progress, isLoading, saveQuizResult, resetProgress, getQuizResult, isQuizUnlocked, saveInProgress, loadInProgress, clearInProgress]
   );
 });

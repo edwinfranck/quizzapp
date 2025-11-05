@@ -3,7 +3,7 @@ import { useUser } from '@/contexts/UserContext';
 import { quizzes } from '@/data/quizzes';
 import * as Haptics from 'expo-haptics';
 import { useRouter } from 'expo-router';
-import { Clock, Trophy, Zap } from 'lucide-react-native';
+import { Clock, Trophy, Zap, Sparkles, Star, Lock } from 'lucide-react-native';
 import { Platform, Pressable, ScrollView, Text, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import styles from '../styles/home.styles';
@@ -110,29 +110,45 @@ export default function HomeScreen() {
                   <Text style={styles.quizTitle}>{quiz.title}</Text>
                   {unlocked ? (
                     result ? (
-                      <View style={styles.quizStats}>
+                      <View style={styles.quizStatsRow}>
                         <Text style={styles.quizStatsText}>
                           Score: {result.score}/{result.totalQuestions}
-                        </Text>
-                        <Text style={styles.badge}>
-                          {result.badge === 'platinum' && '💎'}
-                          {result.badge === 'gold' && '🥇'}
-                          {result.badge === 'silver' && '🥈'}
-                          {result.badge === 'bronze' && '🥉'}
                         </Text>
                       </View>
                     ) : (
                       <Text style={styles.quizQuestions}>{quiz.questions.length} questions</Text>
                     )
                   ) : (
-                    <Text style={styles.quizLocked}>🔒 {quiz.requiredPoints} pts requis</Text>
+                    <View style={styles.quizStatsRow}>
+                      <Text style={styles.quizLocked}>{quiz.requiredPoints} pts requis</Text>
+                      <View style={styles.playButton}>
+                        <Lock size={16} color="#8B9F99" />
+                      </View>
+                    </View>
                   )}
                 </View>
 
-                {unlocked && !result && (
-                  <View style={styles.playButton}>
-                    <Zap size={20} color="#FFFFFF" fill="#FFFFFF" />
-                  </View>
+                {unlocked && (
+                  result ? (
+                    <View style={styles.playButton}>
+                      {result.badge === 'platinum' && (
+                        <Sparkles size={18} color="#8B9F99" />
+                      )}
+                      {result.badge === 'gold' && (
+                        <Trophy size={18} color="#8B9F99" />
+                      )}
+                      {result.badge === 'silver' && (
+                        <Star size={18} color="#8B9F99" />
+                      )}
+                      {result.badge === 'bronze' && (
+                        <Zap size={18} color="#8B9F99" fill="#8B9F99" />
+                      )}
+                    </View>
+                  ) : (
+                    <View style={styles.playButton}>
+                      
+                    </View>
+                  )
                 )}
               </Pressable>
             );
