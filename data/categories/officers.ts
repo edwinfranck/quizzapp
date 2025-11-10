@@ -4,7 +4,7 @@ export const officiersQuiz: Quiz = {
   id: 'officiers',
   title: 'Officiers',
   icon: '🎖️',
-  color: '#192e03',
+  color: '#5d6e63ff',
   requiredPoints: 270,
   questions: [
     {

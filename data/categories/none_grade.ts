@@ -4,7 +4,7 @@ export const nonGradesQuiz: Quiz = {
   id: 'non-grades',
   title: 'Non gradés',
   icon: '🪖',
-  color: '#192e03',
+  color: '#5d6e63ff',
   requiredPoints: 0,
   questions: [
     {

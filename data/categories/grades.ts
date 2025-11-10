@@ -4,7 +4,7 @@ export const gradesQuiz: Quiz = {
   id: 'grades',
   title: 'Gradés',
   icon: '🪖',
-  color: '#192e03',
+  color: '#5d6e63ff',
   requiredPoints: 70,
   questions: [
     {

@@ -121,7 +121,7 @@ export default function OnboardingScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#0F172A',
+    backgroundColor: '#335148',
   },
   scrollContent: {
     flexGrow: 1,
@@ -141,9 +141,10 @@ const styles = StyleSheet.create({
   },
   title: {
     fontSize: 42,
-    fontWeight: '800' as const,
+    //fontWeight: '800' as const,
+    fontFamily: 'Inter_900Black',
     color: '#FFFFFF',
-    marginBottom: 12,
+    //marginBottom: 12,
     textAlign: 'center' as const,
   },
   subtitle: {
@@ -164,13 +165,13 @@ const styles = StyleSheet.create({
     color: '#FFFFFF',
   },
   input: {
-    backgroundColor: '#1E293B',
-    borderRadius: 16,
+    backgroundColor: '#7A9182',
+    borderRadius: 4,
     paddingHorizontal: 20,
     paddingVertical: 16,
     fontSize: 18,
     color: '#FFFFFF',
-    borderWidth: 2,
+    borderWidth: 0,
     borderColor: '#334155',
   },
   avatarSection: {
@@ -185,7 +186,7 @@ const styles = StyleSheet.create({
   avatarButton: {
     width: 70,
     height: 70,
-    borderRadius: 20,
+    borderRadius: 4,
     alignItems: 'center' as const,
     justifyContent: 'center' as const,
     position: 'relative' as const,
@@ -216,16 +217,16 @@ const styles = StyleSheet.create({
     fontWeight: '700' as const,
   },
   startButton: {
-    backgroundColor: '#3B82F6',
+    backgroundColor: '#29392E',
     paddingVertical: 18,
     paddingHorizontal: 48,
-    borderRadius: 20,
+    borderRadius: 4,
     alignItems: 'center' as const,
-    shadowColor: '#3B82F6',
+    //shadowColor: '#3B82F6',
     shadowOffset: { width: 0, height: 8 },
     shadowOpacity: 0.4,
     shadowRadius: 12,
-    elevation: 8,
+    elevation: 0,
   },
   startButtonDisabled: {
     backgroundColor: '#334155',

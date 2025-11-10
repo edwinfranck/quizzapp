@@ -4,7 +4,7 @@ export const sousOffQuiz: Quiz = {
   id: 'sous-off',
   title: 'Sous-officiers',
   icon: '📘',
-  color: '#192e03',
+  color: '#5d6e63ff',
   requiredPoints: 170,
   questions: [
     {
