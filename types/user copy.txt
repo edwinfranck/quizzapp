@@ -1,0 +1,24 @@
+export type Avatar = {
+  id: string;
+  emoji: string;
+  backgroundColor: string;
+};
+
+export type UserProfile = {
+  name: string;
+  avatar: Avatar;
+  hasCompletedOnboarding: boolean;
+};
+
+export const AVAILABLE_AVATARS: Avatar[] = [
+  { id: '1', emoji: '🪖​', backgroundColor: '#29392E' },
+  { id: '2', emoji: '⚔️', backgroundColor: '#29392E' },
+  { id: '3', emoji: '🫡', backgroundColor: '#29392E' },
+  { id: '4', emoji: '🛡️', backgroundColor: '#29392E' },
+  { id: '5', emoji: '👮🏿‍♀️​​', backgroundColor: '#29392E' },
+  { id: '6', emoji: '👨🏿‍✈️​​', backgroundColor: '#29392E' },
+  { id: '7', emoji: '🔥​', backgroundColor: '#29392E' },
+  { id: '8', emoji: '👊🏾​', backgroundColor: '#29392E' },
+  { id: '9', emoji: '🏆', backgroundColor: '#29392E' },
+  { id: '10', emoji: '🎖️', backgroundColor: '#29392E' },
+];

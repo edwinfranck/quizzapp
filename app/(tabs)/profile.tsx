@@ -25,6 +25,7 @@ import {
   Text,
   TextInput,
   View,
+  Image,
 } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 
@@ -111,7 +112,7 @@ export default function ProfileScreen() {
               setIsAvatarModalVisible(true);
             }}
           >
-            <Text style={styles.avatarEmojiLarge}>{profile.avatar.emoji}</Text>
+            <Image source={profile.avatar.image} style={styles.avatarImage} />
             <View style={styles.editBadge}>
               <Edit2 size={14} color="#29392E" />
             </View>
@@ -275,7 +276,7 @@ export default function ProfileScreen() {
                   ]}
                   onPress={() => handleAvatarSelect(avatar)}
                 >
-                  <Text style={styles.avatarOptionEmoji}>{avatar.emoji}</Text>
+                  <Image source={avatar.image} style={styles.avatarImage} />
                   {profile.avatar.id === avatar.id && (
                     <View style={styles.checkmark}>
                       <Text style={styles.checkmarkText}>✓</Text>
@@ -579,4 +580,10 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     marginBottom: 8,
   },
+  avatarImage: {
+  width: 50,
+  height: 50,
+  borderRadius: 25,
+  resizeMode: 'cover',
+},
 });

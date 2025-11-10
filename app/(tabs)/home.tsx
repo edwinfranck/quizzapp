@@ -4,7 +4,7 @@ import { quizzes } from '@/data/quizzes';
 import * as Haptics from 'expo-haptics';
 import { useRouter } from 'expo-router';
 import { Clock, Trophy, Zap, Sparkles, Star, Lock, Play } from 'lucide-react-native';
-import { Platform, Pressable, ScrollView, Text, View } from 'react-native';
+import { Platform, Pressable, ScrollView, Text, View, Image } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import styles from '../styles/home.styles';
 
@@ -31,8 +31,8 @@ export default function HomeScreen() {
     <View style={[styles.container, { paddingTop: insets.top }]}>
       <View style={styles.header}>
         <View style={styles.greeting}>
-          <View style={[styles.avatarSmall, { backgroundColor: profile.avatar.backgroundColor }]}>
-            <Text style={styles.avatarEmojiSmall}>{profile.avatar.emoji}</Text>
+          <View style={[styles.avatarSmall]}>
+            <Image source={profile.avatar.image} style={styles.avatarImage} />
           </View>
           <View>
             <Text style={styles.greetingText}>Salut,</Text>

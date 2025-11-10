@@ -189,4 +189,10 @@ export default StyleSheet.create({
     alignItems: 'center' as const,
     justifyContent: 'center' as const,
   },
+  avatarImage: {
+  width: 50,
+  height: 50,
+  borderRadius: 25,
+  resizeMode: 'cover',
+},
 });
