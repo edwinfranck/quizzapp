@@ -10,10 +10,16 @@ export type Question = {
 export type Quiz = {
   id: string;
   title: string;
+  questions: Question[];
+};
+
+export type Category = {
+  id: string;
+  title: string;
   icon: string;
   color: string;
-  questions: Question[];
   requiredPoints: number;
+  quizzes: Quiz[];
 };
 
 export type Badge = 'bronze' | 'silver' | 'gold' | 'platinum';

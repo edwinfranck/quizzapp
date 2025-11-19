@@ -1,5 +1,5 @@
 import { useProgress } from '@/contexts/ProgressContext';
-import { quizzes } from '@/data/quizzes';
+import { categories } from '@/data/quizzes';
 import * as Haptics from 'expo-haptics';
 import { useRouter } from 'expo-router';
 import { Lock, Trophy, Star, Play, Sparkles, Zap } from 'lucide-react-native';
@@ -30,7 +30,7 @@ export default function QuizzesScreen() {
 
   return (
     <View style={[styles.container, { paddingTop: insets.top }]}>
-      
+
       {/* HEADER */}
       <View style={styles.header}>
         <Text style={styles.headerTitle}>Quiz</Text>
@@ -44,67 +44,55 @@ export default function QuizzesScreen() {
       {/* GRID LIST */}
       <ScrollView contentContainerStyle={styles.gridContainer}>
         <View style={styles.grid}>
-          {quizzes.map((quiz) => {
-            const unlocked = isQuizUnlocked(quiz.requiredPoints);
-            const result = progress.quizResults[quiz.id];
+          {categories.map((category) => {
+            const unlocked = isQuizUnlocked(category.requiredPoints);
+            // We can calculate a "category result" if we want, e.g. average score or completion
+            // For now, we just show if it's unlocked and maybe how many quizzes inside.
+
+            // Calculate total questions in category
+            const totalQuestions = category.quizzes.reduce((acc, q) => acc + q.questions.length, 0);
+            const totalQuizzes = category.quizzes.length;
 
             return (
               <Pressable
-                key={quiz.id}
-                onPress={() => handlePress(quiz.id, quiz.requiredPoints)}
+                key={category.id}
+                onPress={() => {
+                  if (!unlocked) return;
+                  if (Platform.OS !== 'web') {
+                    Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+                  }
+                  router.push(`/category/${category.id}`);
+                }}
                 disabled={!unlocked}
                 style={({ pressed }) => [
                   styles.card,
-                  { backgroundColor: quiz.color },
+                  { backgroundColor: category.color },
                   !unlocked && styles.cardLocked,
                   pressed && unlocked && styles.cardPressed,
                 ]}
               >
                 {/* TOP ROW : icon left + state icon right */}
                 <View style={styles.topRow}>
-                  <Text style={styles.icon}>{quiz.icon}</Text>
+                  <Text style={styles.icon}>{category.icon}</Text>
 
                   {unlocked ? (
-                    result ? (
-                      <>
-                        {result.badge === 'platinum' && (
-                          <Sparkles size={22} color="#FFF" />
-                        )}
-                        {result.badge === 'gold' && (
-                          <Trophy size={22} color="#FFF" />
-                        )}
-                        {result.badge === 'silver' && (
-                          <Star size={22} color="#FFF" />
-                        )}
-                        {result.badge === 'bronze' && (
-                          <Zap size={22} color="#FFF" fill="#FFF" />
-                        )}
-                      </>
-                    ) : (
-                      <Play size={22} color="#FFF" />
-                    )
+                    <Play size={22} color="#FFF" />
                   ) : (
                     <Lock size={22} color="#FFF" />
                   )}
                 </View>
 
                 {/* TITLE */}
-                <Text style={styles.title}>{quiz.title}</Text>
+                <Text style={styles.title}>{category.title}</Text>
 
                 {/* SUBTEXT */}
                 {unlocked ? (
-                  result ? (
-                    <Text style={styles.subText}>
-                      Score : {result.score}/{result.totalQuestions}
-                    </Text>
-                  ) : (
-                    <Text style={styles.subText}>
-                      {quiz.questions.length} questions
-                    </Text>
-                  )
+                  <Text style={styles.subText}>
+                    {totalQuizzes} quiz • {totalQuestions} questions
+                  </Text>
                 ) : (
                   <Text style={styles.lockedText}>
-                    {quiz.requiredPoints} pts requis
+                    {category.requiredPoints} pts requis
                   </Text>
                 )}
               </Pressable>

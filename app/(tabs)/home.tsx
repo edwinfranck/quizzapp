@@ -1,6 +1,6 @@
 import { useProgress } from '@/contexts/ProgressContext';
 import { useUser } from '@/contexts/UserContext';
-import { quizzes } from '@/data/quizzes';
+import { categories } from '@/data/quizzes';
 import * as Haptics from 'expo-haptics';
 import { useRouter } from 'expo-router';
 import { Clock, Trophy, Zap, Sparkles, Star, Lock, Play } from 'lucide-react-native';
@@ -25,7 +25,7 @@ export default function HomeScreen() {
   };
 
   const completedQuizzes = Object.keys(progress.quizResults).length;
-  const totalQuizzes = quizzes.length;
+  const totalQuizzes = categories.reduce((acc, cat) => acc + cat.quizzes.length, 0);
 
   return (
     <View style={[styles.container, { paddingTop: insets.top }]}>
@@ -83,41 +83,42 @@ export default function HomeScreen() {
         <View style={styles.section}>
           <Text style={styles.sectionTitle}>Catégories</Text>
 
-          {quizzes.map((quiz) => {
-            const unlocked = isQuizUnlocked(quiz.requiredPoints);
-            const result = progress.quizResults[quiz.id];
+          {categories.map((category) => {
+            const unlocked = isQuizUnlocked(category.requiredPoints);
+            const totalQuestions = category.quizzes.reduce((acc, q) => acc + q.questions.length, 0);
+            const totalQuizzes = category.quizzes.length;
 
             return (
               <Pressable
-                key={quiz.id}
+                key={category.id}
                 style={({ pressed }) => [
                   styles.quizCard,
                   !unlocked && styles.quizCardLocked,
                   pressed && unlocked && styles.quizCardPressed,
                 ]}
-                onPress={() => handleQuizPress(quiz.id, quiz.requiredPoints)}
+                onPress={() => {
+                  if (!unlocked) return;
+                  if (Platform.OS !== 'web') {
+                    Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+                  }
+                  router.push(`/category/${category.id}` as never);
+                }}
                 disabled={!unlocked}
               >
                 {/* Icone gauche */}
-                <View style={[styles.quizIconContainer, { backgroundColor: quiz.color }]}>
-                  <Text style={styles.quizIcon}>{quiz.icon}</Text>
+                <View style={[styles.quizIconContainer, { backgroundColor: category.color }]}>
+                  <Text style={styles.quizIcon}>{category.icon}</Text>
                 </View>
 
                 {/* Infos */}
                 <View style={styles.quizInfo}>
-                  <Text style={styles.quizTitle}>{quiz.title}</Text>
+                  <Text style={styles.quizTitle}>{category.title}</Text>
 
                   <View style={styles.quizStatsRow}>
                     {unlocked ? (
-                      result ? (
-                        <Text style={styles.quizStatsText}>
-                          Score: {result.score}/{result.totalQuestions}
-                        </Text>
-                      ) : (
-                        <Text style={styles.quizQuestions}>{quiz.questions.length} questions</Text>
-                      )
+                      <Text style={styles.quizQuestions}>{totalQuizzes} quiz • {totalQuestions} questions</Text>
                     ) : (
-                      <Text style={styles.quizLocked}>{quiz.requiredPoints} points requis</Text>
+                      <Text style={styles.quizLocked}>{category.requiredPoints} points requis</Text>
                     )}
                   </View>
                 </View>
@@ -125,18 +126,7 @@ export default function HomeScreen() {
                 {/* Icone droite */}
                 <View style={styles.playButton}>
                   {unlocked ? (
-                    result ? (
-                      <>
-                        {result.badge === 'platinum' && <Sparkles size={18} color="#8B9F99" />}
-                        {result.badge === 'gold' && <Trophy size={18} color="#8B9F99" />}
-                        {result.badge === 'silver' && <Star size={18} color="#8B9F99" />}
-                        {result.badge === 'bronze' && (
-                          <Zap size={18} color="#8B9F99" fill="#8B9F99" />
-                        )}
-                      </>
-                    ) : (
-                      <Play size={18} color="#8B9F99" />
-                    )
+                    <Play size={18} color="#8B9F99" />
                   ) : (
                     <Lock size={18} color="#8B9F99" />
                   )}

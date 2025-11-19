@@ -1,9 +1,4 @@
-import { Quiz } from '@/types/quiz';
-import { nonGradesQuiz } from './categories/none_grade';
-import { gradesQuiz } from './categories/grades';
-import { sousOffQuiz } from './categories/sous-officers';
-import { officiersQuiz } from './categories/officers';
-import { generauxQuiz } from './categories/generaux';
+import { Category } from '@/types/quiz';
 import { militairesRangQuiz } from './categories/militairesRangQuiz';
 import { sousOfficiersSubalternesQuiz } from './categories/sousOfficiersSubalternesQuiz';
 import { sousOfficiersSuperieursQuiz } from './categories/sousOfficiersSuperieursQuiz';
@@ -11,7 +6,7 @@ import { officiersSubalternesQuiz } from './categories/officiersSubalternesQuiz'
 import { officiersSuperieursQuiz } from './categories/officiersSuperieursQuiz';
 import { officiersGenerauxQuiz } from './categories/officiersGenerauxQuiz';
 
-export const quizzes: Quiz[] = [
+export const categories: Category[] = [
   militairesRangQuiz,
   sousOfficiersSubalternesQuiz,
   sousOfficiersSuperieursQuiz,

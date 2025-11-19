@@ -1,6 +1,6 @@
 import { useProgress } from "@/contexts/ProgressContext";
 import { useUser } from "@/contexts/UserContext";
-import { quizzes } from "@/data/quizzes";
+import { categories } from "@/data/quizzes";
 import { AVAILABLE_AVATARS, Avatar } from "@/types/user";
 import * as Haptics from "expo-haptics";
 import {
@@ -39,7 +39,7 @@ export default function ProfileScreen() {
   const [isAvatarModalVisible, setIsAvatarModalVisible] = useState(false);
 
   const completedQuizzes = Object.keys(progress.quizResults).length;
-  const totalQuizzes = quizzes.length;
+  const totalQuizzes = categories.reduce((acc, cat) => acc + cat.quizzes.length, 0);
 
   const handleSaveName = () => {
     if (tempName.trim().length >= 2) {
@@ -240,7 +240,7 @@ export default function ProfileScreen() {
                 </View>
 
                 <Text style={styles.badgeLabel}>
-                  {quizzes.find((q) => q.id === result.quizId)?.title}
+                  {categories.flatMap(cat => cat.quizzes).find((q) => q.id === result.quizId)?.title}
                 </Text>
               </View>
             ))}
@@ -583,9 +583,9 @@ const styles = StyleSheet.create({
     marginBottom: 8,
   },
   avatarImage: {
-  width: 50,
-  height: 50,
-  borderRadius: 25,
-  resizeMode: 'cover',
-},
+    width: 50,
+    height: 50,
+    borderRadius: 25,
+    resizeMode: 'cover',
+  },
 });

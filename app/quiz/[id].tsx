@@ -1,5 +1,5 @@
 import { useProgress } from '@/contexts/ProgressContext';
-import { getBadge, quizzes } from '@/data/quizzes';
+import { getBadge, categories } from '@/data/quizzes';
 import { Question } from '@/types/quiz';
 import * as Haptics from 'expo-haptics';
 import { Image } from 'expo-image';
@@ -29,7 +29,17 @@ export default function QuizScreen() {
 
   const isFocused = useIsFocused();
 
-  const quiz = quizzes.find((q) => q.id === id);
+  // Find quiz by searching through all categories
+  let quiz = null;
+  let categoryColor = '#8B9F99'; // Default color
+  for (const category of categories) {
+    const foundQuiz = category.quizzes.find((q) => q.id === id);
+    if (foundQuiz) {
+      quiz = foundQuiz;
+      categoryColor = category.color;
+      break;
+    }
+  }
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
   const [selectedAnswer, setSelectedAnswer] = useState<number | null>(null);
   const [correctAnswers, setCorrectAnswers] = useState(0);
@@ -245,91 +255,91 @@ export default function QuizScreen() {
   };
 
   return (
-  <View style={[styles.container, { backgroundColor: quiz.color, paddingTop: insets.top }]}>
-    
-    {/* Header (non scrollable) */}
-    <View style={styles.header}>
-      <View style={styles.progressContainer}>
-        <View style={styles.progressBar}>
-          <View style={[styles.progressFill, { width: `${progressPercent}%` }]} />
-        </View>
-        <Text style={styles.progressText}>
-          {currentQuestionIndex + 1}/{quiz.questions.length}
-        </Text>
-      </View>
+    <View style={[styles.container, { backgroundColor: categoryColor, paddingTop: insets.top }]}>
 
-      <View style={styles.timerContainer}>
-        <Clock size={18} color="#FFFFFF" />
-        <Text style={styles.timerText}>{formatTime(timeElapsed)}</Text>
-      </View>
-    </View>
-
-    {/* Scrollable content */}
-    <Animated.View style={[{ flex: 1 }, { opacity: fadeAnim }]}>
-      <ScrollView
-        contentContainerStyle={styles.scrollContent}
-        showsVerticalScrollIndicator={false}
-      >
-        <View style={styles.questionContainer}>
-          <Text style={styles.questionNumber}>Question {currentQuestionIndex + 1}</Text>
-          <Text style={styles.questionText}>{currentQuestion.question}</Text>
-
-          {currentQuestion.image && (
-            <Image
-    source={
-      typeof currentQuestion.image === "string"
-        ? { uri: currentQuestion.image }
-        : currentQuestion.image
-    }
-    style={styles.questionImage}
-    contentFit="contain"
-  />
-          )}
+      {/* Header (non scrollable) */}
+      <View style={styles.header}>
+        <View style={styles.progressContainer}>
+          <View style={styles.progressBar}>
+            <View style={[styles.progressFill, { width: `${progressPercent}%` }]} />
+          </View>
+          <Text style={styles.progressText}>
+            {currentQuestionIndex + 1}/{quiz.questions.length}
+          </Text>
         </View>
 
-        <View style={styles.answersContainer}>
-          {currentQuestion.options.map((option, index) => {
-            const isSelected = selectedAnswer === index;
-            const isCorrect = index === currentQuestion.correctAnswer;
-            // Only reveal the correct answer when the user actually selected it.
-            // This prevents showing the correct option when the user answered
-            // incorrectly and will retry later.
-            const showCorrect = showResult && isCorrect && isSelected;
-            const showIncorrect = showResult && isSelected && !isCorrect;
+        <View style={styles.timerContainer}>
+          <Clock size={18} color="#FFFFFF" />
+          <Text style={styles.timerText}>{formatTime(timeElapsed)}</Text>
+        </View>
+      </View>
 
-            return (
-              <Animated.View key={index} style={{ transform: [{ scale: scaleAnims[index] }] }}>
-                <Pressable
-                  style={[
-                    styles.answerButton,
-                    isSelected && styles.answerButtonSelected,
-                    showCorrect && styles.answerButtonCorrect,
-                    showIncorrect && styles.answerButtonIncorrect,
-                  ]}
-                  onPress={() => handleAnswerPress(index)}
-                  disabled={selectedAnswer !== null}
-                >
-                  <Text
+      {/* Scrollable content */}
+      <Animated.View style={[{ flex: 1 }, { opacity: fadeAnim }]}>
+        <ScrollView
+          contentContainerStyle={styles.scrollContent}
+          showsVerticalScrollIndicator={false}
+        >
+          <View style={styles.questionContainer}>
+            <Text style={styles.questionNumber}>Question {currentQuestionIndex + 1}</Text>
+            <Text style={styles.questionText}>{currentQuestion.question}</Text>
+
+            {currentQuestion.image && (
+              <Image
+                source={
+                  typeof currentQuestion.image === "string"
+                    ? { uri: currentQuestion.image }
+                    : currentQuestion.image
+                }
+                style={styles.questionImage}
+                contentFit="contain"
+              />
+            )}
+          </View>
+
+          <View style={styles.answersContainer}>
+            {currentQuestion.options.map((option, index) => {
+              const isSelected = selectedAnswer === index;
+              const isCorrect = index === currentQuestion.correctAnswer;
+              // Only reveal the correct answer when the user actually selected it.
+              // This prevents showing the correct option when the user answered
+              // incorrectly and will retry later.
+              const showCorrect = showResult && isCorrect && isSelected;
+              const showIncorrect = showResult && isSelected && !isCorrect;
+
+              return (
+                <Animated.View key={index} style={{ transform: [{ scale: scaleAnims[index] }] }}>
+                  <Pressable
                     style={[
-                      styles.answerText,
-                      (isSelected || showCorrect) && styles.answerTextSelected,
+                      styles.answerButton,
+                      isSelected && styles.answerButtonSelected,
+                      showCorrect && styles.answerButtonCorrect,
+                      showIncorrect && styles.answerButtonIncorrect,
                     ]}
+                    onPress={() => handleAnswerPress(index)}
+                    disabled={selectedAnswer !== null}
                   >
-                    {option}
-                  </Text>
+                    <Text
+                      style={[
+                        styles.answerText,
+                        (isSelected || showCorrect) && styles.answerTextSelected,
+                      ]}
+                    >
+                      {option}
+                    </Text>
 
-                  {showCorrect && <CheckCircle2 size={24} color="#FFFFFF" />}
-                  {showIncorrect && <XCircle size={24} color="#FFFFFF" />}
-                </Pressable>
-              </Animated.View>
-            );
-          })}
-        </View>
+                    {showCorrect && <CheckCircle2 size={24} color="#FFFFFF" />}
+                    {showIncorrect && <XCircle size={24} color="#FFFFFF" />}
+                  </Pressable>
+                </Animated.View>
+              );
+            })}
+          </View>
 
-      </ScrollView>
-    </Animated.View>
+        </ScrollView>
+      </Animated.View>
 
-  </View>
-);
+    </View>
+  );
 
 }

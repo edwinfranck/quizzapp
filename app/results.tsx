@@ -1,5 +1,5 @@
 import { useProgress } from '@/contexts/ProgressContext';
-import { getBadgeColor, getBadgeEmoji, quizzes } from '@/data/quizzes';
+import { getBadgeColor, getBadgeEmoji, categories } from '@/data/quizzes';
 import * as Haptics from 'expo-haptics';
 import { useLocalSearchParams, useRouter } from 'expo-router';
 import { AlarmClock, Home, RotateCcw, Sparkles, Star, Trophy, Zap } from 'lucide-react-native';
@@ -20,7 +20,7 @@ export default function ResultsScreen() {
   const insets = useSafeAreaInsets();
   const { getQuizResult } = useProgress();
 
-  const quiz = quizzes.find((q) => q.id === quizId);
+  const quiz = categories.flatMap(cat => cat.quizzes).find((q) => q.id === quizId);
   const result = getQuizResult(quizId || '');
 
   const scaleAnim = useRef(new Animated.Value(0)).current;
@@ -108,23 +108,23 @@ export default function ResultsScreen() {
   };
 
   const badgeConfig = {
-  platinum: {
-    icon: <Sparkles size={28} color="#8B9F99" />,
-    text: "PARFAIT !"
-  },
-  gold: {
-    icon: <Trophy size={28} color="#8B9F99" />,
-    text: "Excellent !"
-  },
-  silver: {
-    icon: <Star size={28} color="#8B9F99" />,
-    text: "Bien joué !"
-  },
-  bronze: {
-    icon: <Zap size={28} color="#8B9F99" fill="#8B9F99" />,
-    text: "Bon effort !"
-  }
-};
+    platinum: {
+      icon: <Sparkles size={28} color="#8B9F99" />,
+      text: "PARFAIT !"
+    },
+    gold: {
+      icon: <Trophy size={28} color="#8B9F99" />,
+      text: "Excellent !"
+    },
+    silver: {
+      icon: <Star size={28} color="#8B9F99" />,
+      text: "Bien joué !"
+    },
+    bronze: {
+      icon: <Zap size={28} color="#8B9F99" fill="#8B9F99" />,
+      text: "Bon effort !"
+    }
+  };
 
 
 
@@ -178,7 +178,7 @@ export default function ResultsScreen() {
             {result.badge === 'silver' && 'Bien joué !'}
             {result.badge === 'bronze' && 'Bon effort !'}
           </Text>
-           {/* Icone droite 
+          {/* Icone droite 
           <View style={styles.badgeIcon}>
   {badgeConfig[result.badge].icon}
 </View>
@@ -187,7 +187,7 @@ export default function ResultsScreen() {
   {badgeConfig[result.badge].text}
 </Text>
 */}
-          
+
         </View>
 
         <View style={styles.statsContainer}>
@@ -378,26 +378,26 @@ const styles = StyleSheet.create({
     textAlign: 'center' as const,
   },
   badgeIcon: {
-  marginBottom: 6,
-  
-},
+    marginBottom: 6,
 
-badgeIconBox: {
-  width: 50,
-  height: 50,
-  borderRadius: 8,
-  backgroundColor: 'rgba(255,255,255,0.15)',
-  justifyContent: 'center',
-  alignItems: 'center',
+  },
 
-  // petit effet premium
-  shadowColor: '#000',
-  shadowOpacity: 0.15,
-  shadowRadius: 4,
-  shadowOffset: { width: 0, height: 2 },
-  elevation: 4,
-  marginBottom: 8,
-},
+  badgeIconBox: {
+    width: 50,
+    height: 50,
+    borderRadius: 8,
+    backgroundColor: 'rgba(255,255,255,0.15)',
+    justifyContent: 'center',
+    alignItems: 'center',
+
+    // petit effet premium
+    shadowColor: '#000',
+    shadowOpacity: 0.15,
+    shadowRadius: 4,
+    shadowOffset: { width: 0, height: 2 },
+    elevation: 4,
+    marginBottom: 8,
+  },
 
 
 });
