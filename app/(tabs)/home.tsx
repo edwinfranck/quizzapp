@@ -4,15 +4,22 @@ import { categories } from '@/data/quizzes';
 import * as Haptics from 'expo-haptics';
 import { useRouter } from 'expo-router';
 import { Clock, Trophy, Zap, Sparkles, Star, Lock, Play } from 'lucide-react-native';
-import { Platform, Pressable, ScrollView, Text, View, Image } from 'react-native';
+import { Platform, Pressable, ScrollView, Text, View, Image, Alert } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import styles from '../styles/home.styles';
+import React from 'react';
+import LockedChallengeModal from '@/components/LockedChallengeModal';
 
 export default function HomeScreen() {
   const router = useRouter();
   const insets = useSafeAreaInsets();
   const { progress, isQuizUnlocked } = useProgress();
   const { profile } = useUser();
+  const [lockedCategory, setLockedCategory] = React.useState<{
+    title: string;
+    requiredPoints: number;
+    color: string;
+  } | null>(null);
 
   const handleQuizPress = (quizId: string, requiredPoints: number) => {
     if (!isQuizUnlocked(requiredPoints)) return;
@@ -97,13 +104,24 @@ export default function HomeScreen() {
                   pressed && unlocked && styles.quizCardPressed,
                 ]}
                 onPress={() => {
-                  if (!unlocked) return;
+                  if (!unlocked) {
+                    // Haptic feedback for locked category
+                    if (Platform.OS !== 'web') {
+                      Haptics.notificationAsync(Haptics.NotificationFeedbackType.Warning);
+                    }
+                    // Show custom modal
+                    setLockedCategory({
+                      title: category.title,
+                      requiredPoints: category.requiredPoints,
+                      color: category.color,
+                    });
+                    return;
+                  }
                   if (Platform.OS !== 'web') {
                     Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
                   }
                   router.push(`/category/${category.id}` as never);
                 }}
-                disabled={!unlocked}
               >
                 {/* Icone gauche */}
                 <View style={[styles.quizIconContainer, { backgroundColor: category.color }]}>
@@ -136,6 +154,16 @@ export default function HomeScreen() {
           })}
         </View>
       </ScrollView>
+
+      {/* Locked Challenge Modal */}
+      <LockedChallengeModal
+        visible={lockedCategory !== null}
+        onClose={() => setLockedCategory(null)}
+        categoryTitle={lockedCategory?.title || ''}
+        requiredPoints={lockedCategory?.requiredPoints || 0}
+        currentPoints={progress.totalPoints}
+        categoryColor={lockedCategory?.color || '#8B9F99'}
+      />
     </View>
   );
 }

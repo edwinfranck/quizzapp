@@ -3,6 +3,7 @@ import { categories } from '@/data/quizzes';
 import * as Haptics from 'expo-haptics';
 import { useRouter } from 'expo-router';
 import { Lock, Trophy, Star, Play, Sparkles, Zap } from 'lucide-react-native';
+import React from 'react';
 import {
   Platform,
   Pressable,
@@ -10,13 +11,20 @@ import {
   StyleSheet,
   Text,
   View,
+  Alert,
 } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import LockedChallengeModal from '@/components/LockedChallengeModal';
 
 export default function QuizzesScreen() {
   const router = useRouter();
   const insets = useSafeAreaInsets();
   const { progress, isQuizUnlocked } = useProgress();
+  const [lockedCategory, setLockedCategory] = React.useState<{
+    title: string;
+    requiredPoints: number;
+    color: string;
+  } | null>(null);
 
   const handlePress = (quizId: string, requiredPoints: number) => {
     if (!isQuizUnlocked(requiredPoints)) return;
@@ -57,13 +65,24 @@ export default function QuizzesScreen() {
               <Pressable
                 key={category.id}
                 onPress={() => {
-                  if (!unlocked) return;
+                  if (!unlocked) {
+                    // Haptic feedback for locked category
+                    if (Platform.OS !== 'web') {
+                      Haptics.notificationAsync(Haptics.NotificationFeedbackType.Warning);
+                    }
+                    // Show custom modal
+                    setLockedCategory({
+                      title: category.title,
+                      requiredPoints: category.requiredPoints,
+                      color: category.color,
+                    });
+                    return;
+                  }
                   if (Platform.OS !== 'web') {
                     Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
                   }
                   router.push(`/category/${category.id}`);
                 }}
-                disabled={!unlocked}
                 style={({ pressed }) => [
                   styles.card,
                   { backgroundColor: category.color },
@@ -100,6 +119,16 @@ export default function QuizzesScreen() {
           })}
         </View>
       </ScrollView>
+
+      {/* Locked Challenge Modal */}
+      <LockedChallengeModal
+        visible={lockedCategory !== null}
+        onClose={() => setLockedCategory(null)}
+        categoryTitle={lockedCategory?.title || ''}
+        requiredPoints={lockedCategory?.requiredPoints || 0}
+        currentPoints={progress.totalPoints}
+        categoryColor={lockedCategory?.color || '#8B9F99'}
+      />
     </View>
   );
 }
@@ -154,24 +183,32 @@ const styles = StyleSheet.create({
 
   card: {
     width: '48%',
-    borderRadius: 4,
-    padding: 14,
-    minHeight: 150,
+    borderRadius: 16,
+    padding: 18,
+    minHeight: 160,
     justifyContent: 'space-between',
+    overflow: 'hidden',
 
+    // Enhanced shadows for depth
     shadowColor: '#000',
-    shadowOpacity: 0.12,
-    shadowOffset: { width: 0, height: 4 },
-    shadowRadius: 6,
-    elevation: 0,
+    shadowOpacity: 0.25,
+    shadowOffset: { width: 0, height: 8 },
+    shadowRadius: 12,
+    elevation: 8,
+
+    // Border for subtle definition
+    borderWidth: 1,
+    borderColor: 'rgba(255, 255, 255, 0.1)',
   },
 
   cardLocked: {
-    opacity: 0.55,
+    opacity: 0.6,
+    transform: [{ scale: 0.98 }],
   },
 
   cardPressed: {
-    transform: [{ scale: 0.97 }],
+    transform: [{ scale: 0.95 }],
+    shadowOpacity: 0.15,
   },
 
   topRow: {
