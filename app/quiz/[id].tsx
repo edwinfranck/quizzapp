@@ -40,6 +40,22 @@ export default function QuizScreen() {
       break;
     }
   }
+
+  // Shuffle function to randomize question order
+  const shuffleArray = <T,>(array: T[]): T[] => {
+    const shuffled = [...array];
+    for (let i = shuffled.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
+    }
+    return shuffled;
+  };
+
+  // State for shuffled questions - initialized once when component mounts
+  const [shuffledQuestions] = useState<Question[]>(() =>
+    quiz ? shuffleArray(quiz.questions) : []
+  );
+
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
   const [selectedAnswer, setSelectedAnswer] = useState<number | null>(null);
   const [correctAnswers, setCorrectAnswers] = useState(0);
@@ -173,8 +189,8 @@ export default function QuizScreen() {
     );
   }
 
-  const currentQuestion: Question = quiz.questions[currentQuestionIndex];
-  const progressPercent = ((currentQuestionIndex + 1) / quiz.questions.length) * 100;
+  const currentQuestion: Question = shuffledQuestions[currentQuestionIndex];
+  const progressPercent = ((currentQuestionIndex + 1) / shuffledQuestions.length) * 100;
 
   const handleAnswerPress = (answerIndex: number) => {
     if (selectedAnswer !== null) {
@@ -212,7 +228,7 @@ export default function QuizScreen() {
     }
 
     setTimeout(() => {
-      if (currentQuestionIndex < quiz.questions.length - 1) {
+      if (currentQuestionIndex < shuffledQuestions.length - 1) {
         Animated.timing(fadeAnim, {
           toValue: 0,
           duration: 200,
@@ -223,11 +239,11 @@ export default function QuizScreen() {
           setShowResult(false);
         });
       } else {
-        const badge = getBadge(correctAnswers + (answerIndex === currentQuestion.correctAnswer ? 1 : 0), quiz.questions.length);
+        const badge = getBadge(correctAnswers + (answerIndex === currentQuestion.correctAnswer ? 1 : 0), shuffledQuestions.length);
         const quizResult = {
           quizId: quiz.id,
           score: correctAnswers + (answerIndex === currentQuestion.correctAnswer ? 1 : 0),
-          totalQuestions: quiz.questions.length,
+          totalQuestions: shuffledQuestions.length,
           timeSpent: timeElapsed,
           badge,
           date: new Date().toISOString(),
@@ -264,7 +280,7 @@ export default function QuizScreen() {
             <View style={[styles.progressFill, { width: `${progressPercent}%` }]} />
           </View>
           <Text style={styles.progressText}>
-            {currentQuestionIndex + 1}/{quiz.questions.length}
+            {currentQuestionIndex + 1}/{shuffledQuestions.length}
           </Text>
         </View>
 

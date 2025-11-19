@@ -48,7 +48,8 @@ export default function CategoryScreen() {
                     <ArrowLeft size={24} color="#FFF" />
                 </Pressable>
                 <Text style={styles.headerTitle}>{category.title}</Text>
-                <View style={{ width: 24 }} /> {/* Spacer for alignment */}
+                {/* Spacer for alignment */}
+                <View style={{ width: 24 }} />
             </View>
 
             {/* LIST */}
