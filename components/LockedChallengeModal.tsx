@@ -46,7 +46,7 @@ export default function LockedChallengeModal({
         },
         modalContainer: {
             backgroundColor: theme.colors.surface,
-            borderRadius: 24,
+            borderRadius: 1,
             padding: 28,
             width: '100%',
             maxWidth: 380,
@@ -54,7 +54,7 @@ export default function LockedChallengeModal({
             shadowOffset: { width: 0, height: 20 },
             shadowOpacity: 0.3,
             shadowRadius: 30,
-            elevation: 10,
+            //elevation: 10,
         },
         closeButton: {
             position: 'absolute' as const,
@@ -66,7 +66,7 @@ export default function LockedChallengeModal({
         iconContainer: {
             width: 96,
             height: 96,
-            borderRadius: 48,
+            borderRadius: 1,
             justifyContent: 'center' as const,
             alignItems: 'center' as const,
             alignSelf: 'center' as const,
@@ -75,7 +75,7 @@ export default function LockedChallengeModal({
             shadowOffset: { width: 0, height: 8 },
             shadowOpacity: 0.2,
             shadowRadius: 12,
-            elevation: 6,
+            //elevation: 6,
         },
         title: {
             fontSize: 26,
@@ -89,7 +89,7 @@ export default function LockedChallengeModal({
             backgroundColor: theme.colors.backgroundSecondary,
             paddingHorizontal: 16,
             paddingVertical: 8,
-            borderRadius: 12,
+            borderRadius: 1,
             alignSelf: 'center' as const,
             marginBottom: 24,
         },
@@ -100,7 +100,7 @@ export default function LockedChallengeModal({
         },
         pointsContainer: {
             backgroundColor: theme.colors.surfaceSecondary,
-            borderRadius: 16,
+            borderRadius: 1,
             padding: 20,
             marginBottom: 20,
             borderWidth: 1,
@@ -148,13 +148,13 @@ export default function LockedChallengeModal({
         },
         button: {
             paddingVertical: 16,
-            borderRadius: 14,
+            borderRadius: 1,
             alignItems: 'center' as const,
             shadowColor: '#000',
             shadowOffset: { width: 0, height: 4 },
             shadowOpacity: 0.2,
             shadowRadius: 8,
-            elevation: 4,
+            //elevation: 4,
         },
         buttonPressed: {
             opacity: 0.8,

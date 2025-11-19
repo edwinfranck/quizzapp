@@ -22,7 +22,7 @@ export const createHomeStyles = (theme: Theme) => StyleSheet.create({
   avatarSmall: {
     width: 48,
     height: 48,
-    borderRadius: 24,
+    borderRadius: 1,
     alignItems: 'center' as const,
     justifyContent: 'center' as const,
   },
@@ -46,7 +46,7 @@ export const createHomeStyles = (theme: Theme) => StyleSheet.create({
     backgroundColor: theme.colors.primaryLight,
     paddingHorizontal: 12,
     paddingVertical: 8,
-    borderRadius: 20,
+    borderRadius: 1,
   },
   pointsText: {
     color: theme.colors.textInverse,
@@ -62,7 +62,7 @@ export const createHomeStyles = (theme: Theme) => StyleSheet.create({
   },
   statsCard: {
     backgroundColor: theme.colors.surface,
-    borderRadius: 16,
+    borderRadius: 1,
     padding: 20,
     borderWidth: 1,
     borderColor: theme.colors.border,
@@ -70,7 +70,7 @@ export const createHomeStyles = (theme: Theme) => StyleSheet.create({
     shadowOffset: { width: 0, height: 4 },
     shadowOpacity: 0.1,
     shadowRadius: 8,
-    elevation: 4,
+    //elevation: 4,
   },
   statsTitle: {
     fontSize: 18,
@@ -89,7 +89,7 @@ export const createHomeStyles = (theme: Theme) => StyleSheet.create({
   statIconContainer: {
     width: 48,
     height: 48,
-    borderRadius: 24,
+    borderRadius: 1,
     backgroundColor: theme.colors.primaryLight,
     alignItems: 'center' as const,
     justifyContent: 'center' as const,
@@ -116,7 +116,7 @@ export const createHomeStyles = (theme: Theme) => StyleSheet.create({
     flexDirection: 'row' as const,
     alignItems: 'center' as const,
     backgroundColor: theme.colors.surface,
-    borderRadius: 16,
+    borderRadius: 1,
     padding: 16,
     gap: 16,
     borderWidth: 1,
@@ -125,7 +125,7 @@ export const createHomeStyles = (theme: Theme) => StyleSheet.create({
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.08,
     shadowRadius: 4,
-    elevation: 2,
+    //elevation: 2,
   },
   quizCardLocked: {
     opacity: 0.6,
@@ -136,7 +136,7 @@ export const createHomeStyles = (theme: Theme) => StyleSheet.create({
   quizIconContainer: {
     width: 56,
     height: 56,
-    borderRadius: 28,
+    borderRadius: 1,
     alignItems: 'center' as const,
     justifyContent: 'center' as const,
   },
@@ -184,7 +184,7 @@ export const createHomeStyles = (theme: Theme) => StyleSheet.create({
   playButton: {
     width: 40,
     height: 40,
-    borderRadius: 20,
+    borderRadius: 1,
     backgroundColor: theme.colors.primary,
     alignItems: 'center' as const,
     justifyContent: 'center' as const,
@@ -192,7 +192,7 @@ export const createHomeStyles = (theme: Theme) => StyleSheet.create({
   infoBadge: {
     width: 28,
     height: 28,
-    borderRadius: 14,
+    borderRadius: 1,
     backgroundColor: theme.colors.primaryLight,
     alignItems: 'center' as const,
     justifyContent: 'center' as const,
@@ -200,7 +200,7 @@ export const createHomeStyles = (theme: Theme) => StyleSheet.create({
   avatarImage: {
     width: 48,
     height: 48,
-    borderRadius: 24,
+    borderRadius: 1,
     resizeMode: 'cover' as const,
   },
 });

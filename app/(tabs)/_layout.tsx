@@ -154,7 +154,7 @@ const createTabStyles = (theme: any) => StyleSheet.create({
     width: 60,
     height: 30,
     backgroundColor: theme.colors.primaryLight,
-    borderRadius: 4,
+    borderRadius: 1,
     zIndex: -1,
   },
 });

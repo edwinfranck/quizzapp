@@ -55,7 +55,7 @@ const styles = StyleSheet.create({
   },
   container: {
     backgroundColor: 'white',
-    borderRadius: 12,
+    borderRadius: 1,
     padding: 24,
     width: '100%',
     maxWidth: 500,

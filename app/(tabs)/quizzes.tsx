@@ -167,7 +167,7 @@ const createQuizzesStyles = (theme: any) => StyleSheet.create({
     backgroundColor: theme.colors.primaryLight,
     paddingHorizontal: 14,
     paddingVertical: 8,
-    borderRadius: 20,
+    borderRadius: 1,
   },
 
   pointsText: {
@@ -188,7 +188,7 @@ const createQuizzesStyles = (theme: any) => StyleSheet.create({
 
   card: {
     width: '48%',
-    borderRadius: 16,
+    borderRadius: 1,
     padding: 18,
     minHeight: 160,
     justifyContent: 'space-between' as const,
@@ -198,7 +198,7 @@ const createQuizzesStyles = (theme: any) => StyleSheet.create({
     shadowOpacity: 0.25,
     shadowOffset: { width: 0, height: 8 },
     shadowRadius: 12,
-    elevation: 8,
+    //elevation: 8,
 
     borderWidth: 1,
     borderColor: theme.colors.border,

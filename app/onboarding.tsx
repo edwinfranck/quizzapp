@@ -166,7 +166,7 @@ const styles = StyleSheet.create({
   },
   input: {
     backgroundColor: '#7A9182',
-    borderRadius: 4,
+    borderRadius: 1,
     paddingHorizontal: 20,
     paddingVertical: 16,
     fontSize: 18,
@@ -186,7 +186,7 @@ const styles = StyleSheet.create({
   avatarButton: {
     width: 70,
     height: 70,
-    borderRadius: 4,
+    borderRadius: 1,
     alignItems: 'center' as const,
     justifyContent: 'center' as const,
     position: 'relative' as const,
@@ -205,7 +205,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#10B981',
     width: 24,
     height: 24,
-    borderRadius: 12,
+    borderRadius: 1,
     alignItems: 'center' as const,
     justifyContent: 'center' as const,
     borderWidth: 2,

@@ -40,7 +40,7 @@ export default function ThemedCard({
 
 const styles = StyleSheet.create({
     card: {
-        borderRadius: 16,
+        borderRadius: 1,
         padding: 16,
         borderWidth: 1,
     },

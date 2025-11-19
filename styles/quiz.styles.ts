@@ -15,13 +15,13 @@ export default StyleSheet.create({
   progressBar: {
     height: 8,
     backgroundColor: 'rgba(255, 255, 255, 0.3)',
-    borderRadius: 4,
+    borderRadius: 1,
     overflow: 'hidden' as const,
   },
   progressFill: {
     height: '100%' as const,
     backgroundColor: '#FFFFFF',
-    borderRadius: 4,
+    borderRadius: 1,
   },
   progressText: {
     color: '#FFFFFF',
@@ -35,7 +35,7 @@ export default StyleSheet.create({
     backgroundColor: 'rgba(0, 0, 0, 0.2)',
     paddingHorizontal: 16,
     paddingVertical: 8,
-    borderRadius: 4,
+    borderRadius: 1,
     alignSelf: 'flex-start' as const,
   },
   timerText: {
@@ -70,7 +70,7 @@ export default StyleSheet.create({
   answerButton: {
     backgroundColor: 'rgba(255, 255, 255, 0.95)',
     padding: 20,
-    borderRadius: 4,
+    borderRadius: 1,
     flexDirection: 'row' as const,
     alignItems: 'center' as const,
     justifyContent: 'space-between' as const,
@@ -78,7 +78,7 @@ export default StyleSheet.create({
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.1,
     shadowRadius: 4,
-    elevation: 0,
+    //elevation: 0,
   },
   answerButtonSelected: {
     backgroundColor: 'rgba(0, 0, 0, 0.3)',
@@ -111,7 +111,7 @@ questionImage: {
   width: '100%',
   height: undefined,
   aspectRatio: 16/9,    // ✔️ image responsive
-  borderRadius: 4,
+  borderRadius: 1,
   //marginTop: ,
   backgroundColor: 'rgba(255, 255, 255, 0.2)',
   marginBottom: 24,

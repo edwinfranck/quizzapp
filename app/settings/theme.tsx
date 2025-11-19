@@ -42,10 +42,7 @@ export default function ThemeSelectionScreen() {
                 contentContainerStyle={styles.scrollContent}
                 showsVerticalScrollIndicator={false}
             >
-                <ThemedText variant="secondary" style={styles.subtitle}>
-                    Personnalisez l'apparence de l'application
-                </ThemedText>
-
+               
                 <View style={styles.grid}>
                     {availableThemes.map((themeOption) => {
                         const isSelected = themeName === themeOption.id;
@@ -118,60 +115,7 @@ export default function ThemeSelectionScreen() {
                     })}
                 </View>
 
-                {/* Preview Section */}
-                <View style={styles.previewSection}>
-                    <ThemedText type="subtitle" style={styles.previewTitle}>
-                        Aperçu
-                    </ThemedText>
-
-                    <View
-                        style={[
-                            styles.previewCard,
-                            {
-                                backgroundColor: theme.colors.surface,
-                                borderColor: theme.colors.border,
-                            }
-                        ]}
-                    >
-                        <View style={[styles.previewHeader, { backgroundColor: theme.colors.primary }]}>
-                            <Text style={[styles.previewHeaderText, { color: theme.colors.textInverse }]}>
-                                Exemple de carte
-                            </Text>
-                        </View>
-
-                        <View style={styles.previewContent}>
-                            <ThemedText type="subtitle">
-                                Titre principal
-                            </ThemedText>
-                            <ThemedText variant="secondary" style={styles.previewText}>
-                                Ceci est un exemple de texte secondaire pour montrer comment le thème s'applique.
-                            </ThemedText>
-
-                            <View style={styles.previewButtons}>
-                                <View
-                                    style={[
-                                        styles.previewButton,
-                                        { backgroundColor: theme.colors.primary }
-                                    ]}
-                                >
-                                    <Text style={[styles.previewButtonText, { color: theme.colors.textInverse }]}>
-                                        Bouton
-                                    </Text>
-                                </View>
-                                <View
-                                    style={[
-                                        styles.previewButtonOutline,
-                                        { borderColor: theme.colors.primary }
-                                    ]}
-                                >
-                                    <Text style={[styles.previewButtonText, { color: theme.colors.primary }]}>
-                                        Secondaire
-                                    </Text>
-                                </View>
-                            </View>
-                        </View>
-                    </View>
-                </View>
+               
             </ScrollView>
         </ThemedView>
     );
@@ -213,14 +157,14 @@ const styles = StyleSheet.create({
     },
     themeCard: {
         width: '47%',
-        borderRadius: 16,
+        borderRadius: 1,
         overflow: 'hidden',
         backgroundColor: '#FFF',
         shadowColor: '#000',
         shadowOffset: { width: 0, height: 4 },
         shadowOpacity: 0.1,
         shadowRadius: 8,
-        elevation: 4,
+        //elevation: 4,
     },
     themeCardPressed: {
         opacity: 0.8,
@@ -260,7 +204,7 @@ const styles = StyleSheet.create({
         right: 8,
         width: 32,
         height: 32,
-        borderRadius: 16,
+        borderRadius: 1,
         justifyContent: 'center',
         alignItems: 'center',
         shadowColor: '#000',
@@ -274,16 +218,6 @@ const styles = StyleSheet.create({
     },
     previewTitle: {
         marginBottom: 16,
-    },
-    previewCard: {
-        borderRadius: 16,
-        borderWidth: 1,
-        overflow: 'hidden',
-        shadowColor: '#000',
-        shadowOffset: { width: 0, height: 4 },
-        shadowOpacity: 0.1,
-        shadowRadius: 8,
-        elevation: 4,
     },
     previewHeader: {
         padding: 16,
@@ -307,13 +241,13 @@ const styles = StyleSheet.create({
     previewButton: {
         flex: 1,
         paddingVertical: 12,
-        borderRadius: 8,
+        borderRadius: 1,
         alignItems: 'center',
     },
     previewButtonOutline: {
         flex: 1,
         paddingVertical: 12,
-        borderRadius: 8,
+        borderRadius: 1,
         alignItems: 'center',
         borderWidth: 2,
     },

@@ -29,7 +29,7 @@ export default function CategoryScreen() {
         return (
             <View style={[styles.container, { paddingTop: insets.top, justifyContent: 'center', alignItems: 'center' }]}>
                 <Text style={{ color: '#FFF', fontSize: 18 }}>Catégorie introuvable</Text>
-                <Pressable onPress={() => router.back()} style={{ marginTop: 20, padding: 10, backgroundColor: '#FFF', borderRadius: 8 }}>
+                <Pressable onPress={() => router.back()} style={{ marginTop: 20, padding: 10, backgroundColor: '#FFF', borderRadius: 1 }}>
                     <Text>Retour</Text>
                 </Pressable>
             </View>
@@ -153,7 +153,7 @@ const createCategoryStyles = (theme: any) => StyleSheet.create({
     },
 
     card: {
-        borderRadius: 16,
+        borderRadius: 1,
         padding: 16,
         minHeight: 80,
         justifyContent: 'center' as const,
@@ -164,7 +164,7 @@ const createCategoryStyles = (theme: any) => StyleSheet.create({
         shadowOffset: { width: 0, height: 2 },
         shadowOpacity: 0.1,
         shadowRadius: 4,
-        elevation: 2,
+        //elevation: 2,
     },
 
     cardLocked: {
