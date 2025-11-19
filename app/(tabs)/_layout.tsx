@@ -19,10 +19,7 @@ import {
 import type { BottomTabBarProps } from "@react-navigation/bottom-tabs";
 import { Inter_900Black, useFonts } from "@expo-google-fonts/inter";
 
-const ACTIVE_BG = "#1f3329";         // Fond de la bulle, style WhatsApp
-const ACTIVE_ICON_COLOR = "#7A9182";  
-const INACTIVE_ICON_COLOR = "#1f3329";
-const LABEL_INACTIVE = "#1f3329";
+import { useTheme } from "@/contexts/ThemeContext";
 
 
 
@@ -47,7 +44,9 @@ const TABS = [
   },
 ];
 
-function CustomTabBar({ state, navigation }: BottomTabBarProps) {
+function CustomTabBar({ state, navigation, theme }: BottomTabBarProps & { theme: any }) {
+  const styles = createTabStyles(theme);
+
   return (
     <View style={styles.container}>
       {state.routes.map((route, index) => {
@@ -90,7 +89,7 @@ function CustomTabBar({ state, navigation }: BottomTabBarProps) {
             <Animated.View style={iconStyle}>
               <Icon
                 size={20}
-                color={focused ? ACTIVE_ICON_COLOR : INACTIVE_ICON_COLOR}
+                color={focused ? theme.colors.primary : theme.colors.textSecondary}
               />
             </Animated.View>
 
@@ -105,7 +104,7 @@ function CustomTabBar({ state, navigation }: BottomTabBarProps) {
 }
 
 export default function TabLayout() {
-
+  const { theme } = useTheme();
   let [fontsLoaded] = useFonts({
     Inter_900Black,
   });
@@ -113,7 +112,7 @@ export default function TabLayout() {
   if (!fontsLoaded) return null;
   return (
     <Tabs
-      tabBar={(props) => <CustomTabBar {...props} />}
+      tabBar={(props) => <CustomTabBar {...props} theme={theme} />}
       screenOptions={{ headerShown: false }}
     >
       <Tabs.Screen name="home" />
@@ -123,14 +122,14 @@ export default function TabLayout() {
   );
 }
 
-const styles = StyleSheet.create({
+const createTabStyles = (theme: any) => StyleSheet.create({
   container: {
     flexDirection: "row",
     height: 80,
-    backgroundColor: "#7A9182", // WhatsApp Dark Mode
+    backgroundColor: theme.colors.surface,
     paddingBottom: 10,
-    borderTopColor: "#1b2927",
-    //borderTopWidth: 1,
+    borderTopColor: theme.colors.border,
+    borderTopWidth: 1,
   },
   tab: {
     flex: 1,
@@ -140,12 +139,12 @@ const styles = StyleSheet.create({
   },
   label: {
     fontSize: 13,
-    color: LABEL_INACTIVE,
+    color: theme.colors.textSecondary,
     //fontWeight: "800",
     fontFamily: "Inter_900Black",
   },
   labelFocused: {
-    color: "#1f3329",
+    color: theme.colors.primary,
     //sfontWeight: "800",
     fontFamily: "Inter_900Black",
   },
@@ -154,7 +153,7 @@ const styles = StyleSheet.create({
     top: 8,
     width: 60,
     height: 30,
-    backgroundColor: ACTIVE_BG,
+    backgroundColor: theme.colors.primaryLight,
     borderRadius: 4,
     zIndex: -1,
   },

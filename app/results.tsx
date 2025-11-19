@@ -1,9 +1,10 @@
 import { useProgress } from '@/contexts/ProgressContext';
+import { useTheme } from '@/contexts/ThemeContext';
 import { getBadgeColor, getBadgeEmoji, categories } from '@/data/quizzes';
 import * as Haptics from 'expo-haptics';
 import { useLocalSearchParams, useRouter } from 'expo-router';
 import { AlarmClock, Home, RotateCcw, Sparkles, Star, Trophy, Zap } from 'lucide-react-native';
-import { useEffect, useRef } from 'react';
+import React, { useEffect, useRef } from 'react';
 import {
   Animated,
   Platform,
@@ -18,10 +19,14 @@ export default function ResultsScreen() {
   const { quizId } = useLocalSearchParams<{ quizId: string }>();
   const router = useRouter();
   const insets = useSafeAreaInsets();
+  const { theme } = useTheme();
   const { getQuizResult } = useProgress();
 
   const quiz = categories.flatMap(cat => cat.quizzes).find((q) => q.id === quizId);
   const result = getQuizResult(quizId || '');
+
+  // Generate styles from theme
+  const styles = React.useMemo(() => createResultsStyles(theme), [theme]);
 
   const scaleAnim = useRef(new Animated.Value(0)).current;
   const fadeAnim = useRef(new Animated.Value(0)).current;
@@ -244,10 +249,11 @@ export default function ResultsScreen() {
   );
 }
 
-const styles = StyleSheet.create({
+
+const createResultsStyles = (theme: any) => StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#335148',
+    backgroundColor: theme.colors.primary,
   },
   confettiContainer: {
     position: 'absolute' as const,
@@ -278,24 +284,24 @@ const styles = StyleSheet.create({
   title: {
     fontSize: 36,
     fontWeight: '800' as const,
-    color: '#FFFFFF',
+    color: theme.colors.textInverse,
     textAlign: 'center' as const,
   },
   quizTitle: {
     fontSize: 20,
-    color: '#94A3B8',
+    color: theme.colors.textSecondary,
     textAlign: 'center' as const,
   },
   badgeContainer: {
     padding: 32,
-    borderRadius: 4,
+    borderRadius: 16,
     alignItems: 'center' as const,
     gap: 16,
-    shadowColor: '#000',
+    shadowColor: theme.colors.shadow,
     shadowOffset: { width: 0, height: 8 },
     shadowOpacity: 0.3,
     shadowRadius: 16,
-    elevation: 1,
+    elevation: 8,
   },
   badgeEmoji: {
     fontSize: 80,
@@ -303,7 +309,7 @@ const styles = StyleSheet.create({
   badgeText: {
     fontSize: 28,
     fontWeight: '800' as const,
-    color: '#FFFFFF',
+    color: theme.colors.textInverse,
   },
   statsContainer: {
     flexDirection: 'row' as const,
@@ -311,31 +317,33 @@ const styles = StyleSheet.create({
   },
   statCard: {
     flex: 1,
-    backgroundColor: '#7A9182',
+    backgroundColor: theme.colors.surface,
     padding: 20,
-    borderRadius: 4,
+    borderRadius: 16,
     alignItems: 'center' as const,
     gap: 8,
+    borderWidth: 1,
+    borderColor: theme.colors.border,
   },
   statValue: {
     fontSize: 24,
     fontWeight: '800' as const,
-    color: '#FFFFFF',
+    color: theme.colors.text,
   },
   statLabel: {
     fontSize: 12,
-    color: '#1E293B',
+    color: theme.colors.textSecondary,
     textAlign: 'center' as const,
   },
   percentageText: {
     fontSize: 25,
     fontWeight: '800' as const,
-    color: '#10B981',
+    color: theme.colors.success,
   },
   timeText: {
     fontSize: 20,
     fontWeight: '700' as const,
-    color: '#F59E0B',
+    color: theme.colors.warning,
   },
   buttonsContainer: {
     gap: 12,
@@ -346,51 +354,46 @@ const styles = StyleSheet.create({
     justifyContent: 'center' as const,
     gap: 12,
     paddingVertical: 18,
-    borderRadius: 4,
-    shadowColor: '#000',
+    borderRadius: 16,
+    shadowColor: theme.colors.shadow,
     shadowOffset: { width: 0, height: 4 },
     shadowOpacity: 0.2,
     shadowRadius: 4,
-    elevation: 1,
+    elevation: 4,
   },
   buttonPressed: {
     transform: [{ scale: 0.97 }],
     opacity: 0.9,
   },
   retryButton: {
-    backgroundColor: '#7A9182',
+    backgroundColor: theme.colors.primaryLight,
   },
   homeButton: {
-    backgroundColor: '#7A9182',
+    backgroundColor: theme.colors.surface,
   },
   buttonText: {
     fontSize: 18,
     fontWeight: '700' as const,
-    color: '#FFFFFF',
-    borderRadius: 4,
+    color: theme.colors.textInverse,
   },
   homeButtonText: {
-    color: '#1E293B',
+    color: theme.colors.text,
   },
   errorText: {
-    color: '#FFFFFF',
+    color: theme.colors.textInverse,
     fontSize: 18,
     textAlign: 'center' as const,
   },
   badgeIcon: {
     marginBottom: 6,
-
   },
-
   badgeIconBox: {
     width: 50,
     height: 50,
     borderRadius: 8,
     backgroundColor: 'rgba(255,255,255,0.15)',
-    justifyContent: 'center',
-    alignItems: 'center',
-
-    // petit effet premium
+    justifyContent: 'center' as const,
+    alignItems: 'center' as const,
     shadowColor: '#000',
     shadowOpacity: 0.15,
     shadowRadius: 4,
@@ -398,6 +401,4 @@ const styles = StyleSheet.create({
     elevation: 4,
     marginBottom: 8,
   },
-
-
 });

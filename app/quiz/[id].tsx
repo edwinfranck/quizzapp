@@ -16,7 +16,7 @@ import {
   View
 } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
-import styles from '../styles/quiz.styles';
+import styles from '@/styles/quiz.styles';
 
 export default function QuizScreen() {
   const { id } = useLocalSearchParams<{ id: string }>();

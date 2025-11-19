@@ -1,4 +1,5 @@
 import { useProgress } from '@/contexts/ProgressContext';
+import { useTheme } from '@/contexts/ThemeContext';
 import { categories } from '@/data/quizzes';
 import * as Haptics from 'expo-haptics';
 import { useRouter } from 'expo-router';
@@ -19,12 +20,16 @@ import LockedChallengeModal from '@/components/LockedChallengeModal';
 export default function QuizzesScreen() {
   const router = useRouter();
   const insets = useSafeAreaInsets();
+  const { theme } = useTheme();
   const { progress, isQuizUnlocked } = useProgress();
   const [lockedCategory, setLockedCategory] = React.useState<{
     title: string;
     requiredPoints: number;
     color: string;
   } | null>(null);
+
+  // Generate styles from theme
+  const styles = React.useMemo(() => createQuizzesStyles(theme), [theme]);
 
   const handlePress = (quizId: string, requiredPoints: number) => {
     if (!isQuizUnlocked(requiredPoints)) return;
@@ -44,7 +49,7 @@ export default function QuizzesScreen() {
         <Text style={styles.headerTitle}>Quiz</Text>
 
         <View style={styles.pointsBadge}>
-          <Trophy size={18} color="#29392E" />
+          <Trophy size={18} color={theme.colors.textInverse} />
           <Text style={styles.pointsText}>{progress.totalPoints} pts</Text>
         </View>
       </View>
@@ -133,41 +138,41 @@ export default function QuizzesScreen() {
   );
 }
 
-const styles = StyleSheet.create({
+
+const createQuizzesStyles = (theme: any) => StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#8B9F99',
+    backgroundColor: theme.colors.background,
   },
 
   header: {
     paddingHorizontal: 22,
     paddingVertical: 20,
-    backgroundColor: '#7A9182',
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
+    backgroundColor: theme.colors.primary,
+    flexDirection: 'row' as const,
+    justifyContent: 'space-between' as const,
+    alignItems: 'center' as const,
   },
 
   headerTitle: {
     fontSize: 28,
-    //fontWeight: '900',
-    color: '#29392E',
+    color: theme.colors.textInverse,
     fontFamily: 'Inter_900Black',
   },
 
   pointsBadge: {
-    flexDirection: 'row',
-    alignItems: 'center',
+    flexDirection: 'row' as const,
+    alignItems: 'center' as const,
     gap: 8,
-    backgroundColor: '#8B9F99',
+    backgroundColor: theme.colors.primaryLight,
     paddingHorizontal: 14,
     paddingVertical: 8,
-    borderRadius: 6,
+    borderRadius: 20,
   },
 
   pointsText: {
-    color: '#29392E',
-    fontWeight: '700',
+    color: theme.colors.textInverse,
+    fontWeight: '700' as const,
   },
 
   gridContainer: {
@@ -175,9 +180,9 @@ const styles = StyleSheet.create({
   },
 
   grid: {
-    flexDirection: 'row',
-    flexWrap: 'wrap',
-    justifyContent: 'space-between',
+    flexDirection: 'row' as const,
+    flexWrap: 'wrap' as const,
+    justifyContent: 'space-between' as const,
     rowGap: 16,
   },
 
@@ -186,19 +191,17 @@ const styles = StyleSheet.create({
     borderRadius: 16,
     padding: 18,
     minHeight: 160,
-    justifyContent: 'space-between',
-    overflow: 'hidden',
+    justifyContent: 'space-between' as const,
+    overflow: 'hidden' as const,
 
-    // Enhanced shadows for depth
-    shadowColor: '#000',
+    shadowColor: theme.colors.shadow,
     shadowOpacity: 0.25,
     shadowOffset: { width: 0, height: 8 },
     shadowRadius: 12,
     elevation: 8,
 
-    // Border for subtle definition
     borderWidth: 1,
-    borderColor: 'rgba(255, 255, 255, 0.1)',
+    borderColor: theme.colors.border,
   },
 
   cardLocked: {
@@ -212,9 +215,9 @@ const styles = StyleSheet.create({
   },
 
   topRow: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
+    flexDirection: 'row' as const,
+    justifyContent: 'space-between' as const,
+    alignItems: 'center' as const,
   },
 
   icon: {
@@ -224,21 +227,21 @@ const styles = StyleSheet.create({
   title: {
     marginTop: 10,
     fontSize: 17,
-    fontWeight: '800',
-    color: '#FFF',
+    fontWeight: '800' as const,
+    color: theme.colors.textInverse,
   },
 
   subText: {
     fontSize: 14,
     marginTop: 4,
-    color: 'rgba(255,255,255,0.85)',
-    fontWeight: '600',
+    color: theme.colors.textSecondary,
+    fontWeight: '600' as const,
   },
 
   lockedText: {
     marginTop: 4,
     fontSize: 14,
-    color: '#FFF',
-    fontWeight: '700',
+    color: theme.colors.error,
+    fontWeight: '600' as const,
   },
 });

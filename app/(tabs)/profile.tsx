@@ -1,5 +1,6 @@
 import { useProgress } from "@/contexts/ProgressContext";
 import { useUser } from "@/contexts/UserContext";
+import { useTheme } from "@/contexts/ThemeContext";
 import { categories } from "@/data/quizzes";
 import { AVAILABLE_AVATARS, Avatar } from "@/types/user";
 import * as Haptics from "expo-haptics";
@@ -14,7 +15,8 @@ import {
   Trophy,
   Zap,
 } from "lucide-react-native";
-import { useState } from "react";
+import React, { useState } from "react";
+import { useRouter } from "expo-router";
 import {
   Alert,
   Modal,
@@ -30,7 +32,9 @@ import {
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 
 export default function ProfileScreen() {
+  const router = useRouter();
   const insets = useSafeAreaInsets();
+  const { theme } = useTheme();
   const { profile, updateName, updateAvatar } = useUser();
   const { progress, resetProgress } = useProgress();
 
@@ -40,6 +44,9 @@ export default function ProfileScreen() {
 
   const completedQuizzes = Object.keys(progress.quizResults).length;
   const totalQuizzes = categories.reduce((acc, cat) => acc + cat.quizzes.length, 0);
+
+  // Generate styles from theme
+  const styles = React.useMemo(() => createProfileStyles(theme), [theme]);
 
   const handleSaveName = () => {
     if (tempName.trim().length >= 2) {
@@ -196,6 +203,33 @@ export default function ProfileScreen() {
         <View style={styles.settingsSection}>
           <Text style={styles.sectionTitle}>Paramètres</Text>
 
+          {/* Theme Selection */}
+          <Pressable
+            style={styles.settingItem}
+            onPress={() => {
+              if (Platform.OS !== 'web') {
+                Haptics.selectionAsync();
+              }
+              router.push('/settings/theme' as never);
+            }}
+          >
+            <View style={styles.settingLeft}>
+              <View style={styles.settingIconContainer}>
+                <Sparkles size={20} color="#8B9F99" />
+              </View>
+              <View>
+                <Text style={styles.settingTitle}>
+                  Thème de l'application
+                </Text>
+                <Text style={styles.settingDescription}>
+                  Personnaliser les couleurs
+                </Text>
+              </View>
+            </View>
+            <ChevronRight size={20} color="#64748B" />
+          </Pressable>
+
+          {/* Reset Progress */}
           <Pressable style={styles.settingItem} onPress={handleResetProgress}>
             <View style={styles.settingLeft}>
               <View
@@ -292,84 +326,117 @@ export default function ProfileScreen() {
   );
 }
 
-const styles = StyleSheet.create({
+
+const createProfileStyles = (theme: any) => StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#8B9F99",
-  },
-  header: {
-    paddingHorizontal: 24,
-    paddingVertical: 20,
-    backgroundColor: "#7A9182",
-  },
-  headerTitle: {
-    fontSize: 26,
-    //fontWeight: '800' as const,
-    fontFamily: "Inter_900Black",
-    color: "#29392E",
+    backgroundColor: theme.colors.background,
   },
   scrollView: {
     flex: 1,
   },
-  scrollContent: {
+  header: {
     padding: 24,
-    gap: 24,
+    backgroundColor: theme.colors.primary,
+    borderBottomLeftRadius: 32,
+    borderBottomRightRadius: 32,
+    shadowColor: theme.colors.shadow,
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.2,
+    shadowRadius: 8,
+    elevation: 4,
+    zIndex: 1,
+  },
+  headerTop: {
+    flexDirection: "row" as const,
+    justifyContent: "space-between" as const,
+    alignItems: "center" as const,
+    marginBottom: 24,
+  },
+  headerTitle: {
+    fontSize: 28,
+    //fontWeight: "800" as const,
+    color: theme.colors.textInverse,
+    fontFamily: "Inter_900Black",
+  },
+  themeButton: {
+    padding: 8,
+    backgroundColor: 'rgba(255,255,255,0.2)',
+    borderRadius: 12,
   },
   profileCard: {
-    backgroundColor: "#7A9182",
-    borderRadius: 4,
-    padding: 32,
+    flexDirection: "row" as const,
     alignItems: "center" as const,
-    gap: 20,
-    borderWidth: 0,
-    borderColor: "#334155",
+    gap: 16,
   },
-  avatarLarge: {
-    width: 100,
-    height: 100,
-    borderRadius: 50,
-    alignItems: "center" as const,
-    justifyContent: "center" as const,
+  avatarContainer: {
     position: "relative" as const,
   },
-  avatarEmojiLarge: {
-    fontSize: 52,
+  avatarLarge: {
+    width: 80,
+    height: 80,
+    borderRadius: 40,
+    backgroundColor: theme.colors.surface,
+    alignItems: "center" as const,
+    justifyContent: "center" as const,
+    borderWidth: 3,
+    borderColor: theme.colors.textInverse,
+  },
+  avatarEmoji: {
+    fontSize: 40,
   },
   editBadge: {
     position: "absolute" as const,
     bottom: 0,
     right: 0,
-    backgroundColor: "#8B9F99",
-    width: 32,
-    height: 32,
-    borderRadius: 16,
+    backgroundColor: theme.colors.accent,
+    width: 28,
+    height: 28,
+    borderRadius: 14,
     alignItems: "center" as const,
     justifyContent: "center" as const,
-    borderWidth: 0,
-    borderColor: "#1E293B",
+    borderWidth: 2,
+    borderColor: theme.colors.primary,
+  },
+  userInfo: {
+    flex: 1,
   },
   nameContainer: {
-    flexDirection: "row" as const,
-    alignItems: "center" as const,
+    flexDirection: 'row' as const,
+    alignItems: 'center' as const,
     gap: 8,
   },
   userName: {
-    fontSize: 28,
-    fontWeight: "700" as const,
-    color: "#29392E",
+    fontSize: 24,
+    //fontWeight: "700" as const,
+    color: theme.colors.textInverse,
+    marginBottom: 4,
+    fontFamily: "Inter_900Black",
+  },
+  userLevel: {
+    fontSize: 14,
+    color: 'rgba(255,255,255,0.8)',
+    fontWeight: "600" as const,
+  },
+  scrollContent: {
+    flexGrow: 1,
+    padding: 24,
+    gap: 32,
+    paddingBottom: 100,
   },
   nameEditContainer: {
-    width: "100%" as const,
     gap: 12,
   },
   nameInput: {
-    backgroundColor: "#8B9F99",
-    borderRadius: 4,
+    backgroundColor: theme.colors.surface,
+    borderRadius: 12,
     paddingHorizontal: 16,
     paddingVertical: 12,
     fontSize: 18,
-    color: "#29392E",
+    color: theme.colors.text,
     textAlign: "center" as const,
+    borderWidth: 1,
+    borderColor: theme.colors.border,
   },
   nameEditButtons: {
     flexDirection: "row" as const,
@@ -378,22 +445,24 @@ const styles = StyleSheet.create({
   nameEditButton: {
     flex: 1,
     paddingVertical: 10,
-    borderRadius: 4,
+    borderRadius: 12,
     alignItems: "center" as const,
   },
   cancelButton: {
-    backgroundColor: "#8B9F99",
+    backgroundColor: theme.colors.surface,
+    borderWidth: 1,
+    borderColor: theme.colors.border,
   },
   saveButton: {
-    backgroundColor: "#29392E",
+    backgroundColor: theme.colors.primary,
   },
   cancelButtonText: {
-    color: "#29392E",
+    color: theme.colors.text,
     fontSize: 16,
     fontWeight: "600" as const,
   },
   saveButtonText: {
-    color: "#8B9F99",
+    color: theme.colors.textInverse,
     fontSize: 16,
     fontWeight: "600" as const,
   },
@@ -402,8 +471,7 @@ const styles = StyleSheet.create({
   },
   sectionTitle: {
     fontSize: 20,
-    //fontWeight: "700" as const,
-    color: "#29392E",
+    color: theme.colors.text,
     fontFamily: "Inter_900Black",
   },
   statsGrid: {
@@ -412,19 +480,24 @@ const styles = StyleSheet.create({
   },
   statCard: {
     flex: 1,
-    backgroundColor: "#7A9182",
-    borderRadius: 4,
+    backgroundColor: theme.colors.surface,
+    borderRadius: 16,
     padding: 16,
     alignItems: "center" as const,
     gap: 8,
-    borderWidth: 0,
-    borderColor: "#334155",
+    borderWidth: 1,
+    borderColor: theme.colors.border,
+    shadowColor: theme.colors.shadow,
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.05,
+    shadowRadius: 4,
+    elevation: 2,
   },
   statIcon: {
     width: 48,
     height: 48,
-    borderRadius: 4,
-    backgroundColor: "#29392E",
+    borderRadius: 12,
+    backgroundColor: theme.colors.primaryLight,
     alignItems: "center" as const,
     justifyContent: "center" as const,
   },
@@ -433,13 +506,12 @@ const styles = StyleSheet.create({
   },
   statValue: {
     fontSize: 24,
-    //fontWeight: "800" as const,
-    color: "#29392E",
+    color: theme.colors.text,
     fontFamily: "Inter_900Black",
   },
   statLabel: {
     fontSize: 12,
-    color: "#29392E",
+    color: theme.colors.textSecondary,
     fontWeight: "600" as const,
     textAlign: "center" as const,
   },
@@ -450,11 +522,16 @@ const styles = StyleSheet.create({
     flexDirection: "row" as const,
     justifyContent: "space-between" as const,
     alignItems: "center" as const,
-    backgroundColor: "#7A9182",
-    borderRadius: 4,
+    backgroundColor: theme.colors.surface,
+    borderRadius: 16,
     padding: 16,
-    borderWidth: 0,
-    borderColor: "#334155",
+    borderWidth: 1,
+    borderColor: theme.colors.border,
+    shadowColor: theme.colors.shadow,
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.05,
+    shadowRadius: 4,
+    elevation: 2,
   },
   settingLeft: {
     flexDirection: "row" as const,
@@ -465,22 +542,22 @@ const styles = StyleSheet.create({
   settingIconContainer: {
     width: 40,
     height: 40,
-    borderRadius: 4,
-    backgroundColor: "#334155",
+    borderRadius: 10,
+    backgroundColor: theme.colors.backgroundSecondary,
     alignItems: "center" as const,
     justifyContent: "center" as const,
   },
   dangerIconContainer: {
-    backgroundColor: "rgba(239, 68, 68, 0.2)",
+    backgroundColor: theme.colors.errorLight,
   },
   settingTitle: {
     fontSize: 16,
     fontWeight: "600" as const,
-    color: "#29392E",
+    color: theme.colors.text,
   },
   settingDescription: {
     fontSize: 13,
-    color: "#29392E",
+    color: theme.colors.textSecondary,
   },
   badgesSection: {
     gap: 16,
@@ -492,27 +569,32 @@ const styles = StyleSheet.create({
     gap: 12,
   },
   badgeItem: {
-    backgroundColor: "#7A9182",
-    borderRadius: 4,
+    backgroundColor: theme.colors.surface,
+    borderRadius: 12,
     padding: 16,
     alignItems: "center" as const,
     gap: 8,
     minWidth: 100,
-    borderWidth: 0,
-    borderColor: "#334155",
+    borderWidth: 1,
+    borderColor: theme.colors.border,
+    shadowColor: theme.colors.shadow,
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.05,
+    shadowRadius: 4,
+    elevation: 2,
   },
   badgeEmoji: {
     fontSize: 36,
   },
   badgeLabel: {
     fontSize: 12,
-    color: "#29392E",
+    color: theme.colors.text,
     fontWeight: "600" as const,
     textAlign: "center" as const,
   },
   noBadgesText: {
     fontSize: 14,
-    color: "#64748B",
+    color: theme.colors.textSecondary,
     fontStyle: "italic" as const,
   },
   modalOverlay: {
@@ -521,16 +603,21 @@ const styles = StyleSheet.create({
     justifyContent: "flex-end" as const,
   },
   modalContent: {
-    backgroundColor: "#8B9F99",
+    backgroundColor: theme.colors.surface,
     borderTopLeftRadius: 24,
     borderTopRightRadius: 24,
     padding: 24,
     paddingBottom: 40,
+    shadowColor: "#000",
+    shadowOffset: { width: 0, height: -4 },
+    shadowOpacity: 0.1,
+    shadowRadius: 12,
+    elevation: 10,
   },
   modalTitle: {
     fontSize: 22,
     fontWeight: "700" as const,
-    color: "#29392E",
+    color: theme.colors.text,
     marginBottom: 20,
     textAlign: "center" as const,
   },
@@ -543,14 +630,16 @@ const styles = StyleSheet.create({
   avatarOption: {
     width: 70,
     height: 70,
-    borderRadius: 4,
+    borderRadius: 12,
     alignItems: "center" as const,
     justifyContent: "center" as const,
     position: "relative" as const,
+    backgroundColor: theme.colors.backgroundSecondary,
   },
   avatarSelected: {
-    borderWidth: 4,
-    borderColor: "#29392E",
+    borderWidth: 3,
+    borderColor: theme.colors.primary,
+    backgroundColor: theme.colors.primaryLight,
   },
   avatarOptionEmoji: {
     fontSize: 36,
@@ -559,25 +648,25 @@ const styles = StyleSheet.create({
     position: "absolute" as const,
     top: -6,
     right: -6,
-    backgroundColor: "#10B981",
+    backgroundColor: theme.colors.success,
     width: 24,
     height: 24,
-    borderRadius: 4,
+    borderRadius: 12,
     alignItems: "center" as const,
     justifyContent: "center" as const,
     borderWidth: 2,
-    borderColor: "#29392E",
+    borderColor: theme.colors.surface,
   },
   checkmarkText: {
-    color: "#29392E",
+    color: "#FFF",
     fontSize: 14,
     fontWeight: "700" as const,
   },
   badgeIcon: {
     width: 40,
     height: 40,
-    borderRadius: 4,
-    backgroundColor: '#29392E',
+    borderRadius: 8,
+    backgroundColor: theme.colors.primary,
     alignItems: 'center',
     justifyContent: 'center',
     marginBottom: 8,

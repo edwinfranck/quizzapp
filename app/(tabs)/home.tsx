@@ -1,18 +1,20 @@
 import { useProgress } from '@/contexts/ProgressContext';
 import { useUser } from '@/contexts/UserContext';
+import { useTheme } from '@/contexts/ThemeContext';
 import { categories } from '@/data/quizzes';
 import * as Haptics from 'expo-haptics';
 import { useRouter } from 'expo-router';
 import { Clock, Trophy, Zap, Sparkles, Star, Lock, Play } from 'lucide-react-native';
 import { Platform, Pressable, ScrollView, Text, View, Image, Alert } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
-import styles from '../styles/home.styles';
+import { createHomeStyles } from '@/styles/home.styles';
 import React from 'react';
 import LockedChallengeModal from '@/components/LockedChallengeModal';
 
 export default function HomeScreen() {
   const router = useRouter();
   const insets = useSafeAreaInsets();
+  const { theme } = useTheme();
   const { progress, isQuizUnlocked } = useProgress();
   const { profile } = useUser();
   const [lockedCategory, setLockedCategory] = React.useState<{
@@ -34,6 +36,9 @@ export default function HomeScreen() {
   const completedQuizzes = Object.keys(progress.quizResults).length;
   const totalQuizzes = categories.reduce((acc, cat) => acc + cat.quizzes.length, 0);
 
+  // Generate styles from theme
+  const styles = React.useMemo(() => createHomeStyles(theme), [theme]);
+
   return (
     <View style={[styles.container, { paddingTop: insets.top }]}>
       <View style={styles.header}>
@@ -48,7 +53,7 @@ export default function HomeScreen() {
         </View>
 
         <View style={styles.pointsBadge}>
-          <Trophy size={18} color="#29392E" />
+          <Trophy size={18} color={theme.colors.textInverse} />
           <Text style={styles.pointsText}>{progress.totalPoints} pts</Text>
         </View>
       </View>
@@ -63,7 +68,7 @@ export default function HomeScreen() {
           <View style={styles.statsGrid}>
             <View style={styles.statItem}>
               <View style={styles.statIconContainer}>
-                <Trophy size={24} color="#8B9F99" />
+                <Trophy size={24} color={theme.colors.primary} />
               </View>
               <Text style={styles.statValue}>{progress.totalPoints}</Text>
               <Text style={styles.statLabel}>Points</Text>
@@ -71,7 +76,7 @@ export default function HomeScreen() {
 
             <View style={styles.statItem}>
               <View style={styles.statIconContainer}>
-                <Zap size={24} color="#8B9F99" />
+                <Zap size={24} color={theme.colors.primary} />
               </View>
               <Text style={styles.statValue}>{completedQuizzes}</Text>
               <Text style={styles.statLabel}>Quiz complétés</Text>
@@ -79,7 +84,7 @@ export default function HomeScreen() {
 
             <View style={styles.statItem}>
               <View style={styles.statIconContainer}>
-                <Clock size={24} color="#8B9F99" />
+                <Clock size={24} color={theme.colors.primary} />
               </View>
               <Text style={styles.statValue}>{totalQuizzes - completedQuizzes}</Text>
               <Text style={styles.statLabel}>À découvrir</Text>
@@ -144,9 +149,9 @@ export default function HomeScreen() {
                 {/* Icone droite */}
                 <View style={styles.playButton}>
                   {unlocked ? (
-                    <Play size={18} color="#8B9F99" />
+                    <Play size={18} color={theme.colors.textInverse} />
                   ) : (
-                    <Lock size={18} color="#8B9F99" />
+                    <Lock size={18} color={theme.colors.textInverse} />
                   )}
                 </View>
               </Pressable>

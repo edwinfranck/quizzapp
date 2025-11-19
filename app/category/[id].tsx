@@ -1,7 +1,9 @@
 import { useProgress } from '@/contexts/ProgressContext';
+import { useTheme } from '@/contexts/ThemeContext';
 import { categories } from '@/data/quizzes';
 import * as Haptics from 'expo-haptics';
 import { useLocalSearchParams, useRouter } from 'expo-router';
+import React from 'react';
 import { Lock, Trophy, Star, Play, Sparkles, Zap, ArrowLeft } from 'lucide-react-native';
 import {
     Platform,
@@ -17,9 +19,11 @@ export default function CategoryScreen() {
     const router = useRouter();
     const { id } = useLocalSearchParams();
     const insets = useSafeAreaInsets();
+    const { theme } = useTheme();
     const { progress, isQuizUnlocked } = useProgress();
 
     const category = categories.find((c) => c.id === id);
+    const styles = React.useMemo(() => createCategoryStyles(theme), [theme]);
 
     if (!category) {
         return (
@@ -43,9 +47,9 @@ export default function CategoryScreen() {
         <View style={[styles.container, { paddingTop: insets.top }]}>
 
             {/* HEADER */}
-            <View style={[styles.header, { backgroundColor: category.color }]}>
+            <View style={styles.header}>
                 <Pressable onPress={() => router.back()} style={styles.backButton}>
-                    <ArrowLeft size={24} color="#FFF" />
+                    <ArrowLeft size={24} color={theme.colors.textInverse} />
                 </Pressable>
                 <Text style={styles.headerTitle}>{category.title}</Text>
                 {/* Spacer for alignment */}
@@ -112,18 +116,20 @@ export default function CategoryScreen() {
     );
 }
 
-const styles = StyleSheet.create({
+
+const createCategoryStyles = (theme: any) => StyleSheet.create({
     container: {
         flex: 1,
-        backgroundColor: '#8B9F99',
+        backgroundColor: theme.colors.background,
     },
 
     header: {
         paddingHorizontal: 22,
         paddingVertical: 20,
-        flexDirection: 'row',
-        justifyContent: 'space-between',
-        alignItems: 'center',
+        flexDirection: 'row' as const,
+        justifyContent: 'space-between' as const,
+        alignItems: 'center' as const,
+        backgroundColor: theme.colors.primary,
     },
 
     backButton: {
@@ -132,10 +138,10 @@ const styles = StyleSheet.create({
 
     headerTitle: {
         fontSize: 22,
-        color: '#FFF',
+        color: theme.colors.textInverse,
         fontFamily: 'Inter_900Black',
         flex: 1,
-        textAlign: 'center',
+        textAlign: 'center' as const,
     },
 
     listContainer: {
@@ -147,11 +153,18 @@ const styles = StyleSheet.create({
     },
 
     card: {
-        borderRadius: 8,
+        borderRadius: 16,
         padding: 16,
         minHeight: 80,
-        justifyContent: 'center',
-        backgroundColor: 'rgba(0,0,0,0.2)',
+        justifyContent: 'center' as const,
+        backgroundColor: theme.colors.surface,
+        borderWidth: 1,
+        borderColor: theme.colors.border,
+        shadowColor: theme.colors.shadow,
+        shadowOffset: { width: 0, height: 2 },
+        shadowOpacity: 0.1,
+        shadowRadius: 4,
+        elevation: 2,
     },
 
     cardLocked: {
@@ -163,31 +176,31 @@ const styles = StyleSheet.create({
     },
 
     cardContent: {
-        flexDirection: 'row',
-        justifyContent: 'space-between',
-        alignItems: 'center',
+        flexDirection: 'row' as const,
+        justifyContent: 'space-between' as const,
+        alignItems: 'center' as const,
     },
 
     quizTitle: {
         fontSize: 18,
-        fontWeight: '700',
-        color: '#FFF',
+        fontWeight: '700' as const,
+        color: theme.colors.text,
     },
 
     quizSubText: {
         fontSize: 14,
-        color: 'rgba(255,255,255,0.7)',
+        color: theme.colors.textSecondary,
         marginTop: 4,
     },
 
     badgeContainer: {
-        flexDirection: 'row',
-        alignItems: 'center',
+        flexDirection: 'row' as const,
+        alignItems: 'center' as const,
         gap: 8,
     },
 
     scoreText: {
-        color: '#FFF',
-        fontWeight: '600',
+        color: theme.colors.text,
+        fontWeight: '600' as const,
     }
 });
