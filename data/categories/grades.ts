@@ -9,8 +9,8 @@ export const gradesQuiz: Quiz = {
   questions: [
     {
       id: 'gr1',
-      question: "Quel est l’insigne du Caporal ?",
-      image: require('@/assets/grades/Armee/Caporal.png'),
+      question: "Quel est l'insigne du Caporal ?",
+      image: require('@/assets/grades/Armée de Terre/Caporal.png'),
       options: ['Caporal', 'Caporal-chef', 'Caporal-major', 'SD1'],
       correctAnswer: 0,
       points: 10,

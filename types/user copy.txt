@@ -10,6 +10,7 @@ export type UserProfile = {
   hasCompletedOnboarding: boolean;
 };
 
+
 export const AVAILABLE_AVATARS: Avatar[] = [
   { id: '1', emoji: '🪖​', backgroundColor: '#29392E' },
   { id: '2', emoji: '⚔️', backgroundColor: '#29392E' },

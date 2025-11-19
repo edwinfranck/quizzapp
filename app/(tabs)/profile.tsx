@@ -402,8 +402,9 @@ const styles = StyleSheet.create({
   },
   sectionTitle: {
     fontSize: 20,
-    fontWeight: "700" as const,
+    //fontWeight: "700" as const,
     color: "#29392E",
+    fontFamily: "Inter_900Black",
   },
   statsGrid: {
     flexDirection: "row" as const,
@@ -432,8 +433,9 @@ const styles = StyleSheet.create({
   },
   statValue: {
     fontSize: 24,
-    fontWeight: "800" as const,
+    //fontWeight: "800" as const,
     color: "#29392E",
+    fontFamily: "Inter_900Black",
   },
   statLabel: {
     fontSize: 12,

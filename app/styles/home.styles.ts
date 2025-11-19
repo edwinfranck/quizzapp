@@ -92,7 +92,8 @@ export default StyleSheet.create({
   },
   statValue: {
     fontSize: 24,
-    fontWeight: '800' as const,
+    //fontWeight: '800' as const,
+    fontFamily: 'Inter_900Black',
     color: '#29392E',
   },
   statLabel: {

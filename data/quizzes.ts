@@ -4,19 +4,25 @@ import { gradesQuiz } from './categories/grades';
 import { sousOffQuiz } from './categories/sous-officers';
 import { officiersQuiz } from './categories/officers';
 import { generauxQuiz } from './categories/generaux';
+import { militairesRangQuiz } from './categories/militairesRangQuiz';
+import { sousOfficiersSubalternesQuiz } from './categories/sousOfficiersSubalternesQuiz';
+import { sousOfficiersSuperieursQuiz } from './categories/sousOfficiersSuperieursQuiz';
+import { officiersSubalternesQuiz } from './categories/officiersSubalternesQuiz';
+import { officiersSuperieursQuiz } from './categories/officiersSuperieursQuiz';
+import { officiersGenerauxQuiz } from './categories/officiersGenerauxQuiz';
 
 export const quizzes: Quiz[] = [
-  nonGradesQuiz,
-  gradesQuiz,
-  sousOffQuiz,
-  officiersQuiz,
-  generauxQuiz
-  
+  militairesRangQuiz,
+  sousOfficiersSubalternesQuiz,
+  sousOfficiersSuperieursQuiz,
+  officiersSubalternesQuiz,
+  officiersSuperieursQuiz,
+  officiersGenerauxQuiz,
 ];
 
 export const getBadge = (score: number, totalQuestions: number): 'bronze' | 'silver' | 'gold' | 'platinum' => {
   const percentage = (score / totalQuestions) * 100;
-  
+
   if (percentage === 100) {
     return 'platinum' as const;
   }

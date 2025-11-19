@@ -20,7 +20,7 @@ import type { BottomTabBarProps } from "@react-navigation/bottom-tabs";
 import { Inter_900Black, useFonts } from "@expo-google-fonts/inter";
 
 const ACTIVE_BG = "#1f3329";         // Fond de la bulle, style WhatsApp
-const ACTIVE_ICON_COLOR = "#ffffff";  
+const ACTIVE_ICON_COLOR = "#7A9182";  
 const INACTIVE_ICON_COLOR = "#1f3329";
 const LABEL_INACTIVE = "#1f3329";
 
@@ -141,17 +141,18 @@ const styles = StyleSheet.create({
   label: {
     fontSize: 13,
     color: LABEL_INACTIVE,
-    fontFamily: "Inter_600SemiBold",
+    //fontWeight: "800",
+    fontFamily: "Inter_900Black",
   },
   labelFocused: {
     color: "#1f3329",
-    //fontWeight: "600",
-    fontFamily: "Inter_600SemiBold",
+    //sfontWeight: "800",
+    fontFamily: "Inter_900Black",
   },
   bubble: {
     position: "absolute",
     top: 8,
-    width: 40,
+    width: 60,
     height: 30,
     backgroundColor: ACTIVE_BG,
     borderRadius: 4,

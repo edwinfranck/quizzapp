@@ -10,7 +10,7 @@ export const nonGradesQuiz: Quiz = {
     {
       id: 'ng1',
       question: "Cet insigne correspond à quel grade ?",
-      image: require('@/assets/grades/Armee/SD2.png'),
+      image: require('@/assets/grades/Armée de Terre/Caporal.png'),
       options: ['SD1', 'Élève agent', 'Garde 2e classe', 'SD2'],
       correctAnswer: 3,
       points: 10,

@@ -35,7 +35,7 @@ export default function HomeScreen() {
             <Image source={profile.avatar.image} style={styles.avatarImage} />
           </View>
           <View>
-            <Text style={styles.greetingText}>Salut,</Text>
+            <Text style={styles.greetingText}>Repos,</Text>
             <Text style={styles.userName}>{profile.name}</Text>
           </View>
         </View>
@@ -117,7 +117,7 @@ export default function HomeScreen() {
                         <Text style={styles.quizQuestions}>{quiz.questions.length} questions</Text>
                       )
                     ) : (
-                      <Text style={styles.quizLocked}>{quiz.requiredPoints} pts requis</Text>
+                      <Text style={styles.quizLocked}>{quiz.requiredPoints} points requis</Text>
                     )}
                   </View>
                 </View>

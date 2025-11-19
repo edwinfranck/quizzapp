@@ -178,7 +178,7 @@ export default function ResultsScreen() {
             {result.badge === 'silver' && 'Bien joué !'}
             {result.badge === 'bronze' && 'Bon effort !'}
           </Text>
-
+           {/* Icone droite 
           <View style={styles.badgeIcon}>
   {badgeConfig[result.badge].icon}
 </View>
@@ -186,13 +186,13 @@ export default function ResultsScreen() {
 <Text style={styles.badgeText}>
   {badgeConfig[result.badge].text}
 </Text>
-
+*/}
           
         </View>
 
         <View style={styles.statsContainer}>
           <View style={styles.statCard}>
-            <Trophy size={32} color="#3B82F6" />
+            <Trophy size={32} color="#335148" />
             <Text style={styles.statValue}>
               {result.score}/{result.totalQuestions}
             </Text>
@@ -200,13 +200,13 @@ export default function ResultsScreen() {
           </View>
 
           <View style={styles.statCard}>
-            <Trophy size={32} color="#3B82F6" />
+            <Trophy size={32} color="#335148" />
             <Text style={styles.percentageText}>{percentage}%</Text>
             <Text style={styles.statLabel}>Score</Text>
           </View>
 
           <View style={styles.statCard}>
-            <AlarmClock size={32} color="#3B82F6" />
+            <AlarmClock size={32} color="#335148" />
             <Text style={styles.timeText}>{formatTime(result.timeSpent)}</Text>
             <Text style={styles.statLabel}>Temps</Text>
           </View>
@@ -311,7 +311,7 @@ const styles = StyleSheet.create({
   },
   statCard: {
     flex: 1,
-    backgroundColor: '#29392E',
+    backgroundColor: '#7A9182',
     padding: 20,
     borderRadius: 4,
     alignItems: 'center' as const,
@@ -324,7 +324,7 @@ const styles = StyleSheet.create({
   },
   statLabel: {
     fontSize: 12,
-    color: '#94A3B8',
+    color: '#1E293B',
     textAlign: 'center' as const,
   },
   percentageText: {
@@ -361,7 +361,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#7A9182',
   },
   homeButton: {
-    backgroundColor: '#29392E',
+    backgroundColor: '#7A9182',
   },
   buttonText: {
     fontSize: 18,
@@ -379,6 +379,7 @@ const styles = StyleSheet.create({
   },
   badgeIcon: {
   marginBottom: 6,
+  
 },
 
 badgeIconBox: {
