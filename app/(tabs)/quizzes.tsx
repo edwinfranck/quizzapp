@@ -3,7 +3,7 @@ import { useTheme } from '@/contexts/ThemeContext';
 import { categories } from '@/data/quizzes';
 import * as Haptics from 'expo-haptics';
 import { useRouter } from 'expo-router';
-import { Lock, Trophy, Star, Play, Sparkles, Zap } from 'lucide-react-native';
+import { Lock, Trophy, Star, Play, Sparkles, Zap, CheckCircle2, Award } from 'lucide-react-native';
 import React from 'react';
 import {
   Platform,
@@ -31,51 +31,53 @@ export default function QuizzesScreen() {
   // Generate styles from theme
   const styles = React.useMemo(() => createQuizzesStyles(theme), [theme]);
 
-  const handlePress = (quizId: string, requiredPoints: number) => {
-    if (!isQuizUnlocked(requiredPoints)) return;
-
-    if (Platform.OS !== 'web') {
-      Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
-    }
-
-    router.push(`/quiz/${quizId}`);
-  };
-
   return (
     <View style={[styles.container, { paddingTop: insets.top }]}>
 
       {/* HEADER */}
       <View style={styles.header}>
-        <Text style={styles.headerTitle}>Quiz</Text>
+        <View>
+          <Text style={styles.headerTitle}>Quiz</Text>
+          <Text style={styles.headerSubtitle}>{categories.length} catégories disponibles</Text>
+        </View>
 
         <View style={styles.pointsBadge}>
-          <Trophy size={18} color={theme.colors.textInverse} />
-          <Text style={styles.pointsText}>{progress.totalPoints} pts</Text>
+          <Trophy size={20} color={theme.colors.textInverse} />
+          <Text style={styles.pointsText}>{progress.totalPoints}</Text>
+          <Text style={styles.pointsLabel}>pts</Text>
         </View>
       </View>
 
       {/* GRID LIST */}
-      <ScrollView contentContainerStyle={styles.gridContainer}>
+      <ScrollView
+        contentContainerStyle={styles.gridContainer}
+        showsVerticalScrollIndicator={false}
+      >
         <View style={styles.grid}>
           {categories.map((category) => {
             const unlocked = isQuizUnlocked(category.requiredPoints);
-            // We can calculate a "category result" if we want, e.g. average score or completion
-            // For now, we just show if it's unlocked and maybe how many quizzes inside.
 
-            // Calculate total questions in category
-            const totalQuestions = category.quizzes.reduce((acc, q) => acc + q.questions.length, 0);
+            // Calculate progress for this category
+            const completedQuizzes = category.quizzes.filter(
+              quiz => progress.quizResults[quiz.id]
+            ).length;
             const totalQuizzes = category.quizzes.length;
+            const completionPercentage = totalQuizzes > 0
+              ? (completedQuizzes / totalQuizzes) * 100
+              : 0;
+            const isCompleted = completedQuizzes === totalQuizzes && totalQuizzes > 0;
+
+            // Calculate total questions
+            const totalQuestions = category.quizzes.reduce((acc, q) => acc + q.questions.length, 0);
 
             return (
               <Pressable
                 key={category.id}
                 onPress={() => {
                   if (!unlocked) {
-                    // Haptic feedback for locked category
                     if (Platform.OS !== 'web') {
                       Haptics.notificationAsync(Haptics.NotificationFeedbackType.Warning);
                     }
-                    // Show custom modal
                     setLockedCategory({
                       title: category.title,
                       requiredPoints: category.requiredPoints,
@@ -90,35 +92,80 @@ export default function QuizzesScreen() {
                 }}
                 style={({ pressed }) => [
                   styles.card,
-                  { backgroundColor: category.color },
                   !unlocked && styles.cardLocked,
                   pressed && unlocked && styles.cardPressed,
                 ]}
               >
-                {/* TOP ROW : icon left + state icon right */}
-                <View style={styles.topRow}>
-                  <Text style={styles.icon}>{category.icon}</Text>
+                {/* Background gradient effect */}
+                <View style={[styles.cardBackground, { backgroundColor: category.color }]} />
 
+                {/* Completion badge */}
+                {unlocked && isCompleted && (
+                  <View style={styles.completionBadge}>
+                    <CheckCircle2 size={16} color={theme.colors.success} fill={theme.colors.success} />
+                  </View>
+                )}
+
+                {/* Content */}
+                <View style={styles.cardContent}>
+                  {/* Icon and status */}
+                  <View style={styles.topRow}>
+                    <View style={[styles.iconContainer, { backgroundColor: category.color }]}>
+                      <Text style={styles.icon}>{category.icon}</Text>
+                    </View>
+
+                    {unlocked ? (
+                      <View style={[styles.statusBadge, { backgroundColor: theme.colors.primaryLight }]}>
+                        <Play size={14} color={theme.colors.primary} fill={theme.colors.primary} />
+                      </View>
+                    ) : (
+                      <View style={[styles.statusBadge, { backgroundColor: theme.colors.backgroundSecondary }]}>
+                        <Lock size={14} color={theme.colors.textSecondary} />
+                      </View>
+                    )}
+                  </View>
+
+                  {/* Title */}
+                  <Text style={styles.title} numberOfLines={2}>{category.title}</Text>
+
+                  {/* Info */}
                   {unlocked ? (
-                    <Play size={22} color="#FFF" />
+                    <>
+                      <View style={styles.infoRow}>
+                        <Text style={styles.infoText}>{totalQuizzes} quiz</Text>
+                        <View style={styles.dot} />
+                        <Text style={styles.infoText}>{totalQuestions} questions</Text>
+                      </View>
+
+                      {/* Progress bar */}
+                      {completedQuizzes > 0 && (
+                        <View style={styles.progressSection}>
+                          <View style={styles.progressBarContainer}>
+                            <View
+                              style={[
+                                styles.progressBar,
+                                {
+                                  width: `${completionPercentage}%`,
+                                  backgroundColor: category.color
+                                }
+                              ]}
+                            />
+                          </View>
+                          <Text style={styles.progressText}>
+                            {completedQuizzes}/{totalQuizzes} complétés
+                          </Text>
+                        </View>
+                      )}
+                    </>
                   ) : (
-                    <Lock size={22} color="#FFF" />
+                    <View style={styles.lockedInfo}>
+                      <Lock size={12} color={theme.colors.error} />
+                      <Text style={styles.lockedText}>
+                        {category.requiredPoints} pts requis
+                      </Text>
+                    </View>
                   )}
                 </View>
-
-                {/* TITLE */}
-                <Text style={styles.title}>{category.title}</Text>
-
-                {/* SUBTEXT */}
-                {unlocked ? (
-                  <Text style={styles.subText}>
-                    {totalQuizzes} quiz • {totalQuestions} questions
-                  </Text>
-                ) : (
-                  <Text style={styles.lockedText}>
-                    {category.requiredPoints} pts requis
-                  </Text>
-                )}
               </Pressable>
             );
           })}
@@ -132,7 +179,7 @@ export default function QuizzesScreen() {
         categoryTitle={lockedCategory?.title || ''}
         requiredPoints={lockedCategory?.requiredPoints || 0}
         currentPoints={progress.totalPoints}
-        categoryColor={lockedCategory?.color || '#8B9F99'}
+        categoryColor={lockedCategory?.color || theme.colors.primary}
       />
     </View>
   );
@@ -152,96 +199,205 @@ const createQuizzesStyles = (theme: any) => StyleSheet.create({
     flexDirection: 'row' as const,
     justifyContent: 'space-between' as const,
     alignItems: 'center' as const,
+    shadowColor: theme.colors.shadow,
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.1,
+    shadowRadius: 8,
   },
 
   headerTitle: {
     fontSize: 28,
     color: theme.colors.textInverse,
     fontFamily: 'Inter_900Black',
+    marginBottom: 4,
+  },
+
+  headerSubtitle: {
+    fontSize: 13,
+    color: theme.colors.textInverse,
+    opacity: 0.85,
   },
 
   pointsBadge: {
     flexDirection: 'row' as const,
     alignItems: 'center' as const,
-    gap: 8,
-    backgroundColor: theme.colors.primaryLight,
-    paddingHorizontal: 14,
-    paddingVertical: 8,
+    gap: 6,
+    backgroundColor: theme.colors.primaryDark,
+    paddingHorizontal: 12,
+    paddingVertical: 10,
     borderRadius: 1,
   },
 
   pointsText: {
     color: theme.colors.textInverse,
-    fontWeight: '700' as const,
+    fontSize: 18,
+    fontFamily: 'Inter_900Black',
+  },
+
+  pointsLabel: {
+    color: theme.colors.textInverse,
+    fontSize: 12,
+    opacity: 0.9,
   },
 
   gridContainer: {
     padding: 16,
+    paddingBottom: 32,
   },
 
   grid: {
     flexDirection: 'row' as const,
     flexWrap: 'wrap' as const,
-    justifyContent: 'space-between' as const,
-    rowGap: 16,
+    gap: 14,
   },
 
   card: {
     width: '48%',
     borderRadius: 1,
-    padding: 18,
-    minHeight: 160,
-    justifyContent: 'space-between' as const,
+    minHeight: 200,
     overflow: 'hidden' as const,
-
-    shadowColor: theme.colors.shadow,
-    shadowOpacity: 0.25,
-    shadowOffset: { width: 0, height: 8 },
-    shadowRadius: 12,
-    //elevation: 8,
-
+    backgroundColor: theme.colors.surface,
     borderWidth: 1,
     borderColor: theme.colors.border,
+    shadowColor: theme.colors.shadow,
+    shadowOpacity: 0.08,
+    shadowOffset: { width: 0, height: 4 },
+    shadowRadius: 12,
   },
 
   cardLocked: {
-    opacity: 0.6,
-    transform: [{ scale: 0.98 }],
+    opacity: 0.7,
   },
 
   cardPressed: {
-    transform: [{ scale: 0.95 }],
-    shadowOpacity: 0.15,
+    transform: [{ scale: 0.96 }],
+    shadowOpacity: 0.04,
+  },
+
+  cardBackground: {
+    position: 'absolute' as const,
+    top: 0,
+    left: 0,
+    right: 0,
+    height: 6,
+  },
+
+  completionBadge: {
+    position: 'absolute' as const,
+    top: 12,
+    right: 12,
+    width: 28,
+    height: 28,
+    borderRadius: 1,
+    backgroundColor: theme.colors.surface,
+    justifyContent: 'center' as const,
+    alignItems: 'center' as const,
+    borderWidth: 2,
+    borderColor: theme.colors.success,
+    zIndex: 10,
+  },
+
+  cardContent: {
+    padding: 16,
+    flex: 1,
+    justifyContent: 'space-between' as const,
   },
 
   topRow: {
     flexDirection: 'row' as const,
     justifyContent: 'space-between' as const,
+    alignItems: 'flex-start' as const,
+    marginBottom: 12,
+  },
+
+  iconContainer: {
+    width: 52,
+    height: 52,
+    borderRadius: 1,
+    justifyContent: 'center' as const,
     alignItems: 'center' as const,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.1,
+    shadowRadius: 4,
   },
 
   icon: {
-    fontSize: 34,
+    fontSize: 28,
+  },
+
+  statusBadge: {
+    width: 28,
+    height: 28,
+    borderRadius: 1,
+    justifyContent: 'center' as const,
+    alignItems: 'center' as const,
   },
 
   title: {
-    marginTop: 10,
-    fontSize: 17,
+    fontSize: 16,
     fontWeight: '800' as const,
-    color: theme.colors.textInverse,
+    color: theme.colors.text,
+    marginBottom: 8,
+    lineHeight: 20,
   },
 
-  subText: {
-    fontSize: 14,
-    marginTop: 4,
+  infoRow: {
+    flexDirection: 'row' as const,
+    alignItems: 'center' as const,
+    gap: 8,
+    marginBottom: 12,
+  },
+
+  infoText: {
+    fontSize: 13,
     color: theme.colors.textSecondary,
     fontWeight: '600' as const,
   },
 
-  lockedText: {
-    marginTop: 4,
-    fontSize: 14,
-    color: theme.colors.error,
+  dot: {
+    width: 3,
+    height: 3,
+    borderRadius: 1.5,
+    backgroundColor: theme.colors.textSecondary,
+  },
+
+  progressSection: {
+    gap: 6,
+  },
+
+  progressBarContainer: {
+    height: 6,
+    backgroundColor: theme.colors.backgroundSecondary,
+    borderRadius: 1,
+    overflow: 'hidden' as const,
+  },
+
+  progressBar: {
+    height: '100%',
+    borderRadius: 1,
+  },
+
+  progressText: {
+    fontSize: 11,
+    color: theme.colors.textTertiary,
     fontWeight: '600' as const,
+  },
+
+  lockedInfo: {
+    flexDirection: 'row' as const,
+    alignItems: 'center' as const,
+    gap: 6,
+    paddingVertical: 6,
+    paddingHorizontal: 10,
+    backgroundColor: theme.colors.backgroundSecondary,
+    borderRadius: 1,
+    alignSelf: 'flex-start' as const,
+  },
+
+  lockedText: {
+    fontSize: 12,
+    color: theme.colors.error,
+    fontWeight: '700' as const,
   },
 });
