@@ -32,6 +32,7 @@ const forestTheme: Theme = {
         success: '#10B981',
         warning: '#F59E0B',
         error: '#EF4444',
+        errorLight: '#FEE2E2',
         info: '#3B82F6',
 
         border: '#E2E8F0',
@@ -73,6 +74,7 @@ const oceanTheme: Theme = {
         success: '#10B981',
         warning: '#F59E0B',
         error: '#EF4444',
+        errorLight: '#DBEAFE',
         info: '#3B82F6',
 
         border: '#D6EBFF',
@@ -114,6 +116,7 @@ const sunsetTheme: Theme = {
         success: '#10B981',
         warning: '#F59E0B',
         error: '#EF4444',
+        errorLight: '#FEE2E2',
         info: '#3B82F6',
 
         border: '#FFD9C7',
@@ -155,6 +158,7 @@ const purpleTheme: Theme = {
         success: '#10B981',
         warning: '#F59E0B',
         error: '#EF4444',
+        errorLight: '#F3E8FF',
         info: '#3B82F6',
 
         border: '#E9D5FF',
@@ -196,6 +200,7 @@ const roseTheme: Theme = {
         success: '#10B981',
         warning: '#F59E0B',
         error: '#EF4444',
+        errorLight: '#FFE4EC',
         info: '#3B82F6',
 
         border: '#FFD1DC',
@@ -237,6 +242,7 @@ const darkTheme: Theme = {
         success: '#10B981',
         warning: '#F59E0B',
         error: '#EF4444',
+        errorLight: '#7F1D1D',
         info: '#3B82F6',
 
         border: '#334155',

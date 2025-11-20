@@ -5,8 +5,10 @@ import { sousOfficiersSuperieursQuiz } from './categories/sousOfficiersSuperieur
 import { officiersSubalternesQuiz } from './categories/officiersSubalternesQuiz';
 import { officiersSuperieursQuiz } from './categories/officiersSuperieursQuiz';
 import { officiersGenerauxQuiz } from './categories/officiersGenerauxQuiz';
+import { testQuiz } from './categories/testQuiz';
 
 export const categories: Category[] = [
+  testQuiz,
   militairesRangQuiz,
   sousOfficiersSubalternesQuiz,
   sousOfficiersSuperieursQuiz,

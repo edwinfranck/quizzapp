@@ -33,6 +33,7 @@ export type ThemeColors = {
     success: string;
     warning: string;
     error: string;
+    errorLight: string;
     info: string;
 
     // Borders

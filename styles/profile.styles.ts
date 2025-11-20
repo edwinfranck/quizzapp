@@ -80,13 +80,13 @@ export const createProfileStyles = (theme: Theme) => StyleSheet.create({
   userName: {
     fontSize: 24,
     //fontWeight: "700" as const,
-    color: theme.colors.textInverse,
+    color: theme.colors.text,
     marginBottom: 4,
     fontFamily: "Inter_900Black",
   },
   userLevel: {
     fontSize: 14,
-    color: 'rgba(255,255,255,0.8)',
+    color: theme.colors.textSecondary,
     fontWeight: "600" as const,
   },
   scrollContent: {
@@ -146,16 +146,16 @@ export const createProfileStyles = (theme: Theme) => StyleSheet.create({
     fontFamily: "Inter_900Black",
   },
   statsGrid: {
-    flexDirection: "row" as const,
+    flexDirection: "column" as const,
     gap: 12,
   },
   statCard: {
-    flex: 1,
     backgroundColor: theme.colors.surface,
     borderRadius: 1,
     padding: 16,
+    flexDirection: "row" as const,
     alignItems: "center" as const,
-    gap: 8,
+    gap: 12,
     borderWidth: 1,
     borderColor: theme.colors.border,
     shadowColor: theme.colors.shadow,
@@ -184,7 +184,10 @@ export const createProfileStyles = (theme: Theme) => StyleSheet.create({
     fontSize: 12,
     color: theme.colors.textSecondary,
     fontWeight: "600" as const,
-    textAlign: "center" as const,
+  },
+  statTextContainer: {
+    flex: 1,
+    gap: 4,
   },
   settingsSection: {
     gap: 16,
@@ -337,7 +340,7 @@ export const createProfileStyles = (theme: Theme) => StyleSheet.create({
     width: 40,
     height: 40,
     borderRadius: 1,
-    backgroundColor: theme.colors.primary,
+    backgroundColor: theme.colors.backgroundSecondary,
     alignItems: 'center',
     justifyContent: 'center',
     marginBottom: 8,

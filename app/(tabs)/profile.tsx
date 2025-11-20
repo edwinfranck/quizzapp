@@ -122,7 +122,7 @@ export default function ProfileScreen() {
           >
             <Image source={profile.avatar.image} style={styles.avatarImage} />
             <View style={styles.editBadge}>
-              <Edit2 size={14} color="#29392E" />
+              <Edit2 size={14} color={theme.colors.textInverse} />
             </View>
           </Pressable>
 
@@ -166,7 +166,7 @@ export default function ProfileScreen() {
               }}
             >
               <Text style={styles.userName}>{profile.name}</Text>
-              <Edit2 size={18} color="#29392E" />
+              <Edit2 size={18} color={theme.colors.text} />
             </Pressable>
           )}
         </View>
@@ -177,26 +177,32 @@ export default function ProfileScreen() {
           <View style={styles.statsGrid}>
             <View style={styles.statCard}>
               <View style={styles.statIcon}>
-                <Trophy size={28} color="#8B9F99" />
+                <Trophy size={28} color={theme.colors.primary} />
               </View>
-              <Text style={styles.statValue}>{progress.totalPoints}</Text>
-              <Text style={styles.statLabel}>Points totaux</Text>
+              <View style={styles.statTextContainer}>
+                <Text style={styles.statValue}>{progress.totalPoints}</Text>
+                <Text style={styles.statLabel}>Points totaux</Text>
+              </View>
             </View>
 
             <View style={styles.statCard}>
               <View style={styles.statIcon}>
-                <CheckCheck size={28} color="#8B9F99" />
+                <CheckCheck size={28} color={theme.colors.primary} />
               </View>
-              <Text style={styles.statValue}>{completedQuizzes}</Text>
-              <Text style={styles.statLabel}>Quiz finis</Text>
+              <View style={styles.statTextContainer}>
+                <Text style={styles.statValue}>{completedQuizzes}</Text>
+                <Text style={styles.statLabel}>Quiz terminés</Text>
+              </View>
             </View>
 
             <View style={styles.statCard}>
               <View style={styles.statIcon}>
-                <TargetIcon size={28} color="#8B9F99" />
+                <TargetIcon size={28} color={theme.colors.primary} />
               </View>
-              <Text style={styles.statValue}>{totalQuizzes}</Text>
-              <Text style={styles.statLabel}>Quiz totaux</Text>
+              <View style={styles.statTextContainer}>
+                <Text style={styles.statValue}>{totalQuizzes}</Text>
+                <Text style={styles.statLabel}>Quiz totaux</Text>
+              </View>
             </View>
           </View>
         </View>
@@ -216,7 +222,7 @@ export default function ProfileScreen() {
           >
             <View style={styles.settingLeft}>
               <View style={styles.settingIconContainer}>
-                <Sparkles size={20} color="#8B9F99" />
+                <Sparkles size={20} color={theme.colors.primary} />
               </View>
               <View>
                 <Text style={styles.settingTitle}>
@@ -227,7 +233,7 @@ export default function ProfileScreen() {
                 </Text>
               </View>
             </View>
-            <ChevronRight size={20} color="#64748B" />
+            <ChevronRight size={20} color={theme.colors.textSecondary} />
           </Pressable>
 
           {/* Reset Progress */}
@@ -239,7 +245,7 @@ export default function ProfileScreen() {
                   styles.dangerIconContainer,
                 ]}
               >
-                <RotateCcw size={20} color="#EF4444" />
+                <RotateCcw size={20} color={theme.colors.error} />
               </View>
               <View>
                 <Text style={styles.settingTitle}>
@@ -250,7 +256,7 @@ export default function ProfileScreen() {
                 </Text>
               </View>
             </View>
-            <ChevronRight size={20} color="#64748B" />
+            <ChevronRight size={20} color={theme.colors.textSecondary} />
           </Pressable>
         </View>
 
@@ -261,16 +267,16 @@ export default function ProfileScreen() {
               <View key={result.quizId} style={styles.badgeItem}>
                 <View style={styles.badgeIcon}>
                   {result.badge === "platinum" && (
-                    <Sparkles size={28} color="#8B9F99" />
+                    <Sparkles size={28} color={theme.colors.primary} />
                   )}
                   {result.badge === "gold" && (
-                    <Trophy size={28} color="#8B9F99" />
+                    <Trophy size={28} color={theme.colors.primary} />
                   )}
                   {result.badge === "silver" && (
-                    <Star size={28} color="#8B9F99" />
+                    <Star size={28} color={theme.colors.primary} />
                   )}
                   {result.badge === "bronze" && (
-                    <Zap size={28} color="#8B9F99" fill="#8B9F99" />
+                    <Zap size={28} color={theme.colors.primary} fill={theme.colors.primary} />
                   )}
                 </View>
 
