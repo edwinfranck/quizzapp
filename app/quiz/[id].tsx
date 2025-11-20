@@ -1,27 +1,29 @@
 import { useProgress } from '@/contexts/ProgressContext';
+import { useTheme } from '@/contexts/ThemeContext';
 import { getBadge, categories } from '@/data/quizzes';
 import { Question } from '@/types/quiz';
 import * as Haptics from 'expo-haptics';
 import { Image } from 'expo-image';
 import { useLocalSearchParams, useRouter } from 'expo-router';
-import { CheckCircle2, Clock, XCircle } from 'lucide-react-native';
-import { useEffect, useRef, useState } from 'react';
+import { CheckCircle2, Clock, XCircle, ArrowLeft, Sparkles } from 'lucide-react-native';
+import React, { useEffect, useRef, useState } from 'react';
 import { useIsFocused } from '@react-navigation/native';
 import {
   Animated,
   Platform,
   Pressable,
   ScrollView,
+  StyleSheet,
   Text,
   View
 } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
-import styles from '@/styles/quiz.styles';
 
 export default function QuizScreen() {
   const { id } = useLocalSearchParams<{ id: string }>();
   const router = useRouter();
   const insets = useSafeAreaInsets();
+  const { theme } = useTheme();
   const { saveQuizResult, progress } = useProgress();
 
   // in-progress helpers (save/restore partial quiz state)
@@ -181,6 +183,9 @@ export default function QuizScreen() {
     }).start();
   }, [currentQuestionIndex, fadeAnim]);
 
+  // Generate styles from theme
+  const styles = React.useMemo(() => createQuizStyles(theme, categoryColor), [theme, categoryColor]);
+
   if (!quiz) {
     return (
       <View style={styles.container}>
@@ -271,22 +276,36 @@ export default function QuizScreen() {
   };
 
   return (
-    <View style={[styles.container, { backgroundColor: categoryColor, paddingTop: insets.top }]}>
+    <View style={[styles.container, { paddingTop: insets.top }]}>
 
-      {/* Header (non scrollable) */}
+      {/* Header with back button */}
       <View style={styles.header}>
-        <View style={styles.progressContainer}>
-          <View style={styles.progressBar}>
-            <View style={[styles.progressFill, { width: `${progressPercent}%` }]} />
-          </View>
-          <Text style={styles.progressText}>
-            {currentQuestionIndex + 1}/{shuffledQuestions.length}
-          </Text>
-        </View>
+        <Pressable
+          style={styles.backButton}
+          onPress={() => {
+            if (Platform.OS !== 'web') {
+              Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+            }
+            router.back();
+          }}
+        >
+          <ArrowLeft size={24} color="#FFFFFF" />
+        </Pressable>
 
-        <View style={styles.timerContainer}>
-          <Clock size={18} color="#FFFFFF" />
-          <Text style={styles.timerText}>{formatTime(timeElapsed)}</Text>
+        <View style={styles.headerContent}>
+          <View style={styles.progressContainer}>
+            <View style={styles.progressBar}>
+              <View style={[styles.progressFill, { width: `${progressPercent}%` }]} />
+            </View>
+            <Text style={styles.progressText}>
+              Question {currentQuestionIndex + 1}/{shuffledQuestions.length}
+            </Text>
+          </View>
+
+          <View style={styles.timerContainer}>
+            <Clock size={16} color="#FFFFFF" />
+            <Text style={styles.timerText}>{formatTime(timeElapsed)}</Text>
+          </View>
         </View>
       </View>
 
@@ -296,8 +315,12 @@ export default function QuizScreen() {
           contentContainerStyle={styles.scrollContent}
           showsVerticalScrollIndicator={false}
         >
-          <View style={styles.questionContainer}>
-            <Text style={styles.questionNumber}>Question {currentQuestionIndex + 1}</Text>
+          {/* Question Card */}
+          <View style={styles.questionCard}>
+            <View style={styles.questionHeader}>
+              <Sparkles size={20} color={categoryColor} />
+              <Text style={styles.questionNumber}>Question {currentQuestionIndex + 1}</Text>
+            </View>
             <Text style={styles.questionText}>{currentQuestion.question}</Text>
 
             {currentQuestion.image && (
@@ -313,13 +336,11 @@ export default function QuizScreen() {
             )}
           </View>
 
+          {/* Answers */}
           <View style={styles.answersContainer}>
             {currentQuestion.options.map((option, index) => {
               const isSelected = selectedAnswer === index;
               const isCorrect = index === currentQuestion.correctAnswer;
-              // Only reveal the correct answer when the user actually selected it.
-              // This prevents showing the correct option when the user answered
-              // incorrectly and will retry later.
               const showCorrect = showResult && isCorrect && isSelected;
               const showIncorrect = showResult && isSelected && !isCorrect;
 
@@ -335,17 +356,40 @@ export default function QuizScreen() {
                     onPress={() => handleAnswerPress(index)}
                     disabled={selectedAnswer !== null}
                   >
-                    <Text
-                      style={[
-                        styles.answerText,
-                        (isSelected || showCorrect) && styles.answerTextSelected,
-                      ]}
-                    >
-                      {option}
-                    </Text>
+                    <View style={styles.answerContent}>
+                      <View style={[
+                        styles.answerIndex,
+                        isSelected && styles.answerIndexSelected,
+                        showCorrect && styles.answerIndexCorrect,
+                        showIncorrect && styles.answerIndexIncorrect,
+                      ]}>
+                        <Text style={[
+                          styles.answerIndexText,
+                          (isSelected || showCorrect || showIncorrect) && styles.answerIndexTextSelected,
+                        ]}>
+                          {String.fromCharCode(65 + index)}
+                        </Text>
+                      </View>
+                      <Text
+                        style={[
+                          styles.answerText,
+                          (isSelected || showCorrect || showIncorrect) && styles.answerTextSelected,
+                        ]}
+                      >
+                        {option}
+                      </Text>
+                    </View>
 
-                    {showCorrect && <CheckCircle2 size={24} color="#FFFFFF" />}
-                    {showIncorrect && <XCircle size={24} color="#FFFFFF" />}
+                    {showCorrect && (
+                      <View style={styles.resultIcon}>
+                        <CheckCircle2 size={24} color="#FFFFFF" fill="#FFFFFF" />
+                      </View>
+                    )}
+                    {showIncorrect && (
+                      <View style={styles.resultIcon}>
+                        <XCircle size={24} color="#FFFFFF" fill="#FFFFFF" />
+                      </View>
+                    )}
                   </Pressable>
                 </Animated.View>
               );
@@ -359,3 +403,227 @@ export default function QuizScreen() {
   );
 
 }
+
+const createQuizStyles = (theme: any, categoryColor: string) => StyleSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor: theme.colors.background,
+  },
+
+  // Header
+  header: {
+    backgroundColor: categoryColor,
+    paddingHorizontal: 20,
+    paddingVertical: 16,
+    shadowColor: theme.colors.shadow,
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.15,
+    shadowRadius: 12,
+  },
+
+  backButton: {
+    width: 40,
+    height: 40,
+    borderRadius: 20,
+    backgroundColor: 'rgba(255, 255, 255, 0.2)',
+    justifyContent: 'center' as const,
+    alignItems: 'center' as const,
+    marginBottom: 12,
+  },
+
+  headerContent: {
+    gap: 12,
+  },
+
+  progressContainer: {
+    gap: 8,
+  },
+
+  progressBar: {
+    height: 8,
+    backgroundColor: 'rgba(255, 255, 255, 0.25)',
+    borderRadius: 20,
+    overflow: 'hidden' as const,
+  },
+
+  progressFill: {
+    height: '100%',
+    backgroundColor: '#FFFFFF',
+    borderRadius: 20,
+  },
+
+  progressText: {
+    color: '#FFFFFF',
+    fontSize: 14,
+    fontWeight: '700' as const,
+    fontFamily: "Inter_900Black",
+  },
+
+  timerContainer: {
+    flexDirection: 'row' as const,
+    alignItems: 'center' as const,
+    gap: 8,
+    backgroundColor: 'rgba(0, 0, 0, 0.15)',
+    paddingHorizontal: 14,
+    paddingVertical: 8,
+    borderRadius: 20,
+    alignSelf: 'flex-start' as const,
+  },
+
+  timerText: {
+    color: '#FFFFFF',
+    fontSize: 15,
+    fontWeight: '700' as const,
+    fontFamily: "Inter_900Black",
+  },
+
+  // Content
+  scrollContent: {
+    padding: 20,
+    paddingBottom: 100,
+    gap: 20,
+  },
+
+  // Question Card
+  questionCard: {
+    backgroundColor: theme.colors.surface,
+    borderRadius: 16,
+    padding: 24,
+    gap: 16,
+    borderWidth: 1,
+    borderColor: theme.colors.border,
+    shadowColor: theme.colors.shadow,
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.08,
+    shadowRadius: 16,
+  },
+
+  questionHeader: {
+    flexDirection: 'row' as const,
+    alignItems: 'center' as const,
+    gap: 8,
+  },
+
+  questionNumber: {
+    color: theme.colors.textSecondary,
+    fontSize: 15,
+    fontWeight: '700' as const,
+  },
+
+  questionText: {
+    color: theme.colors.text,
+    fontSize: 22,
+    fontWeight: '800' as const,
+    lineHeight: 32,
+    fontFamily: "Inter_900Black",
+  },
+
+  questionImage: {
+    width: '100%',
+    height: undefined,
+    aspectRatio: 16 / 9,
+    borderRadius: 12,
+    backgroundColor: theme.colors.backgroundSecondary,
+    marginTop: 8,
+  },
+
+  // Answers
+  answersContainer: {
+    gap: 12,
+  },
+
+  answerButton: {
+    backgroundColor: theme.colors.surface,
+    padding: 18,
+    borderRadius: 12,
+    flexDirection: 'row' as const,
+    alignItems: 'center' as const,
+    justifyContent: 'space-between' as const,
+    borderWidth: 2,
+    borderColor: theme.colors.border,
+    shadowColor: theme.colors.shadow,
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.06,
+    shadowRadius: 8,
+  },
+
+  answerButtonSelected: {
+    backgroundColor: theme.colors.primaryLight,
+    borderColor: theme.colors.primary,
+  },
+
+  answerButtonCorrect: {
+    backgroundColor: theme.colors.success,
+    borderColor: theme.colors.success,
+  },
+
+  answerButtonIncorrect: {
+    backgroundColor: theme.colors.error,
+    borderColor: theme.colors.error,
+  },
+
+  answerContent: {
+    flexDirection: 'row' as const,
+    alignItems: 'center' as const,
+    gap: 12,
+    flex: 1,
+  },
+
+  answerIndex: {
+    width: 32,
+    height: 32,
+    borderRadius: 16,
+    backgroundColor: theme.colors.backgroundSecondary,
+    justifyContent: 'center' as const,
+    alignItems: 'center' as const,
+    borderWidth: 2,
+    borderColor: theme.colors.border,
+  },
+
+  answerIndexSelected: {
+    backgroundColor: theme.colors.primary,
+    borderColor: theme.colors.primary,
+  },
+
+  answerIndexCorrect: {
+    backgroundColor: '#FFFFFF',
+    borderColor: '#FFFFFF',
+  },
+
+  answerIndexIncorrect: {
+    backgroundColor: '#FFFFFF',
+    borderColor: '#FFFFFF',
+  },
+
+  answerIndexText: {
+    fontSize: 14,
+    fontWeight: '800' as const,
+    color: theme.colors.text,
+  },
+
+  answerIndexTextSelected: {
+    color: '#FFFFFF',
+  },
+
+  answerText: {
+    fontSize: 16,
+    fontWeight: '600' as const,
+    color: theme.colors.text,
+    flex: 1,
+  },
+
+  answerTextSelected: {
+    color: '#FFFFFF',
+  },
+
+  resultIcon: {
+    marginLeft: 8,
+  },
+
+  errorText: {
+    color: theme.colors.text,
+    fontSize: 18,
+    textAlign: 'center' as const,
+    padding: 20,
+  },
+});
