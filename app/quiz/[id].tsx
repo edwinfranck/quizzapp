@@ -424,7 +424,7 @@ const createQuizStyles = (theme: any, categoryColor: string) => StyleSheet.creat
   backButton: {
     width: 40,
     height: 40,
-    borderRadius: 20,
+    borderRadius: 1,
     backgroundColor: 'rgba(255, 255, 255, 0.2)',
     justifyContent: 'center' as const,
     alignItems: 'center' as const,
@@ -442,14 +442,14 @@ const createQuizStyles = (theme: any, categoryColor: string) => StyleSheet.creat
   progressBar: {
     height: 8,
     backgroundColor: 'rgba(255, 255, 255, 0.25)',
-    borderRadius: 20,
+    borderRadius: 1,
     overflow: 'hidden' as const,
   },
 
   progressFill: {
     height: '100%',
     backgroundColor: '#FFFFFF',
-    borderRadius: 20,
+    borderRadius: 1,
   },
 
   progressText: {
@@ -466,7 +466,7 @@ const createQuizStyles = (theme: any, categoryColor: string) => StyleSheet.creat
     backgroundColor: 'rgba(0, 0, 0, 0.15)',
     paddingHorizontal: 14,
     paddingVertical: 8,
-    borderRadius: 20,
+    borderRadius: 1,
     alignSelf: 'flex-start' as const,
   },
 
@@ -487,7 +487,7 @@ const createQuizStyles = (theme: any, categoryColor: string) => StyleSheet.creat
   // Question Card
   questionCard: {
     backgroundColor: theme.colors.surface,
-    borderRadius: 16,
+    borderRadius: 1,
     padding: 24,
     gap: 16,
     borderWidth: 1,
@@ -522,7 +522,7 @@ const createQuizStyles = (theme: any, categoryColor: string) => StyleSheet.creat
     width: '100%',
     height: undefined,
     aspectRatio: 16 / 9,
-    borderRadius: 12,
+    borderRadius: 1,
     backgroundColor: theme.colors.backgroundSecondary,
     marginTop: 8,
   },
@@ -535,7 +535,7 @@ const createQuizStyles = (theme: any, categoryColor: string) => StyleSheet.creat
   answerButton: {
     backgroundColor: theme.colors.surface,
     padding: 18,
-    borderRadius: 12,
+    borderRadius: 1,
     flexDirection: 'row' as const,
     alignItems: 'center' as const,
     justifyContent: 'space-between' as const,
@@ -572,7 +572,7 @@ const createQuizStyles = (theme: any, categoryColor: string) => StyleSheet.creat
   answerIndex: {
     width: 32,
     height: 32,
-    borderRadius: 16,
+    borderRadius: 1,
     backgroundColor: theme.colors.backgroundSecondary,
     justifyContent: 'center' as const,
     alignItems: 'center' as const,
