@@ -183,35 +183,31 @@ export default function ResultsScreen() {
             {result.badge === 'silver' && 'Bien joué !'}
             {result.badge === 'bronze' && 'Bon effort !'}
           </Text>
-          {/* Icone droite 
-          <View style={styles.badgeIcon}>
-  {badgeConfig[result.badge].icon}
-</View>
-
-<Text style={styles.badgeText}>
-  {badgeConfig[result.badge].text}
-</Text>
-*/}
-
         </View>
 
         <View style={styles.statsContainer}>
           <View style={styles.statCard}>
-            <Trophy size={32} color="#335148" />
+            <View style={[styles.statIconBox, { backgroundColor: theme.colors.primaryLight }]}>
+              <Trophy size={28} color={theme.colors.primary} />
+            </View>
             <Text style={styles.statValue}>
               {result.score}/{result.totalQuestions}
             </Text>
-            <Text style={styles.statLabel}>Réponses</Text>
+            <Text style={styles.statLabel}>Réponses correctes</Text>
           </View>
 
           <View style={styles.statCard}>
-            <Trophy size={32} color="#335148" />
+            <View style={[styles.statIconBox, { backgroundColor: '#D1FAE5' }]}>
+              <Star size={28} color={theme.colors.success} fill={theme.colors.success} />
+            </View>
             <Text style={styles.percentageText}>{percentage}%</Text>
             <Text style={styles.statLabel}>Score</Text>
           </View>
 
           <View style={styles.statCard}>
-            <AlarmClock size={32} color="#335148" />
+            <View style={[styles.statIconBox, { backgroundColor: '#FEF3C7' }]}>
+              <AlarmClock size={28} color={theme.colors.warning} />
+            </View>
             <Text style={styles.timeText}>{formatTime(result.timeSpent)}</Text>
             <Text style={styles.statLabel}>Temps</Text>
           </View>
@@ -226,7 +222,7 @@ export default function ResultsScreen() {
             ]}
             onPress={handleRetry}
           >
-            <RotateCcw size={24} color="#FFFFFF" />
+            <RotateCcw size={22} color="#FFFFFF" />
             <Text style={styles.buttonText}>Réessayer</Text>
           </Pressable>
 
@@ -238,9 +234,9 @@ export default function ResultsScreen() {
             ]}
             onPress={handleHome}
           >
-            <Home size={24} color="#1E293B" />
+            <Home size={22} color={theme.colors.text} />
             <Text style={[styles.buttonText, styles.homeButtonText]}>
-              Catégories
+              Retour aux catégories
             </Text>
           </Pressable>
         </View>
@@ -293,23 +289,24 @@ const createResultsStyles = (theme: any) => StyleSheet.create({
     textAlign: 'center' as const,
   },
   badgeContainer: {
-    padding: 32,
+    padding: 40,
     borderRadius: 1,
     alignItems: 'center' as const,
-    gap: 16,
+    gap: 12,
     shadowColor: theme.colors.shadow,
-    shadowOffset: { width: 0, height: 8 },
-    shadowOpacity: 0.3,
-    shadowRadius: 16,
-    elevation: 8,
+    shadowOffset: { width: 0, height: 12 },
+    shadowOpacity: 0.25,
+    shadowRadius: 20,
+    //elevation: 8,
   },
   badgeEmoji: {
-    fontSize: 80,
+    fontSize: 72,
   },
   badgeText: {
-    fontSize: 28,
+    fontSize: 26,
     fontWeight: '800' as const,
     color: theme.colors.textInverse,
+    fontFamily: "Inter_900Black",
   },
   statsContainer: {
     flexDirection: 'row' as const,
@@ -321,29 +318,46 @@ const createResultsStyles = (theme: any) => StyleSheet.create({
     padding: 20,
     borderRadius: 1,
     alignItems: 'center' as const,
-    gap: 8,
+    gap: 10,
     borderWidth: 1,
     borderColor: theme.colors.border,
+    shadowColor: theme.colors.shadow,
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.08,
+    shadowRadius: 12,
+  },
+
+  statIconBox: {
+    width: 56,
+    height: 56,
+    borderRadius: 1,
+    justifyContent: 'center' as const,
+    alignItems: 'center' as const,
+    marginBottom: 4,
   },
   statValue: {
-    fontSize: 24,
+    fontSize: 22,
     fontWeight: '800' as const,
     color: theme.colors.text,
+    fontFamily: "Inter_900Black",
   },
   statLabel: {
-    fontSize: 12,
+    fontSize: 11,
     color: theme.colors.textSecondary,
     textAlign: 'center' as const,
+    fontWeight: '600' as const,
   },
   percentageText: {
-    fontSize: 25,
+    fontSize: 22,
     fontWeight: '800' as const,
     color: theme.colors.success,
+    fontFamily: "Inter_900Black",
   },
   timeText: {
     fontSize: 20,
-    fontWeight: '700' as const,
+    fontWeight: '800' as const,
     color: theme.colors.warning,
+    fontFamily: "Inter_900Black",
   },
   buttonsContainer: {
     gap: 12,
@@ -352,13 +366,13 @@ const createResultsStyles = (theme: any) => StyleSheet.create({
     flexDirection: 'row' as const,
     alignItems: 'center' as const,
     justifyContent: 'center' as const,
-    gap: 12,
-    paddingVertical: 18,
+    gap: 10,
+    paddingVertical: 16,
     borderRadius: 1,
     shadowColor: theme.colors.shadow,
     shadowOffset: { width: 0, height: 4 },
-    shadowOpacity: 0.2,
-    shadowRadius: 4,
+    shadowOpacity: 0.15,
+    shadowRadius: 8,
     elevation: 4,
   },
   buttonPressed: {
@@ -366,15 +380,18 @@ const createResultsStyles = (theme: any) => StyleSheet.create({
     opacity: 0.9,
   },
   retryButton: {
-    backgroundColor: theme.colors.primaryLight,
+    backgroundColor: theme.colors.primary,
   },
   homeButton: {
     backgroundColor: theme.colors.surface,
+    borderWidth: 2,
+    borderColor: theme.colors.border,
   },
   buttonText: {
-    fontSize: 18,
+    fontSize: 16,
     fontWeight: '700' as const,
     color: theme.colors.textInverse,
+    fontFamily: "Inter_900Black",
   },
   homeButtonText: {
     color: theme.colors.text,
@@ -388,17 +405,17 @@ const createResultsStyles = (theme: any) => StyleSheet.create({
     marginBottom: 6,
   },
   badgeIconBox: {
-    width: 50,
-    height: 50,
+    width: 64,
+    height: 64,
     borderRadius: 1,
-    backgroundColor: 'rgba(255,255,255,0.15)',
+    backgroundColor: 'rgba(255,255,255,0.2)',
     justifyContent: 'center' as const,
     alignItems: 'center' as const,
     shadowColor: '#000',
-    shadowOpacity: 0.15,
-    shadowRadius: 4,
-    shadowOffset: { width: 0, height: 2 },
-    elevation: 4,
+    shadowOpacity: 0.2,
+    shadowRadius: 8,
+    shadowOffset: { width: 0, height: 4 },
+    elevation: 6,
     marginBottom: 8,
   },
 });
