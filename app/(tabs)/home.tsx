@@ -185,9 +185,24 @@ export default function HomeScreen() {
 
         {/* CATEGORIES GRID */}
         <View style={styles.categoriesSection}>
-          <Text style={styles.sectionTitle}>
-            {searchQuery ? `Résultats (${filteredCategories.length})` : 'Catégories'}
-          </Text>
+          <View style={styles.sectionHeader}>
+            <Text style={styles.sectionTitle}>
+              {searchQuery ? `Résultats (${filteredCategories.length})` : 'Catégories'}
+            </Text>
+            {!searchQuery && (
+              <Pressable
+                onPress={() => {
+                  if (Platform.OS !== 'web') {
+                    Haptics.selectionAsync();
+                  }
+                  router.push('/(tabs)/quizzes' as never);
+                }}
+                style={styles.seeMoreButton}
+              >
+                <Text style={styles.seeMoreText}>Voir plus</Text>
+              </Pressable>
+            )}
+          </View>
 
           {filteredCategories.length > 0 ? (
             <>
@@ -536,10 +551,27 @@ const createHomeStyles = (theme: any) => StyleSheet.create({
     gap: 12,
   },
 
+  sectionHeader: {
+    flexDirection: 'row' as const,
+    justifyContent: 'space-between' as const,
+    alignItems: 'center' as const,
+  },
+
   sectionTitle: {
     fontSize: 18,
     color: theme.colors.text,
     fontFamily: "Inter_900Black",
+  },
+
+  seeMoreButton: {
+    paddingVertical: 6,
+    paddingHorizontal: 12,
+  },
+
+  seeMoreText: {
+    fontSize: 14,
+    fontWeight: '600' as const,
+    color: theme.colors.primary,
   },
 
   categoriesGrid: {
