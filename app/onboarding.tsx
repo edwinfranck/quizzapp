@@ -5,14 +5,15 @@ import { useRouter } from 'expo-router';
 import { Sparkles } from 'lucide-react-native';
 import { useState } from 'react';
 import {
-    KeyboardAvoidingView,
-    Platform,
-    Pressable,
-    ScrollView,
-    StyleSheet,
-    Text,
-    TextInput,
-    View,
+  Image,
+  KeyboardAvoidingView,
+  Platform,
+  Pressable,
+  ScrollView,
+  StyleSheet,
+  Text,
+  TextInput,
+  View,
 } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
@@ -91,7 +92,7 @@ export default function OnboardingScreen() {
                   ]}
                   onPress={() => handleAvatarSelect(avatar)}
                 >
-                  <Text style={styles.avatarEmoji}>{avatar.emoji}</Text>
+                  <Image source={avatar.image} style={styles.avatarImage} />
                   {selectedAvatar.id === avatar.id && (
                     <View style={styles.checkmark}>
                       <Text style={styles.checkmarkText}>✓</Text>
@@ -181,7 +182,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row' as const,
     flexWrap: 'wrap' as const,
     gap: 12,
-    justifyContent: 'center' as const,
+    //justifyContent: 'center' as const,
   },
   avatarButton: {
     width: 70,
@@ -195,8 +196,10 @@ const styles = StyleSheet.create({
     borderWidth: 4,
     borderColor: '#FFFFFF',
   },
-  avatarEmoji: {
-    fontSize: 36,
+  avatarImage: {
+    width: 60,
+    height: 60,
+    borderRadius: 1,
   },
   checkmark: {
     position: 'absolute' as const,
