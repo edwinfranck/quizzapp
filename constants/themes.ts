@@ -252,13 +252,57 @@ const darkTheme: Theme = {
     },
 };
 
+// Crimson Red Theme
+const redTheme: Theme = {
+    id: 'red',
+    name: 'Crimson Red',
+    isDark: false,
+    colors: {
+        primary: '#DC2626',
+        primaryLight: '#EF4444',
+        primaryDark: '#B91C1C',
+
+        secondary: '#EF4444',
+        secondaryLight: '#F87171',
+        secondaryDark: '#DC2626',
+
+        accent: '#B91C1C',
+        accentLight: '#DC2626',
+
+        background: '#FEF2F2',
+        backgroundSecondary: '#FEE2E2',
+        backgroundTertiary: '#FECACA',
+
+        surface: '#FFFFFF',
+        surfaceSecondary: '#FEF2F2',
+
+        text: '#450A0A',
+        textSecondary: '#7F1D1D',
+        textTertiary: '#991B1B',
+        textInverse: '#FFFFFF',
+
+        success: '#10B981',
+        warning: '#F59E0B',
+        error: '#DC2626',
+        errorLight: '#FEE2E2',
+        info: '#3B82F6',
+
+        border: '#FECACA',
+        borderLight: '#FEE2E2',
+
+        shadow: '#000000',
+    },
+};
+
 export const themes: Record<ThemeName, Theme> = {
     forest: forestTheme,
+    dark: darkTheme,
     ocean: oceanTheme,
     sunset: sunsetTheme,
     purple: purpleTheme,
     rose: roseTheme,
-    dark: darkTheme,
+    red: redTheme,
+
 };
 
 export const themeList: Theme[] = Object.values(themes);

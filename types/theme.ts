@@ -50,7 +50,8 @@ export type ThemeName =
     | 'sunset'
     | 'purple'
     | 'rose'
-    | 'dark';
+    | 'dark'
+    | 'red';
 
 export type Theme = {
     id: ThemeName;
