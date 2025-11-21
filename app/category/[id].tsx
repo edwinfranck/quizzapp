@@ -5,7 +5,7 @@ import LockedChallengeModal from '@/components/LockedChallengeModal';
 import * as Haptics from 'expo-haptics';
 import { useLocalSearchParams, useRouter } from 'expo-router';
 import React, { useState } from 'react';
-import { Lock, Trophy, Star, Play, Sparkles, Zap, ArrowLeft, CheckCircle, Award } from 'lucide-react-native';
+import { Lock, Trophy, Star, Play, Sparkles, Zap, ArrowLeft, CheckCircle, Award, Search, X } from 'lucide-react-native';
 import {
     Platform,
     Pressable,
@@ -14,6 +14,7 @@ import {
     Text,
     View,
     Modal,
+    TextInput,
 } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
@@ -32,6 +33,10 @@ export default function CategoryScreen() {
         levelNumber: number;
         requirement: string;
     } | null>(null);
+
+    // State for search and filters
+    const [searchQuery, setSearchQuery] = useState('');
+    const [selectedFilter, setSelectedFilter] = useState<'all' | 'completed' | 'not-started' | 'locked'>('all');
 
     if (!category) {
         return (
@@ -100,6 +105,32 @@ export default function CategoryScreen() {
         router.push(`/quiz/${quizId}`);
     };
 
+    // Filter quizzes based on search and filter
+    const filteredQuizzes = category.quizzes.filter((quiz, index) => {
+        // Search filter
+        const matchesSearch = quiz.title.toLowerCase().includes(searchQuery.toLowerCase());
+        if (!matchesSearch) return false;
+
+        // Status filter
+        if (selectedFilter === 'all') return true;
+
+        const result = progress.quizResults[quiz.id];
+        const isUnlocked = isLevelUnlocked(index);
+
+        if (selectedFilter === 'completed') return result !== undefined;
+        if (selectedFilter === 'not-started') return result === undefined && isUnlocked;
+        if (selectedFilter === 'locked') return !isUnlocked;
+
+        return true;
+    });
+
+    const handleFilterChange = (filter: typeof selectedFilter) => {
+        setSelectedFilter(filter);
+        if (Platform.OS !== 'web') {
+            Haptics.selectionAsync();
+        }
+    };
+
     return (
         <View style={[styles.container, { paddingTop: insets.top }]}>
 
@@ -131,95 +162,196 @@ export default function CategoryScreen() {
                 </View>
             )}
 
+            {/* SEARCH AND FILTERS */}
+            <View style={styles.searchFilterSection}>
+                {/* Search Bar */}
+                <View style={styles.searchContainer}>
+                    <Search size={20} color={theme.colors.textSecondary} />
+                    <TextInput
+                        style={styles.searchInput}
+                        placeholder="Rechercher un niveau..."
+                        placeholderTextColor={theme.colors.textSecondary}
+                        value={searchQuery}
+                        onChangeText={setSearchQuery}
+                    />
+                    {searchQuery.length > 0 && (
+                        <Pressable onPress={() => setSearchQuery('')}>
+                            <X size={20} color={theme.colors.textSecondary} />
+                        </Pressable>
+                    )}
+                </View>
+
+                {/* Filter Chips */}
+                <ScrollView
+                    horizontal
+                    showsHorizontalScrollIndicator={false}
+                    contentContainerStyle={styles.filterChipsContainer}
+                >
+                    <Pressable
+                        style={[
+                            styles.filterChip,
+                            selectedFilter === 'all' && styles.filterChipActive,
+                        ]}
+                        onPress={() => handleFilterChange('all')}
+                    >
+                        <Text style={[
+                            styles.filterChipText,
+                            selectedFilter === 'all' && styles.filterChipTextActive,
+                        ]}>
+                            Tous ({category.quizzes.length})
+                        </Text>
+                    </Pressable>
+
+                    <Pressable
+                        style={[
+                            styles.filterChip,
+                            selectedFilter === 'completed' && styles.filterChipActive,
+                        ]}
+                        onPress={() => handleFilterChange('completed')}
+                    >
+                        <CheckCircle size={16} color={selectedFilter === 'completed' ? theme.colors.textInverse : theme.colors.textSecondary} />
+                        <Text style={[
+                            styles.filterChipText,
+                            selectedFilter === 'completed' && styles.filterChipTextActive,
+                        ]}>
+                            Complétés ({completedQuizzes})
+                        </Text>
+                    </Pressable>
+
+                    <Pressable
+                        style={[
+                            styles.filterChip,
+                            selectedFilter === 'not-started' && styles.filterChipActive,
+                        ]}
+                        onPress={() => handleFilterChange('not-started')}
+                    >
+                        <Play size={16} color={selectedFilter === 'not-started' ? theme.colors.textInverse : theme.colors.textSecondary} />
+                        <Text style={[
+                            styles.filterChipText,
+                            selectedFilter === 'not-started' && styles.filterChipTextActive,
+                        ]}>
+                            Non commencés
+                        </Text>
+                    </Pressable>
+
+                    <Pressable
+                        style={[
+                            styles.filterChip,
+                            selectedFilter === 'locked' && styles.filterChipActive,
+                        ]}
+                        onPress={() => handleFilterChange('locked')}
+                    >
+                        <Lock size={16} color={selectedFilter === 'locked' ? theme.colors.textInverse : theme.colors.textSecondary} />
+                        <Text style={[
+                            styles.filterChipText,
+                            selectedFilter === 'locked' && styles.filterChipTextActive,
+                        ]}>
+                            Verrouillés
+                        </Text>
+                    </Pressable>
+                </ScrollView>
+            </View>
+
             {/* LIST */}
             <ScrollView
                 contentContainerStyle={styles.listContainer}
                 showsVerticalScrollIndicator={false}
             >
-                <View style={styles.list}>
-                    {category.quizzes.map((quiz, index) => {
-                        const result = progress.quizResults[quiz.id];
-                        const isUnlocked = isLevelUnlocked(index);
-                        const unlockRequirement = index > 0 && !isUnlocked ?
-                            (() => {
-                                const prevResult = progress.quizResults[category.quizzes[index - 1].id];
-                                if (!prevResult) return "Terminer le niveau précédent";
-                                const prevPercentage = (prevResult.score / prevResult.totalQuestions) * 100;
-                                if (prevPercentage < 60) return `Obtenir 60%+ au niveau ${index}`;
-                                return "";
-                            })()
-                            : null;
+                {filteredQuizzes.length === 0 ? (
+                    <View style={styles.emptyState}>
+                        <Search size={48} color={theme.colors.textSecondary} />
+                        <Text style={styles.emptyStateTitle}>Aucun résultat</Text>
+                        <Text style={styles.emptyStateText}>
+                            {searchQuery ? `Aucun niveau ne correspond à "${searchQuery}"` : 'Aucun niveau dans cette catégorie'}
+                        </Text>
+                    </View>
+                ) : (
+                    <View style={styles.list}>
+                        {filteredQuizzes.map((quiz) => {
+                            const index = category.quizzes.indexOf(quiz);
+                            const result = progress.quizResults[quiz.id];
+                            const isUnlocked = isLevelUnlocked(index);
+                            const unlockRequirement = index > 0 && !isUnlocked ?
+                                (() => {
+                                    const prevResult = progress.quizResults[category.quizzes[index - 1].id];
+                                    if (!prevResult) return "Terminer le niveau précédent";
+                                    const prevPercentage = (prevResult.score / prevResult.totalQuestions) * 100;
+                                    if (prevPercentage < 60) return `Obtenir 60%+ au niveau ${index}`;
+                                    return "";
+                                })()
+                                : null;
 
-                        return (
-                            <Pressable
-                                key={quiz.id}
-                                onPress={() => handlePress(quiz.id, index)}
-                                disabled={!isUnlocked}
-                                style={({ pressed }) => [
-                                    styles.card,
-                                    !isUnlocked && styles.cardLocked,
-                                    pressed && isUnlocked && styles.cardPressed,
-                                ]}
-                            >
-                                {/* Level Number Badge */}
-                                <View style={[
-                                    styles.levelBadge,
-                                    isUnlocked ? styles.levelBadgeUnlocked : styles.levelBadgeLocked
-                                ]}>
-                                    <Text style={[
-                                        styles.levelText,
-                                        isUnlocked ? styles.levelTextUnlocked : styles.levelTextLocked
+                            return (
+                                <Pressable
+                                    key={quiz.id}
+                                    onPress={() => handlePress(quiz.id, index)}
+                                    disabled={!isUnlocked}
+                                    style={({ pressed }) => [
+                                        styles.card,
+                                        !isUnlocked && styles.cardLocked,
+                                        pressed && isUnlocked && styles.cardPressed,
+                                    ]}
+                                >
+                                    {/* Level Number Badge */}
+                                    <View style={[
+                                        styles.levelBadge,
+                                        isUnlocked ? styles.levelBadgeUnlocked : styles.levelBadgeLocked
                                     ]}>
-                                        {index + 1}
-                                    </Text>
-                                </View>
-
-                                <View style={styles.cardContent}>
-                                    <View style={styles.cardLeft}>
-                                        <Text style={styles.quizTitle}>
-                                            Niveau {index + 1}
+                                        <Text style={[
+                                            styles.levelText,
+                                            isUnlocked ? styles.levelTextUnlocked : styles.levelTextLocked
+                                        ]}>
+                                            {index + 1}
                                         </Text>
-                                        <Text style={styles.quizSubtitle}>{quiz.title}</Text>
-                                        <Text style={styles.quizInfo}>{quiz.questions.length} questions</Text>
-
-                                        {/* Lock requirement text */}
-                                        {!isUnlocked && unlockRequirement && (
-                                            <View style={styles.lockRequirement}>
-                                                <Lock size={12} color={theme.colors.textSecondary} />
-                                                <Text style={styles.lockRequirementText}>{unlockRequirement}</Text>
-                                            </View>
-                                        )}
                                     </View>
 
-                                    <View style={styles.cardRight}>
-                                        {!categoryUnlocked ? (
-                                            <Lock size={28} color={theme.colors.textSecondary} />
-                                        ) : !isUnlocked ? (
-                                            <Lock size={28} color={theme.colors.textSecondary} />
-                                        ) : result ? (
-                                            <View style={styles.resultContainer}>
-                                                <View style={[styles.badgeIconContainer, { backgroundColor: theme.colors.primaryLight }]}>
-                                                    {result.badge === 'platinum' && <Sparkles size={24} color={theme.colors.primary} />}
-                                                    {result.badge === 'gold' && <Trophy size={24} color={theme.colors.primary} />}
-                                                    {result.badge === 'silver' && <Star size={24} color={theme.colors.primary} />}
-                                                    {result.badge === 'bronze' && <Zap size={24} color={theme.colors.primary} fill={theme.colors.primary} />}
+                                    <View style={styles.cardContent}>
+                                        <View style={styles.cardLeft}>
+                                            <Text style={styles.quizTitle}>
+                                                Niveau {index + 1}
+                                            </Text>
+                                            <Text style={styles.quizSubtitle}>{quiz.title}</Text>
+                                            <Text style={styles.quizInfo}>{quiz.questions.length} questions</Text>
+
+                                            {/* Lock requirement text */}
+                                            {!isUnlocked && unlockRequirement && (
+                                                <View style={styles.lockRequirement}>
+                                                    <Lock size={12} color={theme.colors.textSecondary} />
+                                                    <Text style={styles.lockRequirementText}>{unlockRequirement}</Text>
                                                 </View>
-                                                <Text style={styles.scoreText}>{result.score}/{result.totalQuestions}</Text>
-                                                <Text style={styles.percentageText}>
-                                                    {Math.round((result.score / result.totalQuestions) * 100)}%
-                                                </Text>
-                                            </View>
-                                        ) : (
-                                            <View style={styles.playContainer}>
-                                                <Play size={28} color={theme.colors.primary} fill={theme.colors.primary} />
-                                            </View>
-                                        )}
+                                            )}
+                                        </View>
+
+                                        <View style={styles.cardRight}>
+                                            {!categoryUnlocked ? (
+                                                <Lock size={28} color={theme.colors.textSecondary} />
+                                            ) : !isUnlocked ? (
+                                                <Lock size={28} color={theme.colors.textSecondary} />
+                                            ) : result ? (
+                                                <View style={styles.resultContainer}>
+                                                    <View style={[styles.badgeIconContainer, { backgroundColor: theme.colors.primaryLight }]}>
+                                                        {result.badge === 'platinum' && <Sparkles size={24} color={theme.colors.primary} />}
+                                                        {result.badge === 'gold' && <Trophy size={24} color={theme.colors.primary} />}
+                                                        {result.badge === 'silver' && <Star size={24} color={theme.colors.primary} />}
+                                                        {result.badge === 'bronze' && <Zap size={24} color={theme.colors.primary} fill={theme.colors.primary} />}
+                                                    </View>
+                                                    <Text style={styles.scoreText}>{result.score}/{result.totalQuestions}</Text>
+                                                    <Text style={styles.percentageText}>
+                                                        {Math.round((result.score / result.totalQuestions) * 100)}%
+                                                    </Text>
+                                                </View>
+                                            ) : (
+                                                <View style={styles.playContainer}>
+                                                    <Play size={28} color={theme.colors.primary} fill={theme.colors.primary} />
+                                                </View>
+                                            )}
+                                        </View>
                                     </View>
-                                </View>
-                            </Pressable>
-                        );
-                    })}
-                </View>
+                                </Pressable>
+                            );
+                        })}
+                    </View>
+                )}
 
                 {/* Completion message */}
                 {categoryUnlocked && completedQuizzes === totalQuizzes && (
@@ -547,6 +679,85 @@ const createCategoryStyles = (theme: any) => StyleSheet.create({
         fontSize: 14,
         color: theme.colors.textSecondary,
         textAlign: 'center' as const,
+    },
+
+    // Search and Filter Styles
+    searchFilterSection: {
+        backgroundColor: theme.colors.surface,
+        padding: 16,
+        gap: 12,
+        borderBottomWidth: 1,
+        borderBottomColor: theme.colors.border,
+    },
+
+    searchContainer: {
+        flexDirection: 'row' as const,
+        alignItems: 'center' as const,
+        backgroundColor: theme.colors.backgroundSecondary,
+        borderRadius: 1,
+        paddingHorizontal: 12,
+        paddingVertical: 10,
+        gap: 8,
+        borderWidth: 1,
+        borderColor: theme.colors.border,
+    },
+
+    searchInput: {
+        flex: 1,
+        fontSize: 15,
+        color: theme.colors.text,
+    },
+
+    filterChipsContainer: {
+        gap: 8,
+        paddingHorizontal: 2,
+    },
+
+    filterChip: {
+        flexDirection: 'row' as const,
+        alignItems: 'center' as const,
+        gap: 6,
+        paddingHorizontal: 14,
+        paddingVertical: 8,
+        borderRadius: 1,
+        backgroundColor: theme.colors.backgroundSecondary,
+        borderWidth: 1,
+        borderColor: theme.colors.border,
+    },
+
+    filterChipActive: {
+        backgroundColor: theme.colors.primary,
+        borderColor: theme.colors.primary,
+    },
+
+    filterChipText: {
+        fontSize: 13,
+        fontWeight: '600' as const,
+        color: theme.colors.textSecondary,
+    },
+
+    filterChipTextActive: {
+        color: theme.colors.textInverse,
+    },
+
+    emptyState: {
+        alignItems: 'center' as const,
+        justifyContent: 'center' as const,
+        paddingVertical: 60,
+        gap: 12,
+    },
+
+    emptyStateTitle: {
+        fontSize: 18,
+        fontWeight: '700' as const,
+        color: theme.colors.text,
+    },
+
+    emptyStateText: {
+        fontSize: 14,
+        color: theme.colors.textSecondary,
+        textAlign: 'center' as const,
+        paddingHorizontal: 40,
     },
 
     // Modal Styles
