@@ -9,6 +9,7 @@ const defaultProfile: UserProfile = {
   name: '',
   avatar: AVAILABLE_AVATARS[0],
   hasCompletedOnboarding: false,
+  unlockedAvatars: [],
 };
 
 export const [UserProvider, useUser] = createContextHook(() => {
@@ -65,14 +66,36 @@ export const [UserProvider, useUser] = createContextHook(() => {
 
   const completeOnboarding = useCallback(
     (name: string, avatar: Avatar) => {
+      const freeAvatars = AVAILABLE_AVATARS.filter(a => a.requiredPoints === 0).map(a => a.id);
       const newProfile: UserProfile = {
         name,
         avatar,
         hasCompletedOnboarding: true,
+        unlockedAvatars: freeAvatars,
       };
       saveProfile(newProfile);
     },
     []
+  );
+
+  const unlockAvatar = useCallback(
+    (avatarId: string) => {
+      if (!profile.unlockedAvatars.includes(avatarId)) {
+        const newProfile: UserProfile = {
+          ...profile,
+          unlockedAvatars: [...profile.unlockedAvatars, avatarId],
+        };
+        saveProfile(newProfile);
+      }
+    },
+    [profile]
+  );
+
+  const isAvatarUnlocked = useCallback(
+    (avatarId: string) => {
+      return profile.unlockedAvatars.includes(avatarId);
+    },
+    [profile]
   );
 
   const resetProfile = useCallback(async () => {
@@ -86,8 +109,10 @@ export const [UserProvider, useUser] = createContextHook(() => {
       updateName,
       updateAvatar,
       completeOnboarding,
+      unlockAvatar,
+      isAvatarUnlocked,
       resetProfile,
     }),
-    [profile, isLoading, updateName, updateAvatar, completeOnboarding, resetProfile]
+    [profile, isLoading, updateName, updateAvatar, completeOnboarding, unlockAvatar, isAvatarUnlocked, resetProfile]
   );
 });

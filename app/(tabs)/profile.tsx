@@ -16,6 +16,7 @@ import {
   Zap,
   Award,
   TrendingUp,
+  Lock,
 } from "lucide-react-native";
 import React, { useState } from "react";
 import { useRouter } from "expo-router";
@@ -37,7 +38,7 @@ export default function ProfileScreen() {
   const router = useRouter();
   const insets = useSafeAreaInsets();
   const { theme } = useTheme();
-  const { profile, updateName, updateAvatar } = useUser();
+  const { profile, updateName, updateAvatar, unlockAvatar, isAvatarUnlocked } = useUser();
   const { progress, resetProgress } = useProgress();
 
   const [isEditingName, setIsEditingName] = useState(false);
@@ -70,10 +71,30 @@ export default function ProfileScreen() {
   };
 
   const handleAvatarSelect = (avatar: Avatar) => {
-    updateAvatar(avatar);
-    setIsAvatarModalVisible(false);
-    if (Platform.OS !== "web") {
-      Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success);
+    // Check if avatar is unlocked
+    if (!isAvatarUnlocked(avatar.id)) {
+      // Check if user has enough points to unlock
+      if (progress.totalPoints >= avatar.requiredPoints) {
+        // Unlock the avatar
+        unlockAvatar(avatar.id);
+        updateAvatar(avatar);
+        setIsAvatarModalVisible(false);
+        if (Platform.OS !== "web") {
+          Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success);
+        }
+      } else {
+        // Not enough points
+        if (Platform.OS !== "web") {
+          Haptics.notificationAsync(Haptics.NotificationFeedbackType.Error);
+        }
+      }
+    } else {
+      // Avatar is already unlocked, just select it
+      updateAvatar(avatar);
+      setIsAvatarModalVisible(false);
+      if (Platform.OS !== "web") {
+        Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success);
+      }
     }
   };
 
@@ -374,25 +395,47 @@ export default function ProfileScreen() {
         >
           <View style={styles.modalContent}>
             <Text style={styles.modalTitle}>Choisir un avatar</Text>
+            <Text style={styles.modalSubtitle}>Vos points: {progress.totalPoints}</Text>
             <View style={styles.avatarsGrid}>
-              {AVAILABLE_AVATARS.map((avatar) => (
-                <Pressable
-                  key={avatar.id}
-                  style={[
-                    styles.avatarOption,
-                    { backgroundColor: avatar.backgroundColor },
-                    profile.avatar.id === avatar.id && styles.avatarSelected,
-                  ]}
-                  onPress={() => handleAvatarSelect(avatar)}
-                >
-                  <Image source={avatar.image} style={styles.avatarOptionImage} />
-                  {profile.avatar.id === avatar.id && (
-                    <View style={styles.checkmark}>
-                      <Text style={styles.checkmarkText}>✓</Text>
-                    </View>
-                  )}
-                </Pressable>
-              ))}
+              {AVAILABLE_AVATARS.map((avatar) => {
+                const isUnlocked = isAvatarUnlocked(avatar.id);
+                const canUnlock = progress.totalPoints >= avatar.requiredPoints;
+
+                return (
+                  <Pressable
+                    key={avatar.id}
+                    style={[
+                      styles.avatarOption,
+                      { backgroundColor: avatar.backgroundColor },
+                      profile.avatar.id === avatar.id && styles.avatarSelected,
+                      !isUnlocked && !canUnlock && styles.avatarLocked,
+                    ]}
+                    onPress={() => handleAvatarSelect(avatar)}
+                  >
+                    <Image
+                      source={avatar.image}
+                      style={[
+                        styles.avatarOptionImage,
+                        !isUnlocked && styles.avatarImageLocked,
+                      ]}
+                    />
+                    {!isUnlocked && (
+                      <View style={styles.lockOverlay}>
+                        <Lock size={20} color="#FFFFFF" />
+                        <Text style={styles.lockText}>{avatar.requiredPoints}pts</Text>
+                        {canUnlock && (
+                          <Text style={styles.unlockText}>Tap to unlock!</Text>
+                        )}
+                      </View>
+                    )}
+                    {profile.avatar.id === avatar.id && isUnlocked && (
+                      <View style={styles.checkmark}>
+                        <Text style={styles.checkmarkText}>✓</Text>
+                      </View>
+                    )}
+                  </Pressable>
+                );
+              })}
             </View>
           </View>
         </Pressable>
@@ -801,8 +844,16 @@ const createProfileStyles = (theme: any) => StyleSheet.create({
     fontSize: 20,
     fontWeight: "700" as const,
     color: theme.colors.text,
-    marginBottom: 20,
+    marginBottom: 8,
     textAlign: "center" as const,
+  },
+
+  modalSubtitle: {
+    fontSize: 14,
+    color: theme.colors.textSecondary,
+    textAlign: "center" as const,
+    marginBottom: 20,
+    fontWeight: "600" as const,
   },
 
   avatarsGrid: {
@@ -826,10 +877,43 @@ const createProfileStyles = (theme: any) => StyleSheet.create({
     borderColor: theme.colors.primary,
   },
 
+  avatarLocked: {
+    opacity: 0.6,
+  },
+
   avatarOptionImage: {
     width: 50,
     height: 50,
     borderRadius: 1,
+  },
+
+  avatarImageLocked: {
+    opacity: 0.4,
+  },
+
+  lockOverlay: {
+    position: "absolute" as const,
+    top: 0,
+    left: 0,
+    right: 0,
+    bottom: 0,
+    alignItems: "center" as const,
+    justifyContent: "center" as const,
+    backgroundColor: "rgba(0, 0, 0, 0.5)",
+    borderRadius: 1,
+    gap: 2,
+  },
+
+  lockText: {
+    color: "#FFFFFF",
+    fontSize: 10,
+    fontWeight: "700" as const,
+  },
+
+  unlockText: {
+    color: theme.colors.success,
+    fontSize: 9,
+    fontWeight: "700" as const,
   },
 
   checkmark: {

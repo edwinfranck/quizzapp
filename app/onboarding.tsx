@@ -66,10 +66,10 @@ export default function OnboardingScreen() {
 
         <View style={styles.form}>
           <View style={styles.inputContainer}>
-            <Text style={styles.label}>Votre nom</Text>
+            <Text style={styles.label}>Votre nom soldat 🫡</Text>
             <TextInput
               style={styles.input}
-              placeholder="Entrez votre nom"
+              placeholder="Lt Savi"
               placeholderTextColor="#64748B"
               value={name}
               onChangeText={setName}
@@ -82,7 +82,7 @@ export default function OnboardingScreen() {
           <View style={styles.avatarSection}>
             <Text style={styles.label}>Choisissez votre avatar</Text>
             <View style={styles.avatarsGrid}>
-              {AVAILABLE_AVATARS.map((avatar) => (
+              {AVAILABLE_AVATARS.filter(avatar => avatar.requiredPoints === 0).map((avatar) => (
                 <Pressable
                   key={avatar.id}
                   style={[
@@ -177,6 +177,12 @@ const styles = StyleSheet.create({
   },
   avatarSection: {
     gap: 16,
+  },
+  avatarHint: {
+    fontSize: 14,
+    color: '#94A3B8',
+    //textAlign: 'center' as const,
+    marginTop: -8,
   },
   avatarsGrid: {
     flexDirection: 'row' as const,
