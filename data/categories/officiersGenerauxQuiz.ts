@@ -9,7 +9,7 @@ export const officiersGenerauxQuiz: Category = {
     quizzes: [
         {
             id: 'officiers-generaux-1',
-            title: 'Niveau 1',
+            title: 'Général de brigade',
             questions: [
                 // -----------------------------------------------------
                 // 1 - GÉNÉRAL DE BRIGADE

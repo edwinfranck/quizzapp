@@ -9,7 +9,7 @@ export const sousOfficiersSuperieursQuiz: Category = {
     quizzes: [
         {
             id: 'sous-officiers-superieurs-1',
-            title: 'Niveau 1',
+            title: 'Adjudant',
             questions: [
                 // -----------------------------------------------------
                 // 1 - ADJUDANT

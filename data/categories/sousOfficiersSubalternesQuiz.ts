@@ -5,11 +5,11 @@ export const sousOfficiersSubalternesQuiz: Category = {
     title: 'Sous-officiers subalternes',
     icon: '🎖️',
     color: '#8f6a57ff',
-    requiredPoints: 50,
+    requiredPoints: 0,
     quizzes: [
         {
             id: 'sous-officiers-subalternes-1',
-            title: 'Niveau 1',
+            title: 'Sergent',
             questions: [
                 // -----------------------------------------------------
                 // 1 - SERGENT
@@ -17,9 +17,9 @@ export const sousOfficiersSubalternesQuiz: Category = {
                 {
                     id: 'so1',
                     question: "Cet insigne correspond à quel grade ?",
-                    //image: require('@/assets/grades/Armee/Sergent.png'),
+                    image: require('@/assets/grades/ArmeTerre/Sergent-Maréchal des logis.png'),
                     options: ['Caporal-major', 'Sergent', 'Sergent-chef', 'Sergent-major'],
-                    correctAnswer: 1,
+                    correctAnswer: 2,
                     points: 10,
                 },
                 {
@@ -31,14 +31,14 @@ export const sousOfficiersSubalternesQuiz: Category = {
                 },
                 {
                     id: 'so3',
-                    question: "Quel est l’équivalent du Sergent dans la Marine ?",
+                    question: "Quel est l'équivalent du Sergent dans la Marine ?",
                     options: ['Second maître', 'Quartier-maître', 'Maître', 'Aspirant'],
                     correctAnswer: 0,
                     points: 10,
                 },
                 {
                     id: 'so4',
-                    question: "Quelle est l’abréviation du grade Sergent ?",
+                    question: "Quelle est l'abréviation du grade Sergent ?",
                     options: ['SRG', 'SRT', 'SGT', 'SGR'],
                     correctAnswer: 2,
                     points: 10,
@@ -46,19 +46,25 @@ export const sousOfficiersSubalternesQuiz: Category = {
                 {
                     id: 'so5',
                     question: "Cet insigne appartient à quelle armée ?",
-                    //image: require('@/assets/grades/Marine/SecondMaitre.png'),
+                    image: require('@/assets/grades/Marine/Maître.png'),
                     options: ['Terre', 'Air', 'Marine', 'Police'],
                     correctAnswer: 2,
                     points: 10,
                 },
+            ]
+        },
 
+        {
+            id: 'sous-officiers-subalternes-2',
+            title: 'Sergent Chef',
+            questions: [
                 // -----------------------------------------------------
                 // 2 - SERGENT-CHEF
                 // -----------------------------------------------------
                 {
                     id: 'so6',
                     question: "Cet insigne correspond à quel grade ?",
-                    //image: require('@/assets/grades/Armee/SergentChef.png'),
+                    image: require('@/assets/grades/ArmeTerre/Sergent-chef-Maréchal des logis-chef.png'),
                     options: ['Sergent', 'Sergent-chef', 'Sergent-major', 'Adjudant'],
                     correctAnswer: 1,
                     points: 10,
@@ -72,26 +78,32 @@ export const sousOfficiersSubalternesQuiz: Category = {
                 },
                 {
                     id: 'so8',
-                    question: "Quel est l’équivalent du Sergent-chef dans la Marine ?",
+                    question: "Quel est l'équivalent du Sergent-chef dans la Marine ?",
                     options: ['Second maître', 'Maître', 'Maître principal', 'Capitaine de corvette'],
                     correctAnswer: 1,
                     points: 10,
                 },
                 {
                     id: 'so9',
-                    question: "Quelle est l’abréviation du Sergent-chef ?",
+                    question: "Quelle est l'abréviation du Sergent-chef ?",
                     options: ['SGC', 'SCF', 'SCH', 'SGF'],
                     correctAnswer: 2,
                     points: 10,
                 },
+            ]
+        },
 
+        {
+            id: 'sous-officiers-subalternes-3',
+            title: 'Sergent Major',
+            questions: [
                 // -----------------------------------------------------
                 // 3 - SERGENT-MAJOR
                 // -----------------------------------------------------
                 {
                     id: 'so10',
                     question: "Cet insigne correspond à quel grade ?",
-                    //image: require('@/assets/grades/Armee/SergentMajor.png'),
+                    image: require('@/assets/grades/ArmeTerre/Sergent major.png'),
                     options: ['Sergent', 'Sergent-major', 'Sergent-chef', 'Adjudant'],
                     correctAnswer: 1,
                     points: 10,
@@ -99,40 +111,46 @@ export const sousOfficiersSubalternesQuiz: Category = {
                 {
                     id: 'so11',
                     question: "Quel est le grade supérieur au Sergent-chef ?",
-                    options: ['Sergent-major', 'Adjudant', 'Second maître', 'Colonel'],
-                    correctAnswer: 0,
+                    options: ['Adjudant', 'Second maître', 'Colonel', 'Sergent-major'],
+                    correctAnswer: 3,
                     points: 10,
                 },
                 {
                     id: 'so12',
-                    question: "Quel est l’équivalent du Sergent-major dans la Marine ?",
+                    question: "Quel est l'équivalent du Sergent-major dans la Marine ?",
                     options: ['Second maître', 'Maître', 'Il garde le même nom', 'Lieutenant de vaisseau'],
                     correctAnswer: 2,
                     points: 10,
                 },
                 {
                     id: 'so13',
-                    question: "Quelle est l’abréviation du Sergent-major ?",
+                    question: "Quelle est l'abréviation du Sergent-major ?",
                     options: ['SGM', 'SMG', 'SGR', 'SGP'],
                     correctAnswer: 0,
                     points: 10,
                 },
+            ]
+        },
 
+        {
+            id: 'sous-officiers-subalternes-4',
+            title: 'Insignes sous-officiers subalternes',
+            questions: [
                 // -----------------------------------------------------
-                // 4 - RECONNAISSANCE D’INSIGNES (IMAGES)
+                // 4 - RECONNAISSANCE D'INSIGNES (IMAGES)
                 // -----------------------------------------------------
                 {
                     id: 'so14',
                     question: "À quel grade appartient cet insigne ?",
-                    //image: require('@/assets/grades/Air/Sergent.png'),
+                    image: require('@/assets/grades/ArmeTerre/Sergent-Maréchal des logis.png'),
                     options: ['Sergent', 'Sergent-chef', 'Sergent-major', 'Caporal chef'],
                     correctAnswer: 0,
                     points: 10,
                 },
                 {
                     id: 'so15',
-                    question: "À quel grade correspond cet insigne dans l’Armée de l’Air ?",
-                    //image: require('@/assets/grades/Air/SergentChef.png'),
+                    question: "À quel grade correspond cet insigne dans l'Armée de l'Air ?",
+                    image: require('@/assets/grades/ArmeAair/Sergent-che.png'),
                     options: ['Sergent', 'Sergent-chef', 'Maître', 'Adjudant'],
                     correctAnswer: 1,
                     points: 10,
@@ -140,12 +158,18 @@ export const sousOfficiersSubalternesQuiz: Category = {
                 {
                     id: 'so16',
                     question: "Cet insigne correspond à quel corps ?",
-                    //image: require('@/assets/grades/Air/SergentMajor.png'),
+                    image: require('@/assets/grades/ArmeTerre/Sergent major.png'),
                     options: ['Militaires du rang', 'Sous-officiers subalternes', 'Officiers', 'Marine Nationale'],
                     correctAnswer: 1,
                     points: 10,
                 },
+            ]
+        },
 
+        {
+            id: 'sous-officiers-subalternes-5',
+            title: 'Ordre hiérarchique',
+            questions: [
                 // -----------------------------------------------------
                 // 5 - ORDRE HIÉRARCHIQUE
                 // -----------------------------------------------------
@@ -167,7 +191,13 @@ export const sousOfficiersSubalternesQuiz: Category = {
                     correctAnswer: 1,
                     points: 10,
                 },
+            ]
+        },
 
+        {
+            id: 'sous-officiers-subalternes-6',
+            title: 'Questions transversales',
+            questions: [
                 // -----------------------------------------------------
                 // 6 - QUESTIONS TRANSVERSALES
                 // -----------------------------------------------------
@@ -180,7 +210,7 @@ export const sousOfficiersSubalternesQuiz: Category = {
                 },
                 {
                     id: 'so20',
-                    question: "Quel est l’équivalent du Sergent-chef dans l’Armée de l’Air ?",
+                    question: "Quel est l'équivalent du Sergent-chef dans l'Armée de l'Air ?",
                     options: ['Sergent-chef', 'Maître', 'Second maître', 'Adjudant'],
                     correctAnswer: 0,
                     points: 10,
@@ -199,7 +229,13 @@ export const sousOfficiersSubalternesQuiz: Category = {
                     correctAnswer: 1,
                     points: 10,
                 },
+            ]
+        },
 
+        {
+            id: 'sous-officiers-subalternes-7',
+            title: 'Reconnaissance image sous-officiers subalternes',
+            questions: [
                 // -----------------------------------------------------
                 // 7 - RECONNAISSANCE IMAGE MARINE
                 // -----------------------------------------------------
@@ -213,7 +249,7 @@ export const sousOfficiersSubalternesQuiz: Category = {
                 },
                 {
                     id: 'so24',
-                    question: "Cet insigne équivaut à quel grade dans l’Armée de Terre ?",
+                    question: "Cet insigne équivaut à quel grade dans l'Armée de Terre ?",
                     //image: require('@/assets/grades/Marine/SecondMaitre.png'),
                     options: ['Caporal', 'Sergent', 'Sergent-chef', 'Adjudant'],
                     correctAnswer: 1,
@@ -221,11 +257,13 @@ export const sousOfficiersSubalternesQuiz: Category = {
                 },
                 {
                     id: 'so25',
-                    question: "Quel est l’équivalent du Maître dans l’Armée de Terre ?",
+                    question: "Quel est l'équivalent du Maître dans l'Armée de Terre ?",
                     options: ['Caporal-major', 'Sergent-chef', 'Sergent-major', 'Adjudant'],
                     correctAnswer: 1,
                     points: 10,
                 }
             ]
-        }]
+        },
+    ]
+
 };

@@ -237,7 +237,7 @@ export default function ProfileScreen() {
           <View style={styles.statsGrid}>
             <View style={styles.statCard}>
               <View style={[styles.statIconContainer, { backgroundColor: theme.colors.primaryLight }]}>
-                <Trophy size={24} color={theme.colors.primary} />
+                <Trophy size={24} color={theme.colors.primaryIcon} />
               </View>
               <Text style={styles.statValue}>{progress.totalPoints}</Text>
               <Text style={styles.statLabel}>Points totaux</Text>
@@ -245,7 +245,7 @@ export default function ProfileScreen() {
 
             <View style={styles.statCard}>
               <View style={[styles.statIconContainer, { backgroundColor: theme.colors.primaryLight }]}>
-                <CheckCheck size={24} color={theme.colors.primary} />
+                <CheckCheck size={24} color={theme.colors.primaryIcon} />
               </View>
               <Text style={styles.statValue}>{completedQuizzes}</Text>
               <Text style={styles.statLabel}>Quiz réussis</Text>
@@ -253,7 +253,7 @@ export default function ProfileScreen() {
 
             <View style={styles.statCard}>
               <View style={[styles.statIconContainer, { backgroundColor: theme.colors.primaryLight }]}>
-                <TargetIcon size={24} color={theme.colors.primary} />
+                <TargetIcon size={24} color={theme.colors.primaryIcon} />
               </View>
               <Text style={styles.statValue}>{totalQuizzes}</Text>
               <Text style={styles.statLabel}>Quiz totaux</Text>
@@ -261,7 +261,7 @@ export default function ProfileScreen() {
 
             <View style={styles.statCard}>
               <View style={[styles.statIconContainer, { backgroundColor: theme.colors.primaryLight }]}>
-                <TrendingUp size={24} color={theme.colors.primary} />
+                <TrendingUp size={24} color={theme.colors.primaryIcon} />
               </View>
               <Text style={styles.statValue}>{Math.round(completionPercentage)}%</Text>
               <Text style={styles.statLabel}>Progression</Text>
@@ -356,7 +356,7 @@ export default function ProfileScreen() {
           >
             <View style={styles.settingLeft}>
               <View style={[styles.settingIconContainer, { backgroundColor: theme.colors.primaryLight }]}>
-                <Sparkles size={20} color={theme.colors.primary} />
+                <Sparkles size={20} color={theme.colors.primaryIcon} />
               </View>
               <View style={styles.settingText}>
                 <Text style={styles.settingTitle}>Thème de l'application</Text>

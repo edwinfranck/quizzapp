@@ -42,6 +42,9 @@ export type ThemeColors = {
 
     // Shadows
     shadow: string;
+    
+    //Icons
+    primaryIcon: string;
 };
 
 export type ThemeName =

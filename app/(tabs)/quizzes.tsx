@@ -256,7 +256,7 @@ export default function QuizzesScreen() {
 
                       {unlocked ? (
                         <View style={[styles.statusBadge, { backgroundColor: theme.colors.primaryLight }]}>
-                          <Play size={14} color={theme.colors.primary} fill={theme.colors.primary} />
+                          <Play size={14} color={theme.colors.primaryIcon} fill={theme.colors.primaryIcon} />
                         </View>
                       ) : (
                         <View style={[styles.statusBadge, { backgroundColor: theme.colors.backgroundSecondary }]}>

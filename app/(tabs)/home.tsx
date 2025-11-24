@@ -108,7 +108,7 @@ export default function HomeScreen() {
             </View>
           </View>
           <View style={styles.pointsBadge}>
-            <Trophy size={20} color={theme.colors.primary} />
+            <Trophy size={20} color={theme.colors.primaryIcon} />
             <Text style={styles.pointsText}>{progress.totalPoints}</Text>
           </View>
         </View>
@@ -265,7 +265,7 @@ export default function HomeScreen() {
 
                           {unlocked ? (
                             <View style={[styles.statusBadge, { backgroundColor: theme.colors.primaryLight }]}>
-                              <Play size={14} color={theme.colors.primary} fill={theme.colors.primary} />
+                              <Play size={14} color={theme.colors.primaryIcon} fill={theme.colors.primaryIcon} />
                             </View>
                           ) : (
                             <View style={[styles.statusBadge, { backgroundColor: theme.colors.backgroundSecondary }]}>
@@ -456,7 +456,7 @@ const createHomeStyles = (theme: any) => StyleSheet.create({
 
   pointsText: {
     fontSize: 18,
-    color: theme.colors.primary,
+    color: theme.colors.primaryIcon,
     fontFamily: "Inter_900Black",
   },
 

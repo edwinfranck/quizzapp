@@ -149,6 +149,7 @@ export default function CategoryScreen() {
             </View>
 
             {/* PROGRESS BAR */}
+            {/*
             {categoryUnlocked && (
                 <View style={styles.progressSection}>
                     <View style={styles.progressHeader}>
@@ -161,6 +162,7 @@ export default function CategoryScreen() {
                     <Text style={styles.progressPercentage}>{Math.round(progressPercentage)}%</Text>
                 </View>
             )}
+            */}
 
             {/* SEARCH AND FILTERS */}
             <View style={styles.searchFilterSection}>
@@ -330,10 +332,10 @@ export default function CategoryScreen() {
                                             ) : result ? (
                                                 <View style={styles.resultContainer}>
                                                     <View style={[styles.badgeIconContainer, { backgroundColor: theme.colors.primaryLight }]}>
-                                                        {result.badge === 'platinum' && <Sparkles size={24} color={theme.colors.primary} />}
-                                                        {result.badge === 'gold' && <Trophy size={24} color={theme.colors.primary} />}
-                                                        {result.badge === 'silver' && <Star size={24} color={theme.colors.primary} />}
-                                                        {result.badge === 'bronze' && <Zap size={24} color={theme.colors.primary} fill={theme.colors.primary} />}
+                                                        {result.badge === 'platinum' && <Sparkles size={24} color={theme.colors.primaryIcon} />}
+                                                        {result.badge === 'gold' && <Trophy size={24} color={theme.colors.primaryIcon} />}
+                                                        {result.badge === 'silver' && <Star size={24} color={theme.colors.primaryIcon} />}
+                                                        {result.badge === 'bronze' && <Zap size={24} color={theme.colors.primaryIcon} fill={theme.colors.primaryIcon} />}
                                                     </View>
                                                     <Text style={styles.scoreText}>{result.score}/{result.totalQuestions}</Text>
                                                     <Text style={styles.percentageText}>
@@ -342,7 +344,7 @@ export default function CategoryScreen() {
                                                 </View>
                                             ) : (
                                                 <View style={styles.playContainer}>
-                                                    <Play size={28} color={theme.colors.primary} fill={theme.colors.primary} />
+                                                    <Play size={28} color={theme.colors.primary} fill={theme.colors.primaryIcon} />
                                                 </View>
                                             )}
                                         </View>
@@ -353,7 +355,7 @@ export default function CategoryScreen() {
                     </View>
                 )}
 
-                {/* Completion message */}
+                {/* Completion message 
                 {categoryUnlocked && completedQuizzes === totalQuizzes && (
                     <View style={styles.completionCard}>
                         <Award size={48} color={theme.colors.primary} />
@@ -363,6 +365,8 @@ export default function CategoryScreen() {
                         </Text>
                     </View>
                 )}
+                */}
+
             </ScrollView>
 
             {/* Locked Level Modal */}

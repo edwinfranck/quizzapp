@@ -39,6 +39,9 @@ const forestTheme: Theme = {
         borderLight: '#F1F5F9',
 
         shadow: '#000000',
+
+
+        primaryIcon : '#F1F5F9',
     },
 };
 
@@ -81,6 +84,8 @@ const oceanTheme: Theme = {
         borderLight: '#E6F2FF',
 
         shadow: '#000000',
+
+        primaryIcon : '#F1F5F9',
     },
 };
 
@@ -123,6 +128,8 @@ const sunsetTheme: Theme = {
         borderLight: '#FFEBE0',
 
         shadow: '#000000',
+
+        primaryIcon : '#F1F5F9',
     },
 };
 
@@ -165,6 +172,8 @@ const purpleTheme: Theme = {
         borderLight: '#F3E8FF',
 
         shadow: '#000000',
+
+        primaryIcon : '#F1F5F9',
     },
 };
 
@@ -207,6 +216,8 @@ const roseTheme: Theme = {
         borderLight: '#FFE4EC',
 
         shadow: '#000000',
+
+        primaryIcon : '#F1F5F9',
     },
 };
 
@@ -249,6 +260,8 @@ const darkTheme: Theme = {
         borderLight: '#475569',
 
         shadow: '#000000',
+
+        primaryIcon : '#F1F5F9',
     },
 };
 
@@ -291,6 +304,7 @@ const redTheme: Theme = {
         borderLight: '#FEE2E2',
 
         shadow: '#000000',
+        primaryIcon : '#F1F5F9',
     },
 };
 
